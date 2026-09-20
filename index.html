@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Zbierka Účtovníctva - SOČ Pomôcka</title>
+    
+    <!-- Vlastné logo v karte prehliadača (Favicon) bez nutnosti externého súboru -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='50%' font-family='sans-serif' font-weight='bold' font-size='55' fill='white' dominant-baseline='central' text-anchor='middle'>EÚ</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -39,11 +43,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
             
             <div class="lg:col-span-8 space-y-6">
+                <!-- Pohl'ad kapitol -->
                 <div id="chapterView" class="space-y-6">
                     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 p-8 text-white shadow-xl">
                         <div class="relative z-10 max-w-2xl">
                             <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mb-3">Precvičuj podvojné účtovníctvo hravo</h2>
-                            <p class="text-blue-100 text-sm sm:text-base leading-relaxed mb-6">Vyber si kapitolu, rieš praktické súvzťažnosti a určuj účtovné doklady. Využi pravý panel s Rámcovou účtovou osnovou na jednoduché vyhľadávanie a dopĺňanie účtov.</p>
+                            <p class="text-blue-100 text-sm sm:text-base leading-relaxed mb-6">Vyber si kapitolu a rieš účtovné prípady. Využi pravý panel s rámcovou účtovou osnovou na jednoduché vyhľadávanie a dopĺňanie účtov.</p>
                         </div>
                         <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none"><i data-lucide="calculator" class="w-96 h-96 text-white"></i></div>
                     </div>
@@ -55,6 +60,7 @@
                     </div>
                 </div>
 
+                <!-- Pohl'ad samotneho cvicenia -->
                 <div id="exerciseView" class="hidden space-y-6">
                     <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <button onclick="showChapterSelection()" class="inline-flex items-center text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Späť na prehľad kapitol</button>
@@ -229,7 +235,7 @@
         const CHAPTERS = [
             {
                 id: 1, type: "document",
-                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoch. Priraď správnu skratku.",
+                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoo. Priraď správnu skratku.",
                 exercises: [
                     { op: "Nákup kancelárskeho papiera v hotovosti", correct: "VYD" },
                     { op: "Tržba v hotovosti za predaný tovar", correct: "PRI" },
@@ -295,6 +301,12 @@
             renderAccountsList(ACCOUNTS_DB);
             lucide.createIcons();
         };
+
+        
+        // Funkcia na odstránenie diakritiky (mäkčeňov a dĺžňov)
+        function removeDiacritics(str) {
+            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
 
         function renderChaptersGrid() {
             const grid = document.getElementById('chaptersGrid');
@@ -443,10 +455,23 @@
         }
 
         function handleAccountSearch(q) {
-            const query = q.trim().toLowerCase();
+            // Najskôr odstránime dĺžne a mäkčene z vyhľadávaného textu a dáme ho na malé písmená
+            const query = removeDiacritics(q.trim().toLowerCase());
+            
             if (!query) return renderAccountsList(ACCOUNTS_DB);
+            
             const isNum = /^\d+$/.test(query);
-            renderAccountsList(ACCOUNTS_DB.filter(a => isNum ? a.code.startsWith(query) : a.name.toLowerCase().includes(query)));
+            
+            renderAccountsList(ACCOUNTS_DB.filter(a => {
+                if (isNum) {
+                    // Ak hľadáme číslo, hľadáme len podľa kódu
+                    return a.code.startsWith(query);
+                } else {
+                    // Ak hľadáme text, musíme odstrániť diakritiku aj z názvu účtu v databáze, inak by to nenašlo zhodu
+                    const normalizedName = removeDiacritics(a.name.toLowerCase());
+                    return normalizedName.includes(query);
+                }
+            }));
         }
 
         function pasteAccount(code) {
