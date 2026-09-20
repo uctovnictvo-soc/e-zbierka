@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Zbierka Účtovníctva - SOČ Pomôcka</title>
     
-    <!-- Vlastné logo v karte prehliadača (Favicon) bez nutnosti externého súboru -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='50%' font-family='sans-serif' font-weight='bold' font-size='55' fill='white' dominant-baseline='central' text-anchor='middle'>EÚ</text></svg>">
+    <!-- Vlastné logo v karte prehliadača (Favicon) - písmeno Ú -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='50%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' dominant-baseline='central' text-anchor='middle'>Ú</text></svg>">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -43,7 +43,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
             
             <div class="lg:col-span-8 space-y-6">
-                <!-- Pohl'ad kapitol -->
+                <!-- Pohľad kapitol -->
                 <div id="chapterView" class="space-y-6">
                     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 p-8 text-white shadow-xl">
                         <div class="relative z-10 max-w-2xl">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <!-- Pohl'ad samotneho cvicenia -->
+                <!-- Pohľad samotného cvičenia -->
                 <div id="exerciseView" class="hidden space-y-6">
                     <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <button onclick="showChapterSelection()" class="inline-flex items-center text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Späť na prehľad kapitol</button>
@@ -107,6 +107,7 @@
         </div>
     </main>
 
+    <!-- PÄTIČKA -->
     <footer class="bg-white border-t border-slate-200 mt-8 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 space-y-4 md:space-y-0">
             <div class="flex flex-col items-center md:items-start space-y-1.5">
@@ -119,6 +120,47 @@
             </div>
         </div>
     </footer>
+
+    <!-- PLÁVAJÚCA KALKULAČKA V ĽAVOM DOLNOM ROHU -->
+    <div class="fixed bottom-5 left-5 z-50">
+        <button onclick="toggleCalculator()" class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 cursor-pointer" title="Otvoriť kalkulačku">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="calcModal" class="hidden fixed bottom-20 left-5 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden">
+        <div class="bg-slate-900 text-white px-4 py-3 flex justify-between items-center text-sm font-bold">
+            <span>Kalkulačka</span>
+            <span onclick="toggleCalculator()" class="cursor-pointer text-slate-400 hover:text-white text-lg">✕</span>
+        </div>
+        <input type="text" id="calcScreen" readonly value="0" class="w-full h-14 bg-slate-100 text-right px-4 text-2xl font-bold text-slate-800 border-none outline-none">
+        <div class="grid grid-cols-4 gap-1 p-2 bg-slate-200">
+            <button onclick="calcClear()" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">C</button>
+            <button onclick="calcAppend('/')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">÷</button>
+            <button onclick="calcAppend('*')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">×</button>
+            <button onclick="calcBack()" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">⌫</button>
+            
+            <button onclick="calcAppend('7')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">7</button>
+            <button onclick="calcAppend('8')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">8</button>
+            <button onclick="calcAppend('9')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">9</button>
+            <button onclick="calcAppend('-')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">-</button>
+            
+            <button onclick="calcAppend('4')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">4</button>
+            <button onclick="calcAppend('5')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">5</button>
+            <button onclick="calcAppend('6')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">6</button>
+            <button onclick="calcAppend('+')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">+</button>
+            
+            <button onclick="calcAppend('1')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">1</button>
+            <button onclick="calcAppend('2')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">2</button>
+            <button onclick="calcAppend('3')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">3</button>
+            <button onclick="calcCalculate()" class="p-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded row-span-2 flex items-center justify-center">=</button>
+            
+            <button onclick="calcAppend('0')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded col-span-2">0</button>
+            <button onclick="calcAppend('.')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">.</button>
+        </div>
+    </div>
 
     <script>
         const ACCOUNTS_DB = [
@@ -235,7 +277,7 @@
         const CHAPTERS = [
             {
                 id: 1, type: "document",
-                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoo. Priraď správnu skratku.",
+                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoch. Priraď správnu skratku.",
                 exercises: [
                     { op: "Nákup kancelárskeho papiera v hotovosti", correct: "VYD" },
                     { op: "Tržba v hotovosti za predaný tovar", correct: "PRI" },
@@ -302,8 +344,6 @@
             lucide.createIcons();
         };
 
-        
-        // Funkcia na odstránenie diakritiky (mäkčeňov a dĺžňov)
         function removeDiacritics(str) {
             return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         }
@@ -391,6 +431,7 @@
                         <td class="py-3 px-3 text-center"><input type="text" id="d_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none uppercase"></td>
                     </tr>`).join('');
             }
+            lucide.createIcons();
         }
 
         function setActiveInput(inp) {
@@ -452,22 +493,17 @@
                     <span class="text-xs font-medium text-slate-700 truncate">${a.name}</span>
                 </div>
             `).join('');
+            lucide.createIcons();
         }
 
         function handleAccountSearch(q) {
-            // Najskôr odstránime dĺžne a mäkčene z vyhľadávaného textu a dáme ho na malé písmená
             const query = removeDiacritics(q.trim().toLowerCase());
-            
             if (!query) return renderAccountsList(ACCOUNTS_DB);
-            
             const isNum = /^\d+$/.test(query);
-            
             renderAccountsList(ACCOUNTS_DB.filter(a => {
                 if (isNum) {
-                    // Ak hľadáme číslo, hľadáme len podľa kódu
                     return a.code.startsWith(query);
                 } else {
-                    // Ak hľadáme text, musíme odstrániť diakritiku aj z názvu účtu v databáze, inak by to nenašlo zhodu
                     const normalizedName = removeDiacritics(a.name.toLowerCase());
                     return normalizedName.includes(query);
                 }
@@ -480,6 +516,48 @@
                 activeInput.value = code;
                 activeInput.classList.remove('border-red-500', 'bg-red-50');
                 activeInput.classList.add('border-blue-500', 'bg-blue-50');
+            }
+        }
+
+        // Logika kalkulačky
+        function toggleCalculator() {
+            const modal = document.getElementById('calcModal');
+            modal.classList.toggle('hidden');
+        }
+
+        let calcExpression = "0";
+
+        function calcAppend(val) {
+            if (calcExpression === "0" && val !== '.') {
+                calcExpression = val;
+            } else {
+                calcExpression += val;
+            }
+            document.getElementById('calcScreen').value = calcExpression;
+        }
+
+        function calcClear() {
+            calcExpression = "0";
+            document.getElementById('calcScreen').value = calcExpression;
+        }
+
+        function calcBack() {
+            if (calcExpression.length > 1) {
+                calcExpression = calcExpression.slice(0, -1);
+            } else {
+                calcExpression = "0";
+            }
+            document.getElementById('calcScreen').value = calcExpression;
+        }
+
+        function calcCalculate() {
+            try {
+                let result = eval(calcExpression.replace(/×/g, '*').replace(/÷/g, '/'));
+                calcExpression = String(result);
+                document.getElementById('calcScreen').value = calcExpression;
+            } catch (e) {
+                document.getElementById('calcScreen').value = "Chyba";
+                calcExpression = "0";
             }
         }
     </script>
