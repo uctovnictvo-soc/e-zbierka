@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Zbierka Účtovníctva - SOČ Pomôcka</title>
     
-    <!-- Vlastné logo v karte prehliadača (Favicon) bez nutnosti externého súboru -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='50%' font-family='sans-serif' font-weight='bold' font-size='55' fill='white' dominant-baseline='central' text-anchor='middle'>EÚ</text></svg>">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -90,6 +89,7 @@
                 </div>
             </div>
 
+            <!-- Pravý panel: Osnova -->
             <div class="lg:col-span-4 sticky top-20">
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-6rem)]">
                     <div class="p-4 border-b border-slate-200 bg-slate-900 text-white">
@@ -107,15 +107,51 @@
         </div>
     </main>
 
+    <div class="fixed bottom-5 left-5 z-50">
+        <button onclick="toggleCalculator()" class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <i data-lucide="calculator" class="w-6 h-6"></i>
+        </button>
+        <div id="calcPopup" class="hidden absolute bottom-16 left-0 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 w-64 z-50">
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Kalkulačka</span>
+                <button onclick="toggleCalculator()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <input type="text" id="calcDisplay" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-right font-mono text-lg mb-3 text-slate-800 font-bold" value="0">
+            <div class="grid grid-cols-4 gap-1.5 text-sm">
+                <button onclick="calcClear()" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-lg col-span-2">C</button>
+                <button onclick="calcAppend('/')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg">÷</button>
+                <button onclick="calcAppend('*')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg">×</button>
+                
+                <button onclick="calcAppend('7')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">7</button>
+                <button onclick="calcAppend('8')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">8</button>
+                <button onclick="calcAppend('9')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">9</button>
+                <button onclick="calcAppend('-')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg">-</button>
+                
+                <button onclick="calcAppend('4')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">4</button>
+                <button onclick="calcAppend('5')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">5</button>
+                <button onclick="calcAppend('6')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">6</button>
+                <button onclick="calcAppend('+')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg">+</button>
+                
+                <button onclick="calcAppend('1')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">1</button>
+                <button onclick="calcAppend('2')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">2</button>
+                <button onclick="calcAppend('3')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">3</button>
+                <button onclick="calcCompute()" class="p-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg row-span-2 flex items-center justify-center">=</button>
+                
+                <button onclick="calcAppend('0')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg col-span-2">0</button>
+                <button onclick="calcAppend('.')" class="p-2 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg">.</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-white border-t border-slate-200 mt-8 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 space-y-4 md:space-y-0">
             <div class="flex flex-col items-center md:items-start space-y-1.5">
-                <span class="flex items-center font-medium text-slate-700"><i data-lucide="scale" class="w-4 h-4 text-blue-600 mr-1.5"></i>Spracované v zmysle platnej legislatívy a postupov účtovania SR</span>
-                <span class="flex items-center text-slate-400"><i data-lucide="graduation-cap" class="w-3.5 h-3.5 mr-1.5"></i> Projekt v rámci Stredoškolskej odbornej činnosti (SOČ)</span>
+                <span class="flex items-center font-medium text-slate-700"><i data-lucide="scale" class="w-4 h-4 text-blue-600 mr-1.5"></i>Legislatíva SR</span>
+                <span class="flex items-center text-slate-400"><i data-lucide="graduation-cap" class="w-3.5 h-3.5 mr-1.5"></i> Stredoškolská odborná činnosť</span>
             </div>
             <div class="flex items-center font-medium text-slate-400 hover:text-slate-600 transition-colors">
                 <i data-lucide="copyright" class="w-4 h-4 mr-1"></i>
-                <span>2026 E-Zbierka Účtovníctva. Všetky práva vyhradené.</span>
+                <span>© 2026 E-Zbierka Účtovníctva. Všetky práva vyhradené.</span>
             </div>
         </div>
     </footer>
@@ -235,7 +271,7 @@
         const CHAPTERS = [
             {
                 id: 1, type: "document",
-                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoo. Priraď správnu skratku.",
+                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoch. Priraď správnu skratku.",
                 exercises: [
                     { op: "Nákup kancelárskeho papiera v hotovosti", correct: "VYD" },
                     { op: "Tržba v hotovosti za predaný tovar", correct: "PRI" },
@@ -302,8 +338,6 @@
             lucide.createIcons();
         };
 
-        
-        // Funkcia na odstránenie diakritiky (mäkčeňov a dĺžňov)
         function removeDiacritics(str) {
             return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         }
@@ -455,19 +489,14 @@
         }
 
         function handleAccountSearch(q) {
-            // Najskôr odstránime dĺžne a mäkčene z vyhľadávaného textu a dáme ho na malé písmená
             const query = removeDiacritics(q.trim().toLowerCase());
-            
             if (!query) return renderAccountsList(ACCOUNTS_DB);
-            
             const isNum = /^\d+$/.test(query);
             
             renderAccountsList(ACCOUNTS_DB.filter(a => {
                 if (isNum) {
-                    // Ak hľadáme číslo, hľadáme len podľa kódu
                     return a.code.startsWith(query);
                 } else {
-                    // Ak hľadáme text, musíme odstrániť diakritiku aj z názvu účtu v databáze, inak by to nenašlo zhodu
                     const normalizedName = removeDiacritics(a.name.toLowerCase());
                     return normalizedName.includes(query);
                 }
@@ -480,6 +509,37 @@
                 activeInput.value = code;
                 activeInput.classList.remove('border-red-500', 'bg-red-50');
                 activeInput.classList.add('border-blue-500', 'bg-blue-50');
+            }
+        }
+
+        // Kalkulačka logika
+        function toggleCalculator() {
+            const popup = document.getElementById('calcPopup');
+            popup.classList.toggle('hidden');
+        }
+
+        function calcClear() {
+            document.getElementById('calcDisplay').value = '0';
+        }
+
+        function calcAppend(val) {
+            const display = document.getElementById('calcDisplay');
+            if (display.value === '0' && val !== '.') {
+                display.value = val;
+            } else {
+                display.value += val;
+            }
+        }
+
+        function calcCompute() {
+            const display = document.getElementById('calcDisplay');
+            try {
+                // Bezpečný prepočet základných operácií
+                let res = eval(display.value.replace(/×/g, '*').replace(/÷/g, '/'));
+                display.value = Math.round(res * 1000000) / 1000000;
+            } catch (e) {
+                display.value = 'Chyba';
+                setTimeout(calcClear, 1500);
             }
         }
     </script>
