@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Zbierka Účtovníctva - SOČ Pomôcka</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .active-input-ring { ring: 2px; ring-color: #3b82f6; border-color: #2563eb !important; background-color: #eff6ff !important; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showChapterSelection()">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-blue-500/20">Ú</div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">E-Zbierka Účtovníctva</h1>
+                    <p class="text-xs text-slate-500 font-medium">SOČ Interaktívna Pomôcka pre Stredné Školy</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                    <i data-lucide="award" class="w-3.5 h-3.5 mr-1"></i> SOČ Projekt
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
+            
+            <div class="lg:col-span-8 space-y-6">
+                <div id="chapterView" class="space-y-6">
+                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 p-8 text-white shadow-xl">
+                        <div class="relative z-10 max-w-2xl">
+                            <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mb-3">Precvičuj podvojné účtovníctvo hravo</h2>
+                            <p class="text-blue-100 text-sm sm:text-base leading-relaxed mb-6">Vyber si kapitolu, rieš praktické súvzťažnosti a určuj účtovné doklady. Využi pravý panel s Rámcovou účtovou osnovou na jednoduché vyhľadávanie a dopĺňanie účtov.</p>
+                        </div>
+                        <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none"><i data-lucide="calculator" class="w-96 h-96 text-white"></i></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2"><i data-lucide="layers" class="w-5 h-5 text-blue-600"></i>Výber témy a kapitol</h3>
+                        </div>
+                        <div id="chaptersGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                    </div>
+                </div>
+
+                <div id="exerciseView" class="hidden space-y-6">
+                    <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <button onclick="showChapterSelection()" class="inline-flex items-center text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Späť na prehľad kapitol</button>
+                        <span id="chapterBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Kapitola 1</span>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                            <h2 id="exerciseTitle" class="text-2xl font-bold text-slate-900 mb-2">Názov cvičenia</h2>
+                            <p id="exerciseDescription" class="text-slate-600 text-sm leading-relaxed">Popis cvičenia</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead id="tableHeader"></thead>
+                                    <tbody id="transactionRows" class="divide-y divide-slate-100 text-sm"></tbody>
+                                </table>
+                            </div>
+                            <div id="feedbackContainer" class="hidden rounded-xl p-4 transition-all duration-200">
+                                <div id="feedbackContent" class="flex items-start space-x-3"></div>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-end gap-4 pt-4 border-t border-slate-100">
+                                <button onclick="resetCurrentExercise()" class="px-4 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors mr-auto">Vymazať odpovede</button>
+                                <button onclick="checkSolution()" class="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition-all">Skontrolovať riešenie</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 sticky top-20">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-6rem)]">
+                    <div class="p-4 border-b border-slate-200 bg-slate-900 text-white">
+                        <h2 class="text-base font-bold tracking-wide flex items-center gap-2"><i data-lucide="book-marked" class="w-5 h-5 text-blue-400"></i>Rámcová účtová osnova</h2>
+                    </div>
+                    <div class="p-3 bg-slate-50 border-b border-slate-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="accountSearchInput" oninput="handleAccountSearch(this.value)" placeholder="Zadaj číslo alebo názov účtu..." class="w-full pl-9 pr-8 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium text-slate-800">
+                        </div>
+                    </div>
+                    <div id="accountList" class="overflow-y-auto p-2 space-y-1 custom-scrollbar flex-1 min-h-[320px]"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-8 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 space-y-4 md:space-y-0">
+            <div class="flex flex-col items-center md:items-start space-y-1.5">
+                <span class="flex items-center font-medium text-slate-700"><i data-lucide="scale" class="w-4 h-4 text-blue-600 mr-1.5"></i>Spracované v zmysle platnej legislatívy a postupov účtovania SR</span>
+                <span class="flex items-center text-slate-400"><i data-lucide="graduation-cap" class="w-3.5 h-3.5 mr-1.5"></i> Projekt v rámci Stredoškolskej odbornej činnosti (SOČ)</span>
+            </div>
+            <div class="flex items-center font-medium text-slate-400 hover:text-slate-600 transition-colors">
+                <i data-lucide="copyright" class="w-4 h-4 mr-1"></i>
+                <span>2026 E-Zbierka Účtovníctva. Všetky práva vyhradené.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const ACCOUNTS_DB = [
+            // Trieda 0
+            { code: "012", name: "Aktivované náklady na vývoj" }, { code: "013", name: "Softvér" }, { code: "014", name: "Oceniteľné práva" },
+            { code: "015", name: "Goodwill" }, { code: "019", name: "Ostatný dlhodobý nehmotný majetok" }, { code: "021", name: "Stavby" },
+            { code: "022", name: "Samostatné hnuteľné veci a súbory hnuteľných vecí" }, { code: "025", name: "Pestovateľské celky trvalých porastov" },
+            { code: "026", name: "Základné stádo a ťažné zvieratá" }, { code: "029", name: "Ostatný dlhodobý hmotný majetok" },
+            { code: "031", name: "Pozemky" }, { code: "032", name: "Umelecké diela a zbierky" }, { code: "041", name: "Obstaranie dlhodobého nehmotného majetku" },
+            { code: "042", name: "Obstaranie dlhodobého hmotného majetku" }, { code: "043", name: "Obstaranie dlhodobého finančného majetku" },
+            { code: "051", name: "Poskytnuté preddavky na dlhodobý nehmotný majetok" }, { code: "052", name: "Poskytnuté preddavky na dlhodobý hmotný majetok" },
+            { code: "053", name: "Poskytnuté preddavky na dlhodobý finančný majetok" }, { code: "061", name: "Podielové cenné papiere a podiely v dcérskej účtovnej jednotke" },
+            { code: "062", name: "Podielové cenné papiere a podiely v spoločnosti alebo družstve s podielovou účasťou" }, { code: "063", name: "Realizovateľné cenné papiere a podiely" },
+            { code: "065", name: "Dlhové cenné papiere držané do splatnosti" }, { code: "066", name: "Pôžičky prepojeným účtovným jednotkám a účtovným jednotkám v rámci podielovej účasti" },
+            { code: "067", name: "Ostatné pôžičky" }, { code: "069", name: "Ostatný dlhodobý finančný majetok" },
+            { code: "072", name: "Oprávky k aktivovaným nákladom na vývoj" }, { code: "073", name: "Oprávky k softvéru" }, { code: "074", name: "Oprávky k oceniteľným právam" },
+            { code: "075", name: "Oprávky ku goodwillu" }, { code: "079", name: "Oprávky k ostatnému dlhodobému nehmotnému majetku" },
+            { code: "081", name: "Oprávky k stavbám" }, { code: "082", name: "Oprávky k samostatným hnuteľným veciam a k súboru hnuteľných vecí" },
+            { code: "085", name: "Oprávky k pestovateľským celkom trvalých porastov" }, { code: "086", name: "Oprávky k základnému stádu a ťažným zvieratám" },
+            { code: "089", name: "Oprávky k ostatnému dlhodobému hmotnému majetku" }, { code: "091", name: "Opravné položky k dlhodobému nehmotnému majetku" },
+            { code: "092", name: "Opravné položky k dlhodobému hmotnému majetku" }, { code: "093", name: "Opravné položky k nedokončenému dlhodobému nehmotnému majetku" },
+            { code: "094", name: "Opravné položky k nedokončenému dlhodobému hmotnému majetku" }, { code: "095", name: "Opravné položky k poskytnutým preddavkom na dlhodobý majetok" },
+            { code: "096", name: "Opravné položky k dlhodobému finančnému majetku" }, { code: "097", name: "Opravné položky k nadobudnutému majetku" },
+            { code: "098", name: "Oprávky k opravnej položke k nadobudnutému majetku" },
+            // Trieda 1
+            { code: "111", name: "Obstaranie materiálu" }, { code: "112", name: "Materiál na sklade" }, { code: "119", name: "Materiál na ceste" },
+            { code: "121", name: "Nedokončená výroba" }, { code: "122", name: "Polotovary vlastnej výroby" }, { code: "123", name: "Výrobky" },
+            { code: "124", name: "Zvieratá" }, { code: "131", name: "Obstaranie tovaru" }, { code: "132", name: "Tovar na sklade a v predajniach" },
+            { code: "133", name: "Nehnuteľnosť na predaj" }, { code: "139", name: "Tovar na ceste" },
+            { code: "191", name: "Opravné položky k materiálu" }, { code: "192", name: "Opravné položky k nedokončenej výrobe" },
+            { code: "193", name: "Opravné položky k polotovarom vlastnej výroby" }, { code: "194", name: "Opravné položky k výrobkom" },
+            { code: "195", name: "Opravné položky k zvieratám" }, { code: "196", name: "Opravné položky k tovaru" },
+            // Trieda 2
+            { code: "211", name: "Pokladnica" }, { code: "213", name: "Ceniny" }, { code: "221", name: "Bankové účty" },
+            { code: "231", name: "Krátkodobé bankové úvery" }, { code: "232", name: "Eskontné úvery" }, { code: "241", name: "Vydané krátkodobé dlhopisy" },
+            { code: "249", name: "Ostatné krátkodobé finančné výpomoci" }, { code: "251", name: "Majetkové cenné papiere na obchodovanie" },
+            { code: "252", name: "Vlastné akcie a vlastné obchodné podiely" }, { code: "253", name: "Dlhové cenné papiere na obchodovanie" },
+            { code: "255", name: "Vlastné dlhopisy" }, { code: "256", name: "Dlhové cenné papiere so splatnosťou do jedného roka držané do splatnosti" },
+            { code: "257", name: "Ostatné realizovateľné cenné papiere" }, { code: "259", name: "Obstaranie krátkodobého finančného majetku" },
+            { code: "261", name: "Peniaze na ceste" }, { code: "291", name: "Opravné položky ku krátkodobému finančnému majetku" },
+            // Trieda 3
+            { code: "311", name: "Odberatelia" }, { code: "312", name: "Zmenky na inkaso" }, { code: "313", name: "Pohľadávky za eskontované cenné papiere" },
+            { code: "314", name: "Poskytnuté preddavky" }, { code: "315", name: "Ostatné pohľadávky" }, { code: "316", name: "Čistá hodnota zákazky" },
+            { code: "321", name: "Dodávatelia" }, { code: "322", name: "Zmenky na úhradu" }, { code: "323", name: "Krátkodobé rezervy" },
+            { code: "324", name: "Prijaté preddavky" }, { code: "325", name: "Ostatné záväzky" }, { code: "326", name: "Nevyfakturované dodávky" },
+            { code: "331", name: "Zamestnanci" }, { code: "333", name: "Ostatné záväzky voči zamestnancom" }, { code: "335", name: "Pohľadávky voči zamestnancom" },
+            { code: "336", name: "Zúčtovanie s orgánmi sociálneho poistenia a zdravotného poistenia" }, { code: "341", name: "Daň z príjmov" },
+            { code: "342", name: "Ostatné priame dane" }, { code: "343", name: "Daň z pridanej hodnoty" }, { code: "345", name: "Ostatné dane a poplatky" },
+            { code: "346", name: "Dotácie zo štátneho rozpočtu" }, { code: "347", name: "Ostatné dotácie" },
+            { code: "351", name: "Pohľadávky voči prepojeným účtovným jednotkám..." }, { code: "353", name: "Pohľadávky za upísané vlastné imanie" },
+            { code: "354", name: "Pohľadávky voči spoločníkom a členom pri úhrade straty" }, { code: "355", name: "Ostatné pohľadávky voči spoločníkom a členom" },
+            { code: "358", name: "Pohľadávky voči účastníkom združenia" }, { code: "361", name: "Záväzky voči prepojeným účtovným jednotkám..." },
+            { code: "364", name: "Záväzky voči spoločníkom a členom pri rozdeľovaní zisku" }, { code: "365", name: "Ostatné záväzky voči spoločníkom a členom" },
+            { code: "366", name: "Záväzky voči spoločníkom a členom zo závislej činnosti" }, { code: "367", name: "Záväzky z upísaných nesplatených cenných papierov a vkladov" },
+            { code: "368", name: "Záväzky voči účastníkom združenia" }, { code: "371", name: "Pohľadávky z predaja podniku" },
+            { code: "372", name: "Záväzky z kúpy podniku" }, { code: "373", name: "Pohľadávky a záväzky z pevných termínových operácií" },
+            { code: "374", name: "Pohľadávky z nájmu" }, { code: "375", name: "Pohľadávky z vydaných dlhopisov" }, { code: "376", name: "Nakúpené opcie" },
+            { code: "377", name: "Predané opcie" }, { code: "378", name: "Iné pohľadávky" }, { code: "379", name: "Iné záväzky" },
+            { code: "381", name: "Náklady budúcich období" }, { code: "382", name: "Komplexné náklady budúcich období" },
+            { code: "383", name: "Výdavky budúcich období" }, { code: "384", name: "Výnosy budúcich období" }, { code: "385", name: "Príjmy budúcich období" },
+            { code: "391", name: "Opravné položky k pohľadávkam" }, { code: "395", name: "Vnútorné zúčtovanie" }, { code: "398", name: "Spojovací účet pri združení" },
+            // Trieda 4
+            { code: "411", name: "Základné imanie" }, { code: "412", name: "Emisné ážio" }, { code: "413", name: "Ostatné kapitálové fondy" },
+            { code: "414", name: "Oceňovacie rozdiely z precenenia majetku a záväzkov" }, { code: "415", name: "Oceňovacie rozdiely z kapitálových účastín" },
+            { code: "416", name: "Oceňovacie rozdiely z precenenia pri zlúčení, splynutí a rozdelení" }, { code: "417", name: "Zákonný rezervný fond z kapitálových vkladov" },
+            { code: "418", name: "Nedeliteľný fond z kapitálových vkladov" }, { code: "419", name: "Zmeny základného imania" },
+            { code: "421", name: "Zákonný rezervný fond" }, { code: "422", name: "Nedeliteľný fond" }, { code: "423", name: "Štatutárne fondy" },
+            { code: "427", name: "Ostatné fondy" }, { code: "428", name: "Nerozdelený zisk minulých rokov" }, { code: "429", name: "Neuhradená strata minulých rokov" },
+            { code: "431", name: "Výsledok hospodárenia v schvaľovaní" }, { code: "451", name: "Rezervy zákonné" }, { code: "459", name: "Ostatné rezervy" },
+            { code: "461", name: "Bankové úvery" }, { code: "471", name: "Dlhodobé záväzky voči prepojeným účtovným jednotkám..." },
+            { code: "472", name: "Záväzky zo sociálneho fondu" }, { code: "473", name: "Vydané dlhopisy" }, { code: "474", name: "Záväzky z nájmu" },
+            { code: "475", name: "Dlhodobé prijaté preddavky" }, { code: "476", name: "Dlhodobé nevyfakturované dodávky" },
+            { code: "478", name: "Dlhodobé zmenky na úhradu" }, { code: "479", name: "Ostatné dlhodobé záväzky" },
+            { code: "481", name: "Odložený daňový záväzok a odložená daňová pohľadávka" }, { code: "491", name: "Vlastné imanie fyzickej osoby – podnikateľa" },
+            // Trieda 5
+            { code: "501", name: "Spotreba materiálu" }, { code: "502", name: "Spotreba energie" }, { code: "503", name: "Spotreba ostatných neskladovateľných dodávok" },
+            { code: "504", name: "Predaný tovar" }, { code: "505", name: "Tvorba a zúčtovanie opravných položiek k zásobám" }, { code: "507", name: "Predaná nehnuteľnosť" },
+            { code: "511", name: "Opravy a udržiavanie" }, { code: "512", name: "Cestovné" }, { code: "513", name: "Náklady na reprezentáciu" },
+            { code: "518", name: "Ostatné služby" }, { code: "521", name: "Mzdové náklady" }, { code: "522", name: "Príjmy spoločníkov a členov zo závislej činnosti" },
+            { code: "523", name: "Odmeny členom orgánov spoločnosti a družstva" }, { code: "524", name: "Zákonné sociálne poistenie" },
+            { code: "525", name: "Ostatné sociálne poistenie" }, { code: "526", name: "Sociálne náklady fyzickej osoby - podnikateľa" },
+            { code: "527", name: "Zákonné sociálne náklady" }, { code: "528", name: "Ostatné sociálne náklady" },
+            { code: "531", name: "Daň z motorových vozidiel" }, { code: "532", name: "Daň z nehnuteľností" }, { code: "538", name: "Ostatné dane a poplatky" },
+            { code: "541", name: "Zostatková cena predaného dlhodobého nehmotného majetku..." }, { code: "542", name: "Predaný materiál" }, { code: "543", name: "Dary" },
+            { code: "544", name: "Zmluvné pokuty, penále a úroky z omeškania" }, { code: "545", name: "Ostatné pokuty, penále a úroky z omeškania" },
+            { code: "546", name: "Odpis pohľadávky" }, { code: "547", name: "Tvorba a zúčtovanie opravných položiek k pohľadávkam" },
+            { code: "548", name: "Ostatné náklady na hospodársku činnosť" }, { code: "549", name: "Manká a škody" },
+            { code: "551", name: "Odpisy dlhodobého nehmotného majetku a dlhodobého hmotného majetku" }, { code: "553", name: "Tvorba a zúčtovanie opravných položiek k dlhodobému majetku" },
+            { code: "555", name: "Zúčtovanie komplexných nákladov budúcich období" }, { code: "557", name: "Zúčtovanie oprávky k opravnej položke k nadobudnutému majetku" },
+            { code: "561", name: "Predané cenné papiere a podiely" }, { code: "562", name: "Úroky" }, { code: "563", name: "Kurzové straty" },
+            { code: "564", name: "Náklady na precenenie cenných papierov" }, { code: "565", name: "Tvorba a zúčtovanie opravných položiek k finančnému majetku" },
+            { code: "566", name: "Náklady na krátkodobý finančný majetok" }, { code: "567", name: "Náklady na derivátové operácie" },
+            { code: "568", name: "Ostatné finančné náklady" }, { code: "569", name: "Manká a škody na finančnom majetku" },
+            { code: "591", name: "Splatná daň z príjmov" }, { code: "592", name: "Odložená daň z príjmov" }, { code: "595", name: "Dodatočné odvody dane z príjmov" },
+            { code: "596", name: "Prevod podielov na výsledku hospodárenia spoločníkom" },
+            // Trieda 6
+            { code: "601", name: "Tržby za vlastné výrobky" }, { code: "602", name: "Tržby z predaja služieb" }, { code: "604", name: "Tržby za tovar" },
+            { code: "606", name: "Výnosy zo zákazky" }, { code: "607", name: "Výnosy z nehnuteľnosti na predaj" },
+            { code: "611", name: "Zmena stavu nedokončenej výroby" }, { code: "612", name: "Zmena stavu polotovarov" },
+            { code: "613", name: "Zmena stavu výrobkov" }, { code: "614", name: "Zmena stavu zvierat" },
+            { code: "621", name: "Aktivácia materiálu a tovaru" }, { code: "622", name: "Aktivácia vnútroorganizačných služieb" },
+            { code: "623", name: "Aktivácia dlhodobého nehmotného majetku" }, { code: "624", name: "Aktivácia dlhodobého hmotného majetku" },
+            { code: "641", name: "Tržby z predaja dlhodobého nehmotného majetku..." }, { code: "642", name: "Tržby z predaja materiálu" },
+            { code: "644", name: "Zmluvné pokuty, penále a úroky z omeškania" }, { code: "645", name: "Ostatné pokuty, penále a úroky z omeškania" },
+            { code: "646", name: "Výnosy z odpísaných pohľadávok" }, { code: "648", name: "Ostatné výnosy z hospodárskej činnosti" },
+            { code: "655", name: "Zúčtovanie komplexných nákladov budúcich období" }, { code: "657", name: "Zúčtovanie oprávky k opravnej položke k nadobudnutému majetku" },
+            { code: "661", name: "Tržby z predaja cenných papierov a podielov" }, { code: "662", name: "Úroky" }, { code: "663", name: "Kurzové zisky" },
+            { code: "664", name: "Výnosy z precenenia cenných papierov" }, { code: "665", name: "Výnosy z dlhodobého finančného majetku" },
+            { code: "666", name: "Výnosy z krátkodobého finančného majetku" }, { code: "667", name: "Výnosy z derivátových operácií" }, { code: "668", name: "Ostatné finančné výnosy" },
+            // Trieda 7
+            { code: "701", name: "Začiatočný účet súvahový" }, { code: "702", name: "Konečný účet súvahový" }, { code: "710", name: "Účet ziskov a strát" }, { code: "711", name: "Začiatočný účet nákladov a výnosov" }
+        ];
+
+        const CHAPTERS = [
+            {
+                id: 1, type: "document",
+                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoch. Priraď správnu skratku.",
+                exercises: [
+                    { op: "Nákup kancelárskeho papiera v hotovosti", correct: "VYD" },
+                    { op: "Tržba v hotovosti za predaný tovar", correct: "PRI" },
+                    { op: "Došlá faktúra od dodávateľa za materiál", correct: "PFA" },
+                    { op: "Vystavená faktúra odberateľovi za služby", correct: "VFA" },
+                    { op: "Úhrada faktúry dodávateľovi z nášho účtu", correct: "VBÚ" },
+                    { op: "Odberateľ uhradil faktúru na náš účet", correct: "VBÚ" },
+                    { op: "Výber hotovosti z bankového účtu (z pohľadu banky)", correct: "VBÚ" },
+                    { op: "Príjem hotovosti vybranej z banky do pokladnice", correct: "PRI" },
+                    { op: "Zúčtovanie hrubých miezd zamestnancov", correct: "ID" },
+                    { op: "Výpočet a zaúčtovanie ročných odpisov", correct: "ID" },
+                    { op: "Odvod hotovosti z pokladnice do banky (z pohľadu pokladne)", correct: "VYD" },
+                    { op: "Došlá faktúra od elektrární", correct: "PFA" },
+                    { op: "Bankové poplatky strhnuté z účtu", correct: "VBÚ" },
+                    { op: "Zaradenie nového stroja do používania", correct: "ID" },
+                    { op: "Vystavená faktúra za predané hotové výrobky", correct: "VFA" },
+                    { op: "Nákup kolkov v hotovosti", correct: "VYD" },
+                    { op: "Zúčtovanie sociálneho poistenia zamestnávateľa", correct: "ID" },
+                    { op: "Výplata zálohy na služobnú cestu", correct: "VYD" },
+                    { op: "Splátka bankového úveru strhnutá z účtu", correct: "VBÚ" },
+                    { op: "Vrátenie nespotrebovanej zálohy do pokladnice", correct: "PRI" }
+                ]
+            },
+            {
+                id: 2, type: "asset_type",
+                title: "Majetok a jeho zdroje krytia", desc: "Určovanie formy a zloženia majetku (DNM, DHM, DFM, DP, KM).",
+                exercises: [
+                    { op: "Nakúpený softvér pre účtovné oddelenie", correct: "DNM" },
+                    { op: "Výrobná hala s pozemkom vo vlastníctve", correct: "DHM" },
+                    { op: "Nakúpené akcie iného podniku (držba 3 roky)", correct: "DFM" },
+                    { op: "Pohľadávka voči odberateľovi so splatnosťou 2 roky", correct: "DP" },
+                    { op: "Nakúpený materiál na sklade", correct: "KM" },
+                    { op: "Zostatok peňazí na bankovom účte", correct: "KM" },
+                    { op: "Dodávkové auto pre rozvoz tovaru", correct: "DHM" },
+                    { op: "Ochranná známka podniku", correct: "DNM" },
+                    { op: "Pozemok pod budovou podniku", correct: "DHM" },
+                    { op: "Poskytnutá pôžička inému podniku (splatnosť 5 rokov)", correct: "DFM" },
+                    { op: "Tovar pripravený v predajni", correct: "KM" },
+                    { op: "Umelecké dielo v kancelárii riaditeľa", correct: "DHM" },
+                    { op: "Zakúpená licencia na výrobu technológie", correct: "DNM" },
+                    { op: "Podielové cenné papiere dcérskej spoločnosti", correct: "DFM" },
+                    { op: "Dlhodobá pohľadávka z predaja podniku", correct: "DP" }
+                ]
+            },
+            {
+                id: 3, type: "accounting",
+                title: "Pokladňa a Bankové účty", desc: "Základy účtovania na finančných účtoch (MD a D).",
+                exercises: [
+                    { op: "Tržba v hotovosti za predaný tovar", md: "211", d: "604" },
+                    { op: "Výber hotovosti z bankového účtu (výpis z banky)", md: "261", d: "221" },
+                    { op: "Príjem hotovosti do pokladnice (podľa PPD)", md: "211", d: "261" },
+                    { op: "Nákup kancelárskeho papiera v hotovosti", md: "501", d: "211" },
+                    { op: "Úhrada došlej faktúry z bankového účtu", md: "321", d: "221" }
+                ]
+            }
+        ];
+
+        let currentChapter = null;
+        let activeInput = null;
+
+        window.onload = function() {
+            renderChaptersGrid();
+            renderAccountsList(ACCOUNTS_DB);
+            lucide.createIcons();
+        };
+
+        function renderChaptersGrid() {
+            const grid = document.getElementById('chaptersGrid');
+            grid.innerHTML = CHAPTERS.map(ch => `
+                <div onclick="selectChapter(${ch.id})" class="group bg-white rounded-xl border border-slate-200 p-5 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">Kapitola ${ch.id}: ${ch.title}</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-4">${ch.desc}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-blue-600 group-hover:text-blue-700">
+                        <span>Otvoriť cvičenie</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function showChapterSelection() {
+            document.getElementById('chapterView').classList.remove('hidden');
+            document.getElementById('exerciseView').classList.add('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function selectChapter(id) {
+            currentChapter = CHAPTERS.find(c => c.id === id);
+            document.getElementById('chapterView').classList.add('hidden');
+            document.getElementById('exerciseView').classList.remove('hidden');
+            document.getElementById('chapterBadge').innerText = `Kapitola ${currentChapter.id}`;
+            document.getElementById('exerciseTitle').innerText = currentChapter.title;
+            document.getElementById('exerciseDescription').innerText = currentChapter.desc;
+            loadCurrentExercise();
+            window.scrollTo(0,0);
+        }
+
+        function loadCurrentExercise() {
+            const tableHeader = document.getElementById('tableHeader');
+            const tbody = document.getElementById('transactionRows');
+            document.getElementById('feedbackContainer').classList.add('hidden');
+            activeInput = null;
+
+            if (currentChapter.type === "document") {
+                tableHeader.innerHTML = `
+                    <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+                        <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 text-center w-40">Doklad</th>
+                    </tr>`;
+                tbody.innerHTML = currentChapter.exercises.map((row, i) => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
+                        <td class="py-3 px-3 text-sm">${row.op}</td>
+                        <td class="py-3 px-3 text-center">
+                            <select id="sel_${i}" class="w-full text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white">
+                                <option value="">-- Vyber --</option><option value="PFA">PFA</option><option value="VFA">VFA</option><option value="VBÚ">VBÚ</option><option value="PRI">PRI</option><option value="VYD">VYD</option><option value="ID">ID</option>
+                            </select>
+                        </td>
+                    </tr>`).join('');
+            } else if (currentChapter.type === "asset_type") {
+                tableHeader.innerHTML = `
+                    <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+                        <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad (Druh majetku)</th><th class="py-3 px-3 text-center w-40">Druh</th>
+                    </tr>`;
+                tbody.innerHTML = currentChapter.exercises.map((row, i) => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
+                        <td class="py-3 px-3 text-sm">${row.op}</td>
+                        <td class="py-3 px-3 text-center">
+                            <select id="sel_${i}" class="w-full text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white">
+                                <option value="">-- Vyber --</option><option value="DNM">DNM</option><option value="DHM">DHM</option><option value="DFM">DFM</option><option value="DP">DP</option><option value="KM">KM</option>
+                            </select>
+                        </td>
+                    </tr>`).join('');
+            } else {
+                tableHeader.innerHTML = `
+                    <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+                        <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 text-center w-28">Má Dať (MD)</th><th class="py-3 px-3 text-center w-28">Dal (D)</th>
+                    </tr>`;
+                tbody.innerHTML = currentChapter.exercises.map((row, i) => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
+                        <td class="py-3 px-3 text-sm">${row.op}</td>
+                        <td class="py-3 px-3 text-center"><input type="text" id="md_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none uppercase"></td>
+                        <td class="py-3 px-3 text-center"><input type="text" id="d_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none uppercase"></td>
+                    </tr>`).join('');
+            }
+        }
+
+        function setActiveInput(inp) {
+            document.querySelectorAll('#transactionRows input').forEach(el => el.classList.remove('active-input-ring'));
+            activeInput = inp;
+            inp.classList.add('active-input-ring');
+        }
+
+        function resetCurrentExercise() {
+            document.querySelectorAll('#transactionRows input, #transactionRows select').forEach(el => {
+                el.value = '';
+                el.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+            });
+            document.getElementById('feedbackContainer').classList.add('hidden');
+        }
+
+        function checkSolution() {
+            let isAllCorrect = true;
+            currentChapter.exercises.forEach((row, i) => {
+                if (currentChapter.type === "document" || currentChapter.type === "asset_type") {
+                    const el = document.getElementById(`sel_${i}`);
+                    if (el.value === row.correct) {
+                        el.classList.add('border-emerald-500', 'bg-emerald-50'); el.classList.remove('border-red-500', 'bg-red-50');
+                    } else {
+                        el.classList.add('border-red-500', 'bg-red-50'); el.classList.remove('border-emerald-500', 'bg-emerald-50');
+                        isAllCorrect = false;
+                    }
+                } else {
+                    const md = document.getElementById(`md_${i}`);
+                    const d = document.getElementById(`d_${i}`);
+                    
+                    if (md.value.trim() === row.md) { md.classList.add('border-emerald-500', 'bg-emerald-50'); md.classList.remove('border-red-500', 'bg-red-50'); } 
+                    else { md.classList.add('border-red-500', 'bg-red-50'); md.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
+                    
+                    if (d.value.trim() === row.d) { d.classList.add('border-emerald-500', 'bg-emerald-50'); d.classList.remove('border-red-500', 'bg-red-50'); } 
+                    else { d.classList.add('border-red-500', 'bg-red-50'); d.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
+                }
+            });
+
+            const fb = document.getElementById('feedbackContainer');
+            const fbContent = document.getElementById('feedbackContent');
+            fb.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                fb.className = "rounded-xl p-4 bg-emerald-50 border border-emerald-200 text-emerald-900";
+                fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-emerald-950 mb-1">Výborne! Všetko je správne.</h4><p class="text-xs text-emerald-800">Skvelo zvládnuté účtovné prípady.</p></div>`;
+            } else {
+                fb.className = "rounded-xl p-4 bg-rose-50 border border-rose-200 text-rose-900";
+                fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="x" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-rose-950 mb-1">Našli sa chyby!</h4><p class="text-xs text-rose-800">Skontroluj červeno podfarbené políčka a oprav ich.</p></div>`;
+            }
+            lucide.createIcons();
+        }
+
+        function renderAccountsList(arr) {
+            const list = document.getElementById('accountList');
+            list.innerHTML = arr.map(a => `
+                <div onclick="pasteAccount('${a.code}')" class="p-2 rounded-lg border border-slate-100 bg-white hover:bg-blue-50 transition-colors cursor-pointer flex items-center overflow-hidden">
+                    <span class="px-2 py-1 bg-slate-100 text-slate-700 font-mono font-bold text-xs mr-2">${a.code}</span>
+                    <span class="text-xs font-medium text-slate-700 truncate">${a.name}</span>
+                </div>
+            `).join('');
+        }
+
+        function handleAccountSearch(q) {
+            const query = q.trim().toLowerCase();
+            if (!query) return renderAccountsList(ACCOUNTS_DB);
+            const isNum = /^\d+$/.test(query);
+            renderAccountsList(ACCOUNTS_DB.filter(a => isNum ? a.code.startsWith(query) : a.name.toLowerCase().includes(query)));
+        }
+
+        function pasteAccount(code) {
+            if (currentChapter && (currentChapter.type === 'document' || currentChapter.type === 'asset_type')) return;
+            if (activeInput) {
+                activeInput.value = code;
+                activeInput.classList.remove('border-red-500', 'bg-red-50');
+                activeInput.classList.add('border-blue-500', 'bg-blue-50');
+            }
+        }
+    </script>
+</body>
+</html>
