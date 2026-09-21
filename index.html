@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Zbierka Účtovníctva - SOČ Pomôcka</title>
     
-    <!-- Vlastné logo v karte prehliadača (Favicon) - písmeno Ú -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='50%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' dominant-baseline='central' text-anchor='middle'>Ú</text></svg>">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -66,24 +65,58 @@
                         <button onclick="showChapterSelection()" class="inline-flex items-center text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Späť na prehľad kapitol</button>
                         <span id="chapterBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Kapitola 1</span>
                     </div>
+                    
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                         <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                             <h2 id="exerciseTitle" class="text-2xl font-bold text-slate-900 mb-2">Názov cvičenia</h2>
-                            <p id="exerciseDescription" class="text-slate-600 text-sm leading-relaxed">Popis cvičenia</p>
+                            <p id="exerciseDescription" class="text-slate-600 text-sm leading-relaxed mb-4">Popis cvičenia</p>
+                            
+                            <!-- Legenda pre dokumenty (zobrazí sa len pri Kapitole 1) -->
+                            <div id="docLegend" class="hidden bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-900">
+                                <h4 class="font-bold mb-3 flex items-center text-blue-800"><i data-lucide="info" class="w-4 h-4 mr-1.5"></i>Legenda účtovných dokladov</h4>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 font-medium">
+                                    <div><span class="font-bold">PPD</span> - Príjmový pokl. doklad</div>
+                                    <div><span class="font-bold">VPD</span> - Výdavkový pokl. doklad</div>
+                                    <div><span class="font-bold">PFA</span> - Prijatá faktúra</div>
+                                    <div><span class="font-bold">VFA</span> - Vystavená faktúra</div>
+                                    <div><span class="font-bold">VBÚ</span> - Výpis z bankového účtu</div>
+                                    <div><span class="font-bold">VKBÚ</span> - Výpis z krátk. bank. úveru</div>
+                                    <div><span class="font-bold">PRI</span> - Príjemka</div>
+                                    <div><span class="font-bold">VYD</span> - Výdajka</div>
+                                    <div><span class="font-bold">ID</span> - Interný doklad</div>
+                                    <div><span class="font-bold">ZAZ</span> - Záznam o zaradení</div>
+                                    <div><span class="font-bold">VPFA</span> - Vnútropodniková faktúra</div>
+                                    <div><span class="font-bold">ZVL</span> - Zúčtovacia výplatná listina</div>
+                                    <div><span class="font-bold">ZNI</span> - Zmenka na inkaso</div>
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="p-6 space-y-6">
+                            <div class="flex justify-start items-center bg-slate-50 px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hidden" id="paginationTop">
+                                <span>Strana <span id="currentPageNum">1</span> z <span id="totalPagesNum">3</span></span>
+                            </div>
+
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left border-collapse">
                                     <thead id="tableHeader"></thead>
                                     <tbody id="transactionRows" class="divide-y divide-slate-100 text-sm"></tbody>
                                 </table>
                             </div>
+                            
                             <div id="feedbackContainer" class="hidden rounded-xl p-4 transition-all duration-200">
                                 <div id="feedbackContent" class="flex items-start space-x-3"></div>
                             </div>
-                            <div class="flex flex-wrap items-center justify-end gap-4 pt-4 border-t border-slate-100">
-                                <button onclick="resetCurrentExercise()" class="px-4 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors mr-auto">Vymazať odpovede</button>
-                                <button onclick="checkSolution()" class="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition-all">Skontrolovať riešenie</button>
+                            
+                            <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+                                <div class="flex gap-2" id="paginationControls">
+                                    <button onclick="changePage(-1)" id="btnPrevPage" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"><i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i>Predchádzajúca</button>
+                                    <button onclick="changePage(1)" id="btnNextPage" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed">Ďalšia<i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i></button>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="resetCurrentExercise()" class="px-4 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">Vymazať stranu</button>
+                                    <button onclick="checkSolution()" class="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition-all">Skontrolovať riešenie</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -107,7 +140,6 @@
         </div>
     </main>
 
-    <!-- PÄTIČKA -->
     <footer class="bg-white border-t border-slate-200 mt-8 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 space-y-4 md:space-y-0">
             <div class="flex flex-col items-center md:items-start space-y-1.5">
@@ -121,11 +153,11 @@
         </div>
     </footer>
 
-    <!-- PLÁVAJÚCA KALKULAČKA V ĽAVOM DOLNOM ROHU -->
     <div class="fixed bottom-5 left-5 z-50">
-        <button onclick="toggleCalculator()" class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 cursor-pointer" title="Otvoriť kalkulačku">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        <button onclick="toggleCalculator()" class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-300" title="Otvoriť kalkulačku">
+            <!-- Moderná SVG ikona kalkulačky -->
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
             </svg>
         </button>
     </div>
@@ -135,30 +167,30 @@
             <span>Kalkulačka</span>
             <span onclick="toggleCalculator()" class="cursor-pointer text-slate-400 hover:text-white text-lg">✕</span>
         </div>
-        <input type="text" id="calcScreen" readonly value="0" class="w-full h-14 bg-slate-100 text-right px-4 text-2xl font-bold text-slate-800 border-none outline-none">
+        <input type="text" id="calcScreen" readonly value="0" class="w-full h-14 bg-slate-100 text-right px-4 text-2xl font-bold text-slate-800 border-none outline-none focus:outline-none">
         <div class="grid grid-cols-4 gap-1 p-2 bg-slate-200">
-            <button onclick="calcClear()" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">C</button>
-            <button onclick="calcAppend('/')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">÷</button>
-            <button onclick="calcAppend('*')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">×</button>
-            <button onclick="calcBack()" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">⌫</button>
+            <button onclick="calcClear()" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">C</button>
+            <button onclick="calcAppend('/')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded shadow-sm">÷</button>
+            <button onclick="calcAppend('*')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded shadow-sm">×</button>
+            <button onclick="calcBack()" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded shadow-sm">⌫</button>
             
-            <button onclick="calcAppend('7')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">7</button>
-            <button onclick="calcAppend('8')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">8</button>
-            <button onclick="calcAppend('9')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">9</button>
-            <button onclick="calcAppend('-')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">-</button>
+            <button onclick="calcAppend('7')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">7</button>
+            <button onclick="calcAppend('8')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">8</button>
+            <button onclick="calcAppend('9')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">9</button>
+            <button onclick="calcAppend('-')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded shadow-sm">-</button>
             
-            <button onclick="calcAppend('4')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">4</button>
-            <button onclick="calcAppend('5')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">5</button>
-            <button onclick="calcAppend('6')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">6</button>
-            <button onclick="calcAppend('+')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded">+</button>
+            <button onclick="calcAppend('4')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">4</button>
+            <button onclick="calcAppend('5')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">5</button>
+            <button onclick="calcAppend('6')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">6</button>
+            <button onclick="calcAppend('+')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded shadow-sm">+</button>
             
-            <button onclick="calcAppend('1')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">1</button>
-            <button onclick="calcAppend('2')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">2</button>
-            <button onclick="calcAppend('3')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">3</button>
-            <button onclick="calcCalculate()" class="p-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded row-span-2 flex items-center justify-center">=</button>
+            <button onclick="calcAppend('1')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">1</button>
+            <button onclick="calcAppend('2')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">2</button>
+            <button onclick="calcAppend('3')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">3</button>
+            <button onclick="calcCalculate()" class="p-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded row-span-2 flex items-center justify-center shadow-sm">=</button>
             
-            <button onclick="calcAppend('0')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded col-span-2">0</button>
-            <button onclick="calcAppend('.')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded">.</button>
+            <button onclick="calcAppend('0')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded col-span-2 shadow-sm">0</button>
+            <button onclick="calcAppend('.')" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">.</button>
         </div>
     </div>
 
@@ -274,32 +306,84 @@
             { code: "701", name: "Začiatočný účet súvahový" }, { code: "702", name: "Konečný účet súvahový" }, { code: "710", name: "Účet ziskov a strát" }, { code: "711", name: "Začiatočný účet nákladov a výnosov" }
         ];
 
+        const allDocExercises = [
+            { op: "Prevod peňazí z banky do pokladne", correct: "PPD" },
+            { op: "Vyplatenie miezd zamestnancom v hotovosti", correct: "VPD" },
+            { op: "Nákup materiálu od dodávateľa", correct: "PFA" },
+            { op: "Príjem materiálu na sklad", correct: "PRI" },
+            { op: "Faktúra za prepravu materiálu", correct: "PFA" },
+            { op: "Spotreba materiálu vo výrobe", correct: "VYD" },
+            { op: "Podnik vystavil faktúru odberateľovi za poskytnuté služby", correct: "VFA" },
+            { op: "Nákup poštových známok v hotovosti", correct: "VPD" },
+            { op: "Zaúčtovanie mesačných odpisov", correct: "ID" },
+            { op: "Nákup materiálu v hotovosti", correct: "VPD" },
+            { op: "Splátka časti krátkodobého bankového úveru", correct: "VKBÚ" },
+            { op: "Nákup nového stroja", correct: "PFA" },
+            { op: "Faktúra za sprevádzkovanie stroja", correct: "PFA" },
+            { op: "Zaradenie stroja do užívania v obstarávacej cene", correct: "ZAZ" },
+            { op: "Zaplatenie úrokov z úveru", correct: "VBÚ" },
+            { op: "Preprava vlastným vozidlom", correct: "VPFA" },
+            { op: "Zúčtovanie poskytnutého preddavku", correct: "ID" },
+            { op: "Inkaso faktúry od odberateľa", correct: "VBÚ" },
+            { op: "Úhrada faktúry dodávateľovi z bankového účtu", correct: "VBÚ" },
+            { op: "Zrážka na sporenie", correct: "ZVL" },
+            { op: "Priznané hrubé mzdy zamestnancom", correct: "ZVL" },
+            { op: "Zrážka sociálneho a zdravotného poistenia", correct: "ZVL" },
+            { op: "Náhrada PN do 10 dní", correct: "ZVL" },
+            { op: "Tvorba sociálneho fondu", correct: "ID" },
+            { op: "Predaj nadbytočného materiálu", correct: "VFA" },
+            { op: "Manko na materiáli", correct: "ID" },
+            { op: "Uhradenie pohľadávky bankovým účtom", correct: "VBÚ" },
+            { op: "Úhrada dane z nehnuteľnosti", correct: "VBÚ" },
+            { op: "Úhrada dane z príjmov účtovnej jednotky", correct: "VBÚ" },
+            { op: "Faktúra za občerstvenie obchodných partnerov vyplatená v hotovosti", correct: "VPD" },
+            { op: "Tovar vydaný na reprezentáciu", correct: "VYD" },
+            { op: "Aktivácia nákladov", correct: "ID" },
+            { op: "Poplatok za stavebné povolenie platený v hotovosti", correct: "VPD" },
+            { op: "Poskytnutie preddavku dodávateľovi z bankového účtu", correct: "VBÚ" },
+            { op: "Vystavená faktúra za prepravné služby", correct: "VFA" },
+            { op: "Nákup stavebného materiálu použitého pri výstavbe budovy", correct: "PFA" },
+            { op: "Poplatky za kolaudáciu platené v hotovosti", correct: "VPD" },
+            { op: "Uhradenie faktúry z krátkodobého úveru", correct: "VKBÚ" },
+            { op: "Eskont zmenky na inkaso banke", correct: "ID" },
+            { op: "Predaj tovaru v hotovosti", correct: "PPD" },
+            { op: "Pripísanie úveru na bankový účet", correct: "VBÚ" },
+            { op: "Inkaso pohľadávky zmenkou", correct: "ZNI" },
+            { op: "Reklamácia uplatnená voči dodávateľovi za materiál", correct: "ID" },
+            { op: "Vrátenie zvyšku preddavku do pokladnice", correct: "PPD" },
+            { op: "Predaj výrobkov odberateľovi", correct: "VFA" },
+            { op: "Poplatok za vedenie účtu", correct: "VBÚ" },
+            { op: "Spotreba kolkov zo zásoby", correct: "ID" },
+            { op: "Nákup nového osobného vozidla", correct: "PFA" },
+            { op: "Zaplatenie za prepis auta v hotovosti", correct: "VPD" },
+            { op: "Zrážka na sporenie a pôžičky zamestnanca", correct: "ZVL" },
+            { op: "Vyplatenie miezd zamestnancom z bankového účtu", correct: "VBÚ" },
+            { op: "Vyskladnenie predaných výrobkov", correct: "VYD" },
+            { op: "Predaj vlastných výrobkov", correct: "VFA" },
+            { op: "Príjem nedokončenej výroby do skladu", correct: "PRI" },
+            { op: "Výroba materiálu vo vlastnej réžii", correct: "VPFA" },
+            { op: "Preradenie osobného vozidla z osobného užívania do podnikania", correct: "ID" },
+            { op: "Zaradenie osobného vozidla do užívania", correct: "ZAZ" },
+            { op: "Zaplatené kolky na stavebné povolenie v hotovosti", correct: "VPD" },
+            { op: "Inštalácia softvéru", correct: "PFA" },
+            { op: "Zúčtovanie prijatého preddavku", correct: "ID" }
+        ];
+
+        // Premiešame 60 príkladov, aby nešli presne za sebou podľa zoznamu
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        shuffleArray(allDocExercises);
+
         const CHAPTERS = [
             {
                 id: 1, type: "document",
-                title: "Určenie účtovného dokladu", desc: "Základná orientácia v dokladoch. Priraď správnu skratku.",
-                exercises: [
-                    { op: "Nákup kancelárskeho papiera v hotovosti", correct: "VYD" },
-                    { op: "Tržba v hotovosti za predaný tovar", correct: "PRI" },
-                    { op: "Došlá faktúra od dodávateľa za materiál", correct: "PFA" },
-                    { op: "Vystavená faktúra odberateľovi za služby", correct: "VFA" },
-                    { op: "Úhrada faktúry dodávateľovi z nášho účtu", correct: "VBÚ" },
-                    { op: "Odberateľ uhradil faktúru na náš účet", correct: "VBÚ" },
-                    { op: "Výber hotovosti z bankového účtu (z pohľadu banky)", correct: "VBÚ" },
-                    { op: "Príjem hotovosti vybranej z banky do pokladnice", correct: "PRI" },
-                    { op: "Zúčtovanie hrubých miezd zamestnancov", correct: "ID" },
-                    { op: "Výpočet a zaúčtovanie ročných odpisov", correct: "ID" },
-                    { op: "Odvod hotovosti z pokladnice do banky (z pohľadu pokladne)", correct: "VYD" },
-                    { op: "Došlá faktúra od elektrární", correct: "PFA" },
-                    { op: "Bankové poplatky strhnuté z účtu", correct: "VBÚ" },
-                    { op: "Zaradenie nového stroja do používania", correct: "ID" },
-                    { op: "Vystavená faktúra za predané hotové výrobky", correct: "VFA" },
-                    { op: "Nákup kolkov v hotovosti", correct: "VYD" },
-                    { op: "Zúčtovanie sociálneho poistenia zamestnávateľa", correct: "ID" },
-                    { op: "Výplata zálohy na služobnú cestu", correct: "VYD" },
-                    { op: "Splátka bankového úveru strhnutá z účtu", correct: "VBÚ" },
-                    { op: "Vrátenie nespotrebovanej zálohy do pokladnice", correct: "PRI" }
-                ]
+                title: "Určenie účtovného dokladu", 
+                desc: "Základná orientácia v dokladoch. Priraď k danému účtovnému prípadu správny účtovný doklad.",
+                exercises: allDocExercises
             },
             {
                 id: 2, type: "asset_type",
@@ -337,6 +421,8 @@
 
         let currentChapter = null;
         let activeInput = null;
+        let currentPage = 0;
+        const itemsPerPage = 20;
 
         window.onload = function() {
             renderChaptersGrid();
@@ -373,11 +459,21 @@
 
         function selectChapter(id) {
             currentChapter = CHAPTERS.find(c => c.id === id);
+            currentPage = 0; // Reset na 1. stranu pri otvorení
+            
             document.getElementById('chapterView').classList.add('hidden');
             document.getElementById('exerciseView').classList.remove('hidden');
             document.getElementById('chapterBadge').innerText = `Kapitola ${currentChapter.id}`;
             document.getElementById('exerciseTitle').innerText = currentChapter.title;
             document.getElementById('exerciseDescription').innerText = currentChapter.desc;
+            
+            // Zobraziť legendu len pre kapitolu 1
+            if (currentChapter.id === 1) {
+                document.getElementById('docLegend').classList.remove('hidden');
+            } else {
+                document.getElementById('docLegend').classList.add('hidden');
+            }
+
             loadCurrentExercise();
             window.scrollTo(0,0);
         }
@@ -387,33 +483,66 @@
             const tbody = document.getElementById('transactionRows');
             document.getElementById('feedbackContainer').classList.add('hidden');
             activeInput = null;
+            
+            let displayExercises = currentChapter.exercises;
+            
+            // Logika stránkovania
+            if (currentChapter.exercises.length > itemsPerPage) {
+                document.getElementById('paginationControls').classList.remove('hidden');
+                document.getElementById('paginationTop').classList.remove('hidden');
+                
+                const start = currentPage * itemsPerPage;
+                const end = start + itemsPerPage;
+                displayExercises = currentChapter.exercises.slice(start, end);
+                
+                const totalPages = Math.ceil(currentChapter.exercises.length / itemsPerPage);
+                document.getElementById('currentPageNum').innerText = currentPage + 1;
+                document.getElementById('totalPagesNum').innerText = totalPages;
+                
+                document.getElementById('btnPrevPage').disabled = currentPage === 0;
+                document.getElementById('btnNextPage').disabled = currentPage >= totalPages - 1;
+            } else {
+                document.getElementById('paginationControls').classList.add('hidden');
+                document.getElementById('paginationTop').classList.add('hidden');
+            }
 
+            // Vykreslenie hlavičiek a riadkov
             if (currentChapter.type === "document") {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
                         <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 text-center w-40">Doklad</th>
                     </tr>`;
-                tbody.innerHTML = currentChapter.exercises.map((row, i) => `
+                tbody.innerHTML = displayExercises.map((row, i) => {
+                    const absIndex = (currentPage * itemsPerPage) + i + 1;
+                    return `
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
+                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${absIndex}.</td>
                         <td class="py-3 px-3 text-sm">${row.op}</td>
                         <td class="py-3 px-3 text-center">
-                            <select id="sel_${i}" class="w-full text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white">
-                                <option value="">-- Vyber --</option><option value="PFA">PFA</option><option value="VFA">VFA</option><option value="VBÚ">VBÚ</option><option value="PRI">PRI</option><option value="VYD">VYD</option><option value="ID">ID</option>
+                            <select id="sel_${i}" class="w-full text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white shadow-sm">
+                                <option value="">-- Vyber --</option>
+                                <option value="PPD">PPD</option><option value="VPD">VPD</option>
+                                <option value="PFA">PFA</option><option value="VFA">VFA</option>
+                                <option value="VBÚ">VBÚ</option><option value="VKBÚ">VKBÚ</option>
+                                <option value="PRI">PRI</option><option value="VYD">VYD</option>
+                                <option value="ID">ID</option><option value="ZAZ">ZAZ</option>
+                                <option value="VPFA">VPFA</option><option value="ZVL">ZVL</option>
+                                <option value="ZNI">ZNI</option>
                             </select>
                         </td>
-                    </tr>`).join('');
+                    </tr>`
+                }).join('');
             } else if (currentChapter.type === "asset_type") {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
                         <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad (Druh majetku)</th><th class="py-3 px-3 text-center w-40">Druh</th>
                     </tr>`;
-                tbody.innerHTML = currentChapter.exercises.map((row, i) => `
+                tbody.innerHTML = displayExercises.map((row, i) => `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
                         <td class="py-3 px-3 text-sm">${row.op}</td>
                         <td class="py-3 px-3 text-center">
-                            <select id="sel_${i}" class="w-full text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white">
+                            <select id="sel_${i}" class="w-full text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white shadow-sm">
                                 <option value="">-- Vyber --</option><option value="DNM">DNM</option><option value="DHM">DHM</option><option value="DFM">DFM</option><option value="DP">DP</option><option value="KM">KM</option>
                             </select>
                         </td>
@@ -423,15 +552,22 @@
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
                         <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 text-center w-28">Má Dať (MD)</th><th class="py-3 px-3 text-center w-28">Dal (D)</th>
                     </tr>`;
-                tbody.innerHTML = currentChapter.exercises.map((row, i) => `
+                tbody.innerHTML = displayExercises.map((row, i) => `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
                         <td class="py-3 px-3 text-sm">${row.op}</td>
-                        <td class="py-3 px-3 text-center"><input type="text" id="md_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none uppercase"></td>
-                        <td class="py-3 px-3 text-center"><input type="text" id="d_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none uppercase"></td>
+                        <td class="py-3 px-3 text-center"><input type="text" id="md_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none shadow-sm uppercase"></td>
+                        <td class="py-3 px-3 text-center"><input type="text" id="d_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none shadow-sm uppercase"></td>
                     </tr>`).join('');
             }
             lucide.createIcons();
+        }
+
+        function changePage(dir) {
+            currentPage += dir;
+            loadCurrentExercise();
+            // Automaticky posunie zobrazenie na začiatok cvičenia
+            document.getElementById('exerciseView').scrollIntoView({ behavior: 'smooth' });
         }
 
         function setActiveInput(inp) {
@@ -450,7 +586,12 @@
 
         function checkSolution() {
             let isAllCorrect = true;
-            currentChapter.exercises.forEach((row, i) => {
+            
+            // Získame len prvky pre aktuálnu stranu
+            const start = currentPage * itemsPerPage;
+            const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPage);
+
+            displayExercises.forEach((row, i) => {
                 if (currentChapter.type === "document" || currentChapter.type === "asset_type") {
                     const el = document.getElementById(`sel_${i}`);
                     if (el.value === row.correct) {
@@ -476,10 +617,10 @@
             fb.classList.remove('hidden');
 
             if (isAllCorrect) {
-                fb.className = "rounded-xl p-4 bg-emerald-50 border border-emerald-200 text-emerald-900";
-                fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-emerald-950 mb-1">Výborne! Všetko je správne.</h4><p class="text-xs text-emerald-800">Skvelo zvládnuté účtovné prípady.</p></div>`;
+                fb.className = "rounded-xl p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 mt-4";
+                fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-emerald-950 mb-1">Výborne! Všetko je správne.</h4><p class="text-xs text-emerald-800">Skvelo zvládnuté účtovné prípady na tejto strane.</p></div>`;
             } else {
-                fb.className = "rounded-xl p-4 bg-rose-50 border border-rose-200 text-rose-900";
+                fb.className = "rounded-xl p-4 bg-rose-50 border border-rose-200 text-rose-900 mt-4";
                 fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="x" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-rose-950 mb-1">Našli sa chyby!</h4><p class="text-xs text-rose-800">Skontroluj červeno podfarbené políčka a oprav ich.</p></div>`;
             }
             lucide.createIcons();
@@ -519,7 +660,6 @@
             }
         }
 
-        // Logika kalkulačky
         function toggleCalculator() {
             const modal = document.getElementById('calcModal');
             modal.classList.toggle('hidden');
