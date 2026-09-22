@@ -17,6 +17,8 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .active-input-ring { ring: 2px; ring-color: #3b82f6; border-color: #2563eb !important; background-color: #eff6ff !important; }
+        optgroup { font-weight: 700; color: #1e293b; font-style: normal; background-color: #f8fafc; }
+        option { font-weight: 500; color: #334155; }
     </style>
 </head>
 <body class="text-slate-800">
@@ -155,7 +157,6 @@
 
     <div class="fixed bottom-5 left-5 z-50">
         <button onclick="toggleCalculator()" class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-300" title="Otvoriť kalkulačku">
-            <!-- Moderná SVG ikona kalkulačky -->
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
             </svg>
@@ -306,6 +307,58 @@
             { code: "701", name: "Začiatočný účet súvahový" }, { code: "702", name: "Konečný účet súvahový" }, { code: "710", name: "Účet ziskov a strát" }, { code: "711", name: "Začiatočný účet nákladov a výnosov" }
         ];
 
+        // Definovanie hlavných a vedľajších kategórií pre Kapitolu 2
+        const KATEGORIE_MAJETKU = {
+            "DM": {
+                name: "Dlhodobý majetok",
+                options: [
+                    {val: "DHM", label: "Dlhodobý hmotný majetok"},
+                    {val: "DNM", label: "Dlhodobý nehmotný majetok"},
+                    {val: "DFM", label: "Dlhodobý finančný majetok"}
+                ]
+            },
+            "KM": {
+                name: "Krátkodobý majetok",
+                options: [
+                    {group: "Zásoby", items: [
+                        {val: "K_MAT", label: "Materiál"},
+                        {val: "K_NV", label: "Nedokončená výroba"},
+                        {val: "K_VYR", label: "Výrobky"},
+                        {val: "K_TOV", label: "Tovar"}
+                    ]},
+                    {group: "Pohľadávky", items: [
+                        {val: "P_ODB", label: "Pohľadávky voči odberateľovi"},
+                        {val: "P_OST", label: "Ostatné pohľadávky"}
+                    ]},
+                    {group: "Krátkodobý finančný majetok", items: [
+                        {val: "F_POK", label: "Pokladnica a ceniny"},
+                        {val: "F_BU", label: "Bankové účty"},
+                        {val: "F_CP", label: "Krátkodobé cenné papiere"}
+                    ]}
+                ]
+            },
+            "VZ": {
+                name: "Vlastné zdroje",
+                options: [
+                    {val: "VZ_ZI", label: "Základné imanie"},
+                    {val: "VZ_KF", label: "Kapitálové fondy"},
+                    {val: "VZ_FZ", label: "Fondy zo zisku"},
+                    {val: "VZ_VH", label: "Výsledok hospodárenia"}
+                ]
+            },
+            "CZ": {
+                name: "Cudzie zdroje",
+                options: [
+                    {val: "CZ_UV", label: "Úvery"},
+                    {val: "CZ_DOD", label: "Záväzky voči dodávateľom"},
+                    {val: "CZ_ZAM", label: "Záväzky voči zamestnancom"},
+                    {val: "CZ_DAN", label: "Záväzky voči daňovému úradu"},
+                    {val: "CZ_POI", label: "Záväzky voči poisťovniam"},
+                    {val: "CZ_INE", label: "Iné záväzky"}
+                ]
+            }
+        };
+
         const allDocExercises = [
             { op: "Prevod peňazí z banky do pokladne", correct: "PPD" },
             { op: "Vyplatenie miezd zamestnancom v hotovosti", correct: "VPD" },
@@ -369,7 +422,70 @@
             { op: "Zúčtovanie prijatého preddavku", correct: "ID" }
         ];
 
-        // Premiešame 60 príkladov, aby nešli presne za sebou podľa zoznamu
+        // Rozdelené na text a sumu, aby sa to zobrazilo pod sebou / vedľa sumy bez zátvoriek
+        const allAssetExercises = [
+            { text: "Výrobná hala podniku", amount: "350 000,00 €", main: "DM", sub: "DHM" },
+            { text: "Osobný automobil pre obchodného zástupcu", amount: "24 500,00 €", main: "DM", sub: "DHM" },
+            { text: "Výrobný stroj", amount: "45 000,00 €", main: "DM", sub: "DHM" },
+            { text: "Pozemok pod výrobnou halou", amount: "85 000,00 €", main: "DM", sub: "DHM" },
+            { text: "Nakúpený účtovný softvér", amount: "1 200,00 €", main: "DM", sub: "DNM" },
+            { text: "Ochranná známka podniku", amount: "3 500,00 €", main: "DM", sub: "DNM" },
+            { text: "Licencia na výrobný postup", amount: "8 000,00 €", main: "DM", sub: "DNM" },
+            { text: "Zriaďovacie náklady spoločnosti", amount: "1 500,00 €", main: "DM", sub: "DNM" },
+            { text: "Nakúpené akcie inej spoločnosti držané nad 1 rok", amount: "15 000,00 €", main: "DM", sub: "DFM" },
+            { text: "Poskytnutá pôžička inej firme so splatnosťou 5 rokov", amount: "50 000,00 €", main: "DM", sub: "DFM" },
+            { text: "Umelecké dielo v zasadačke podniku", amount: "4 200,00 €", main: "DM", sub: "DHM" },
+            { text: "Látka na výrobu odevov na sklade", amount: "4 200,00 €", main: "KM", sub: "K_MAT" },
+            { text: "Kancelársky papier a náplne do tlačiarní v sklade", amount: "150,00 €", main: "KM", sub: "K_MAT" },
+            { text: "Náhradné diely na opravu strojov", amount: "850,00 €", main: "KM", sub: "K_MAT" },
+            { text: "Obalový materiál pre výrobky", amount: "320,00 €", main: "KM", sub: "K_MAT" },
+            { text: "Rozpracované výrobky na výrobnej linke", amount: "1 800,00 €", main: "KM", sub: "K_NV" },
+            { text: "Nedokončený drevený nábytok v dielni", amount: "2 100,00 €", main: "KM", sub: "K_NV" },
+            { text: "Hotový nábytok na sklade pripravený na predaj", amount: "8 500,00 €", main: "KM", sub: "K_VYR" },
+            { text: "Upečené pekárenské výrobky na sklade", amount: "400,00 €", main: "KM", sub: "K_VYR" },
+            { text: "Nakúpené notebooky v predajni elektroniky", amount: "12 000,00 €", main: "KM", sub: "K_TOV" },
+            { text: "Tovar v podnikovej predajni potravín", amount: "5 500,00 €", main: "KM", sub: "K_TOV" },
+            { text: "Vystavená faktúra za služby - neuhradená", amount: "1 100,00 €", main: "KM", sub: "P_ODB" },
+            { text: "Neuhradená faktúra od odberateľa za tovar", amount: "4 300,00 €", main: "KM", sub: "P_ODB" },
+            { text: "Zmenka na inkaso od odberateľa", amount: "2 000,00 €", main: "KM", sub: "P_ODB" },
+            { text: "Pohľadávka voči zamestnancovi za manko", amount: "120,00 €", main: "KM", sub: "P_OST" },
+            { text: "Poskytnutý preddavok dodávateľovi na materiál", amount: "500,00 €", main: "KM", sub: "P_OST" },
+            { text: "Nárok na vrátenie nadmerného odpočtu DPH", amount: "3 100,00 €", main: "KM", sub: "P_OST" },
+            { text: "Krátkodobá pohľadávka voči spoločníkovi", amount: "400,00 €", main: "KM", sub: "P_OST" },
+            { text: "Hotovosť v pokladnici v eurách", amount: "350,00 €", main: "KM", sub: "F_POK" },
+            { text: "Poštové známky a stravné lístky v trezore", amount: "450,00 €", main: "KM", sub: "F_POK" },
+            { text: "Valuty v cudzej mene v pokladnici", amount: "150,00 €", main: "KM", sub: "F_POK" },
+            { text: "Peniaze na bežnom účte v banke", amount: "18 500,00 €", main: "KM", sub: "F_BU" },
+            { text: "Zostatok na devízovom účte v USD", amount: "4 200,00 €", main: "KM", sub: "F_BU" },
+            { text: "Nakúpené štátne dlhopisy so splatnosťou 6 mesiacov", amount: "10 000,00 €", main: "KM", sub: "F_CP" },
+            { text: "Majetkové cenné papiere určené na obchodovanie do pol roka", amount: "5 000,00 €", main: "KM", sub: "F_CP" },
+            { text: "Vklady spoločníkov do s.r.o.", amount: "5 000,00 €", main: "VZ", sub: "VZ_ZI" },
+            { text: "Základné imanie akciovej spoločnosti", amount: "25 000,00 €", main: "VZ", sub: "VZ_ZI" },
+            { text: "Emisné ážio", amount: "1 200,00 €", main: "VZ", sub: "VZ_KF" },
+            { text: "Oceňovacie rozdiely z precenenia majetku", amount: "800,00 €", main: "VZ", sub: "VZ_KF" },
+            { text: "Kapitálové fondy z prijatých darov", amount: "3 000,00 €", main: "VZ", sub: "VZ_KF" },
+            { text: "Zákonný rezervný fond", amount: "1 500,00 €", main: "VZ", sub: "VZ_FZ" },
+            { text: "Štatutárne fondy tvorené zo zisku", amount: "2 200,00 €", main: "VZ", sub: "VZ_FZ" },
+            { text: "Nedeliteľný fond", amount: "4 000,00 €", main: "VZ", sub: "VZ_FZ" },
+            { text: "Nerozdelený zisk z minulých rokov", amount: "12 400,00 €", main: "VZ", sub: "VZ_VH" },
+            { text: "Neuhradená strata z minulého roka", amount: "3 200,00 €", main: "VZ", sub: "VZ_VH" },
+            { text: "Zisk bežného účtovného obdobia", amount: "8 900,00 €", main: "VZ", sub: "VZ_VH" },
+            { text: "Dlhodobý hypotekárny úver na budovu", amount: "150 000,00 €", main: "CZ", sub: "CZ_UV" },
+            { text: "Krátkodobý prevádzkový úver", amount: "15 000,00 €", main: "CZ", sub: "CZ_UV" },
+            { text: "Eskontný úver poskytnutý bankou", amount: "4 500,00 €", main: "CZ", sub: "CZ_UV" },
+            { text: "Došlá faktúra za nákup materiálu - nezaplatená", amount: "2 600,00 €", main: "CZ", sub: "CZ_DOD" },
+            { text: "Nezaplatená faktúra za opravu firemného auta", amount: "380,00 €", main: "CZ", sub: "CZ_DOD" },
+            { text: "Neuhradená faktúra od telekomunikačného operátora", amount: "65,00 €", main: "CZ", sub: "CZ_DOD" },
+            { text: "Nevyplatené čisté mzdy zamestnancom", amount: "6 400,00 €", main: "CZ", sub: "CZ_ZAM" },
+            { text: "Nevyplatené odmeny manažmentu", amount: "2 500,00 €", main: "CZ", sub: "CZ_ZAM" },
+            { text: "Záväzok voči zamestnancovi z vyúčtovania pracovnej cesty", amount: "45,00 €", main: "CZ", sub: "CZ_ZAM" },
+            { text: "Neodvedená daň z príjmov právnických osôb", amount: "4 100,00 €", main: "CZ", sub: "CZ_DAN" },
+            { text: "Záväzok voči daňovému úradu z titulu DPH", amount: "1 800,00 €", main: "CZ", sub: "CZ_DAN" },
+            { text: "Záväzok voči Sociálnej poisťovni za zamestnancov", amount: "2 100,00 €", main: "CZ", sub: "CZ_POI" },
+            { text: "Záväzok voči zdravotnej poisťovni", amount: "850,00 €", main: "CZ", sub: "CZ_POI" },
+            { text: "Prijatý preddavok od zákazníka na zákazku", amount: "1 500,00 €", main: "CZ", sub: "CZ_INE" }
+        ];
+
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -377,6 +493,7 @@
             }
         }
         shuffleArray(allDocExercises);
+        shuffleArray(allAssetExercises);
 
         const CHAPTERS = [
             {
@@ -386,25 +503,10 @@
                 exercises: allDocExercises
             },
             {
-                id: 2, type: "asset_type",
-                title: "Majetok a jeho zdroje krytia", desc: "Určovanie formy a zloženia majetku (DNM, DHM, DFM, DP, KM).",
-                exercises: [
-                    { op: "Nakúpený softvér pre účtovné oddelenie", correct: "DNM" },
-                    { op: "Výrobná hala s pozemkom vo vlastníctve", correct: "DHM" },
-                    { op: "Nakúpené akcie iného podniku (držba 3 roky)", correct: "DFM" },
-                    { op: "Pohľadávka voči odberateľovi so splatnosťou 2 roky", correct: "DP" },
-                    { op: "Nakúpený materiál na sklade", correct: "KM" },
-                    { op: "Zostatok peňazí na bankovom účte", correct: "KM" },
-                    { op: "Dodávkové auto pre rozvoz tovaru", correct: "DHM" },
-                    { op: "Ochranná známka podniku", correct: "DNM" },
-                    { op: "Pozemok pod budovou podniku", correct: "DHM" },
-                    { op: "Poskytnutá pôžička inému podniku (splatnosť 5 rokov)", correct: "DFM" },
-                    { op: "Tovar pripravený v predajni", correct: "KM" },
-                    { op: "Umelecké dielo v kancelárii riaditeľa", correct: "DHM" },
-                    { op: "Zakúpená licencia na výrobu technológie", correct: "DNM" },
-                    { op: "Podielové cenné papiere dcérskej spoločnosti", correct: "DFM" },
-                    { op: "Dlhodobá pohľadávka z predaja podniku", correct: "DP" }
-                ]
+                id: 2, type: "asset_grouping",
+                title: "Majetok a jeho zdroje krytia", 
+                desc: "Priraď majetok a zdroje financovania do správnych skupín. Najskôr zvoľ hlavnú kategóriu, potom upresni podskupinu.",
+                exercises: allAssetExercises
             },
             {
                 id: 3, type: "accounting",
@@ -459,7 +561,7 @@
 
         function selectChapter(id) {
             currentChapter = CHAPTERS.find(c => c.id === id);
-            currentPage = 0; // Reset na 1. stranu pri otvorení
+            currentPage = 0; 
             
             document.getElementById('chapterView').classList.add('hidden');
             document.getElementById('exerciseView').classList.remove('hidden');
@@ -467,7 +569,6 @@
             document.getElementById('exerciseTitle').innerText = currentChapter.title;
             document.getElementById('exerciseDescription').innerText = currentChapter.desc;
             
-            // Zobraziť legendu len pre kapitolu 1
             if (currentChapter.id === 1) {
                 document.getElementById('docLegend').classList.remove('hidden');
             } else {
@@ -476,6 +577,40 @@
 
             loadCurrentExercise();
             window.scrollTo(0,0);
+        }
+        
+        function getSubOptionsHtml(mainKey) {
+            if(!mainKey || !KATEGORIE_MAJETKU[mainKey]) return '<option value="">-- Najskôr zvoľ kategóriu --</option>';
+            const opts = KATEGORIE_MAJETKU[mainKey].options;
+            let html = '<option value="">-- Vyber upresnenie --</option>';
+            opts.forEach(o => {
+                if(o.group) {
+                    html += `<optgroup label="${o.group}">`;
+                    o.items.forEach(i => { html += `<option value="${i.val}">${i.label}</option>`; });
+                    html += `</optgroup>`;
+                } else {
+                    html += `<option value="${o.val}">${o.label}</option>`;
+                }
+            });
+            return html;
+        }
+
+        function handleMainCategoryChange(index) {
+            const mainSel = document.getElementById(`main_${index}`);
+            const subSel = document.getElementById(`sub_${index}`);
+            
+            mainSel.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+            subSel.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+            
+            if(mainSel.value) {
+                subSel.innerHTML = getSubOptionsHtml(mainSel.value);
+                subSel.classList.remove('hidden');
+                subSel.disabled = false;
+            } else {
+                subSel.innerHTML = '';
+                subSel.classList.add('hidden');
+                subSel.disabled = true;
+            }
         }
 
         function loadCurrentExercise() {
@@ -486,7 +621,6 @@
             
             let displayExercises = currentChapter.exercises;
             
-            // Logika stránkovania
             if (currentChapter.exercises.length > itemsPerPage) {
                 document.getElementById('paginationControls').classList.remove('hidden');
                 document.getElementById('paginationTop').classList.remove('hidden');
@@ -506,7 +640,6 @@
                 document.getElementById('paginationTop').classList.add('hidden');
             }
 
-            // Vykreslenie hlavičiek a riadkov
             if (currentChapter.type === "document") {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
@@ -532,21 +665,33 @@
                         </td>
                     </tr>`
                 }).join('');
-            } else if (currentChapter.type === "asset_type") {
+            } else if (currentChapter.type === "asset_grouping") {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
-                        <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad (Druh majetku)</th><th class="py-3 px-3 text-center w-40">Druh</th>
+                        <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 w-[45%]">Určenie skupiny</th>
                     </tr>`;
-                tbody.innerHTML = displayExercises.map((row, i) => `
+                tbody.innerHTML = displayExercises.map((row, i) => {
+                    const absIndex = (currentPage * itemsPerPage) + i + 1;
+                    return `
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
-                        <td class="py-3 px-3 text-sm">${row.op}</td>
-                        <td class="py-3 px-3 text-center">
-                            <select id="sel_${i}" class="w-full text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white shadow-sm">
-                                <option value="">-- Vyber --</option><option value="DNM">DNM</option><option value="DHM">DHM</option><option value="DFM">DFM</option><option value="DP">DP</option><option value="KM">KM</option>
+                        <td class="py-3 px-2 font-bold text-slate-400 text-sm align-top pt-4">${absIndex}.</td>
+                        <td class="py-3 px-3 align-top pt-4">
+                            <div class="text-sm font-medium text-slate-800">${row.text}</div>
+                            <div class="text-sm font-bold text-slate-600 mt-1">${row.amount}</div>
+                        </td>
+                        <td class="py-3 px-3 space-y-2 align-top pt-4">
+                            <select id="main_${i}" onchange="handleMainCategoryChange(${i})" class="w-full px-3 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white shadow-sm cursor-pointer text-slate-700">
+                                <option value="">-- Vyber hlavnú kategóriu --</option>
+                                <option value="DM">Dlhodobý majetok</option>
+                                <option value="KM">Krátkodobý majetok</option>
+                                <option value="VZ">Vlastné zdroje</option>
+                                <option value="CZ">Cudzie zdroje</option>
+                            </select>
+                            <select id="sub_${i}" disabled class="w-full hidden px-3 py-2 text-sm font-semibold border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 bg-slate-50 shadow-sm cursor-pointer text-blue-800">
                             </select>
                         </td>
-                    </tr>`).join('');
+                    </tr>`
+                }).join('');
             } else {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
@@ -566,7 +711,6 @@
         function changePage(dir) {
             currentPage += dir;
             loadCurrentExercise();
-            // Automaticky posunie zobrazenie na začiatok cvičenia
             document.getElementById('exerciseView').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -580,6 +724,7 @@
             document.querySelectorAll('#transactionRows input, #transactionRows select').forEach(el => {
                 el.value = '';
                 el.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                if(el.id.startsWith('sub_')) { el.classList.add('hidden'); el.disabled = true; }
             });
             document.getElementById('feedbackContainer').classList.add('hidden');
         }
@@ -587,12 +732,11 @@
         function checkSolution() {
             let isAllCorrect = true;
             
-            // Získame len prvky pre aktuálnu stranu
             const start = currentPage * itemsPerPage;
             const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPage);
 
             displayExercises.forEach((row, i) => {
-                if (currentChapter.type === "document" || currentChapter.type === "asset_type") {
+                if (currentChapter.type === "document") {
                     const el = document.getElementById(`sel_${i}`);
                     if (el.value === row.correct) {
                         el.classList.add('border-emerald-500', 'bg-emerald-50'); el.classList.remove('border-red-500', 'bg-red-50');
@@ -600,6 +744,29 @@
                         el.classList.add('border-red-500', 'bg-red-50'); el.classList.remove('border-emerald-500', 'bg-emerald-50');
                         isAllCorrect = false;
                     }
+                } else if (currentChapter.type === "asset_grouping") {
+                    const main = document.getElementById(`main_${i}`);
+                    const sub = document.getElementById(`sub_${i}`);
+                    if(!main || !sub) return;
+
+                    let mainOk = false;
+                    let subOk = false;
+
+                    if(main.value === row.main) {
+                        main.classList.add('border-emerald-500', 'bg-emerald-50'); main.classList.remove('border-red-500', 'bg-red-50');
+                        mainOk = true;
+                    } else {
+                        main.classList.add('border-red-500', 'bg-red-50'); main.classList.remove('border-emerald-500', 'bg-emerald-50');
+                    }
+
+                    if(sub.value === row.sub && mainOk) {
+                        sub.classList.add('border-emerald-500', 'bg-emerald-50'); sub.classList.remove('border-red-500', 'bg-red-50');
+                        subOk = true;
+                    } else if (sub.value !== '' || main.value !== '') {
+                        sub.classList.add('border-red-500', 'bg-red-50'); sub.classList.remove('border-emerald-500', 'bg-emerald-50');
+                    }
+
+                    if(!mainOk || !subOk) isAllCorrect = false;
                 } else {
                     const md = document.getElementById(`md_${i}`);
                     const d = document.getElementById(`d_${i}`);
@@ -652,7 +819,7 @@
         }
 
         function pasteAccount(code) {
-            if (currentChapter && (currentChapter.type === 'document' || currentChapter.type === 'asset_type')) return;
+            if (currentChapter && (currentChapter.type === 'document' || currentChapter.type === 'asset_grouping')) return;
             if (activeInput) {
                 activeInput.value = code;
                 activeInput.classList.remove('border-red-500', 'bg-red-50');
