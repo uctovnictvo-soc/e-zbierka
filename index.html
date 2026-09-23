@@ -92,6 +92,16 @@
                                     <div><span class="font-bold">ZNI</span> - Zmenka na inkaso</div>
                                 </div>
                             </div>
+                            
+                            <!-- Legenda pre Aktíva/Pasíva (Zobrazí sa len pri Kapitole 3) -->
+                            <div id="docLegend3" class="hidden bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-xs text-indigo-900 mb-4 mt-4">
+                                <h4 class="font-bold mb-3 flex items-center text-indigo-800"><i data-lucide="info" class="w-4 h-4 mr-1.5"></i>Legenda položiek Súvahy</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-medium">
+                                    <div><span class="font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded mr-1">A</span> <span class="font-bold">Aktíva</span> - Majetok podniku</div>
+                                    <div><span class="font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded mr-1">P</span> <span class="font-bold">Pasíva</span> - Zdroje krytia majetku</div>
+                                    <div><span class="font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded mr-1">-A</span> <span class="font-bold">Kontraaktíva</span> - Účty znižujúce hodnotu aktív</div>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="p-6 space-y-6">
@@ -104,6 +114,31 @@
                                     <thead id="tableHeader"></thead>
                                     <tbody id="transactionRows" class="divide-y divide-slate-100 text-sm"></tbody>
                                 </table>
+                            </div>
+                            
+                            <!-- Interaktívna Súvaha (Zobrazí sa len v Kapitole 3) -->
+                            <div id="interactiveSuvaha" class="hidden mt-8 border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+                                <div class="bg-blue-600 text-white text-center py-2 font-bold text-lg tracking-wider">SÚVAHA</div>
+                                <div class="grid grid-cols-2">
+                                    <div class="border-r border-slate-300 flex flex-col bg-white">
+                                        <div class="bg-slate-500 text-white px-4 py-2 flex justify-between font-bold text-sm">
+                                            <span>AKTÍVA</span><span>€</span>
+                                        </div>
+                                        <div id="suvaha-aktiva" class="min-h-[150px] text-sm py-1"></div>
+                                        <div id="suvaha-footer-aktiva" class="bg-slate-500 text-white px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500">
+                                            <span>Spolu Aktíva</span><span id="suvaha-aktiva-sum">0,00 €</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col bg-white">
+                                        <div class="bg-slate-500 text-white px-4 py-2 flex justify-between font-bold text-sm">
+                                            <span>PASÍVA</span><span>€</span>
+                                        </div>
+                                        <div id="suvaha-pasiva" class="min-h-[150px] text-sm py-1"></div>
+                                        <div id="suvaha-footer-pasiva" class="bg-slate-500 text-white px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500">
+                                            <span>Spolu Pasíva</span><span id="suvaha-pasiva-sum">0,00 €</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div id="feedbackContainer" class="hidden rounded-xl p-4 transition-all duration-200">
@@ -157,9 +192,7 @@
 
     <div class="fixed bottom-5 left-5 z-50">
         <button onclick="toggleCalculator()" class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-300" title="Otvoriť kalkulačku">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-            </svg>
+            <i data-lucide="calculator" class="w-6 h-6"></i>
         </button>
     </div>
 
@@ -196,6 +229,11 @@
     </div>
 
     <script>
+        // Formátovanie meny
+        function formatCurrency(val) {
+            return val.toLocaleString('sk-SK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        }
+
         const ACCOUNTS_DB = [
             // Trieda 0
             { code: "012", name: "Aktivované náklady na vývoj" }, { code: "013", name: "Softvér" }, { code: "014", name: "Oceniteľné práva" },
@@ -359,6 +397,7 @@
             }
         };
 
+        // Údaje pre Kapitolu 1
         const allDocExercises = [
             { op: "Prevod peňazí z banky do pokladne", correct: "PPD" },
             { op: "Vyplatenie miezd zamestnancom v hotovosti", correct: "VPD" },
@@ -422,7 +461,7 @@
             { op: "Zúčtovanie prijatého preddavku", correct: "ID" }
         ];
 
-        // Rozdelené na text a sumu, aby sa to zobrazilo pod sebou / vedľa sumy bez zátvoriek
+        // Údaje pre Kapitolu 2
         const allAssetExercises = [
             { text: "Výrobná hala podniku", amount: "350 000,00 €", main: "DM", sub: "DHM" },
             { text: "Osobný automobil pre obchodného zástupcu", amount: "24 500,00 €", main: "DM", sub: "DHM" },
@@ -486,14 +525,96 @@
             { text: "Prijatý preddavok od zákazníka na zákazku", amount: "1 500,00 €", main: "CZ", sub: "CZ_INE" }
         ];
 
+        // Údaje pre NOVÚ Kapitolu 3: 3 vybalansované sady po 20 položiek (spolu 60)
+        const balanceExercises = [
+            // SADA 1 (0-19): Spolu Súvaha = 116 000 €
+            { text: "211 - Pokladnica", amount: 2000, type: "A", answeredCorrectly: false },
+            { text: "221 - Bankové účty", amount: 35000, type: "A", answeredCorrectly: false },
+            { text: "112 - Materiál na sklade", amount: 8000, type: "A", answeredCorrectly: false },
+            { text: "311 - Odberatelia", amount: 15000, type: "A", answeredCorrectly: false },
+            { text: "013 - Softvér", amount: 5000, type: "A", answeredCorrectly: false },
+            { text: "021 - Stavby", amount: 40000, type: "A", answeredCorrectly: false },
+            { text: "022 - Samostatné hnuteľné veci", amount: 20000, type: "A", answeredCorrectly: false },
+            { text: "132 - Tovar na sklade a v predajniach", amount: 5000, type: "A", answeredCorrectly: false },
+            { text: "213 - Ceniny", amount: 500, type: "A", answeredCorrectly: false },
+            { text: "314 - Poskytnuté preddavky", amount: 1500, type: "A", answeredCorrectly: false },
+            { text: "073 - Oprávky k softvéru", amount: 1000, type: "-A", answeredCorrectly: false },
+            { text: "081 - Oprávky k stavbám", amount: 8000, type: "-A", answeredCorrectly: false },
+            { text: "082 - Oprávky k samost. hnuteľným veciam", amount: 5000, type: "-A", answeredCorrectly: false },
+            { text: "391 - Opravné položky k pohľadávkam", amount: 2000, type: "-A", answeredCorrectly: false },
+            { text: "411 - Základné imanie", amount: 50000, type: "P", answeredCorrectly: false },
+            { text: "461 - Bankové úvery", amount: 30000, type: "P", answeredCorrectly: false },
+            { text: "321 - Dodávatelia", amount: 15000, type: "P", answeredCorrectly: false },
+            { text: "331 - Zamestnanci", amount: 12000, type: "P", answeredCorrectly: false },
+            { text: "341 - Daň z príjmov", amount: 4000, type: "P", answeredCorrectly: false },
+            { text: "421 - Zákonný rezervný fond", amount: 5000, type: "P", answeredCorrectly: false },
+
+            // SADA 2 (20-39): Spolu Súvaha = 275 000 €
+            { text: "031 - Pozemky", amount: 50000, type: "A", answeredCorrectly: false },
+            { text: "021 - Budovy", amount: 120000, type: "A", answeredCorrectly: false },
+            { text: "022 - Stroje a zariadenia", amount: 80000, type: "A", answeredCorrectly: false },
+            { text: "121 - Nedokončená výroba", amount: 15000, type: "A", answeredCorrectly: false },
+            { text: "123 - Výrobky", amount: 25000, type: "A", answeredCorrectly: false },
+            { text: "311 - Pohľadávky z obchodného styku", amount: 30000, type: "A", answeredCorrectly: false },
+            { text: "221 - Bankové účty", amount: 22000, type: "A", answeredCorrectly: false },
+            { text: "211 - Pokladnica", amount: 1500, type: "A", answeredCorrectly: false },
+            { text: "251 - Majetkové cenné papiere na obchodovanie", amount: 8500, type: "A", answeredCorrectly: false },
+            { text: "081 - Oprávky k budovám", amount: 40000, type: "-A", answeredCorrectly: false },
+            { text: "082 - Oprávky k strojom", amount: 35000, type: "-A", answeredCorrectly: false },
+            { text: "196 - Opravné položky k tovaru", amount: 2000, type: "-A", answeredCorrectly: false },
+            { text: "411 - Základné imanie", amount: 100000, type: "P", answeredCorrectly: false },
+            { text: "412 - Emisné ážio", amount: 10000, type: "P", answeredCorrectly: false },
+            { text: "428 - Nerozdelený zisk minulých rokov", amount: 45000, type: "P", answeredCorrectly: false },
+            { text: "461 - Dlhodobý bankový úver", amount: 80000, type: "P", answeredCorrectly: false },
+            { text: "323 - Krátkodobé rezervy", amount: 5000, type: "P", answeredCorrectly: false },
+            { text: "321 - Záväzky voči dodávateľom", amount: 25000, type: "P", answeredCorrectly: false },
+            { text: "336 - Zúčtovanie s orgánmi soc. poistenia", amount: 8000, type: "P", answeredCorrectly: false },
+            { text: "342 - Ostatné priame dane", amount: 2000, type: "P", answeredCorrectly: false },
+
+            // SADA 3 (40-59): Spolu Súvaha = 85 000 €
+            { text: "013 - Softvér", amount: 12000, type: "A", answeredCorrectly: false },
+            { text: "014 - Oceniteľné práva", amount: 8000, type: "A", answeredCorrectly: false },
+            { text: "022 - Stroje", amount: 45000, type: "A", answeredCorrectly: false },
+            { text: "022 - Počítače (SHV)", amount: 18000, type: "A", answeredCorrectly: false },
+            { text: "112 - Materiál", amount: 6500, type: "A", answeredCorrectly: false },
+            { text: "139 - Tovar na ceste", amount: 3500, type: "A", answeredCorrectly: false },
+            { text: "311 - Odberatelia", amount: 14000, type: "A", answeredCorrectly: false },
+            { text: "253 - Dlhové cenné papiere na obchodovanie", amount: 5000, type: "A", answeredCorrectly: false },
+            { text: "221 - Bankový účet", amount: 11000, type: "A", answeredCorrectly: false },
+            { text: "211 - Pokladnica", amount: 2000, type: "A", answeredCorrectly: false },
+            { text: "073 - Oprávky k softvéru", amount: 6000, type: "-A", answeredCorrectly: false },
+            { text: "074 - Oprávky k oceniteľným právam", amount: 3000, type: "-A", answeredCorrectly: false },
+            { text: "082 - Oprávky k strojom", amount: 20000, type: "-A", answeredCorrectly: false },
+            { text: "082 - Oprávky k počítačom", amount: 10000, type: "-A", answeredCorrectly: false },
+            { text: "391 - Opravné položky k pohľadávkam", amount: 1000, type: "-A", answeredCorrectly: false },
+            { text: "491 - Vlastné imanie FO - podnikateľa", amount: 50000, type: "P", answeredCorrectly: false },
+            { text: "231 - Krátkodobé bankové úvery", amount: 15000, type: "P", answeredCorrectly: false },
+            { text: "321 - Dodávatelia", amount: 12000, type: "P", answeredCorrectly: false },
+            { text: "331 - Zamestnanci", amount: 6000, type: "P", answeredCorrectly: false },
+            { text: "336 - Záväzky voči zdravotnej poisťovni", amount: 2000, type: "P", answeredCorrectly: false }
+        ];
+
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
+        
+        function shuffleChapter3(array) {
+            for(let block = 0; block < 3; block++) {
+                let start = block * 20;
+                let end = start + 20;
+                for (let i = end - 1; i > start; i--) {
+                    const j = start + Math.floor(Math.random() * (i - start + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+        }
+
         shuffleArray(allDocExercises);
         shuffleArray(allAssetExercises);
+        shuffleChapter3(balanceExercises);
 
         const CHAPTERS = [
             {
@@ -509,7 +630,13 @@
                 exercises: allAssetExercises
             },
             {
-                id: 3, type: "accounting",
+                id: 3, type: "balance_sheet",
+                title: "Určovanie aktív a pasív", 
+                desc: "Zaraď položku do Aktív, Pasív alebo ako Kontraaktívny účet. Ak zaradíš účet správne, presunie sa dole do Súvahy.",
+                exercises: balanceExercises
+            },
+            {
+                id: 4, type: "accounting",
                 title: "Pokladňa a Bankové účty", desc: "Základy účtovania na finančných účtoch (MD a D).",
                 exercises: [
                     { op: "Tržba v hotovosti za predaný tovar", md: "211", d: "604" },
@@ -569,10 +696,19 @@
             document.getElementById('exerciseTitle').innerText = currentChapter.title;
             document.getElementById('exerciseDescription').innerText = currentChapter.desc;
             
+            // Nastavenie legiend
+            document.getElementById('docLegend').classList.add('hidden');
+            document.getElementById('docLegend3').classList.add('hidden');
+            document.getElementById('interactiveSuvaha').classList.add('hidden');
+
             if (currentChapter.id === 1) {
                 document.getElementById('docLegend').classList.remove('hidden');
-            } else {
-                document.getElementById('docLegend').classList.add('hidden');
+            }
+            if (currentChapter.id === 3) {
+                document.getElementById('docLegend3').classList.remove('hidden');
+                document.getElementById('interactiveSuvaha').classList.remove('hidden');
+                // Reset answers for chapter 3 on open
+                currentChapter.exercises.forEach(e => e.answeredCorrectly = false);
             }
 
             loadCurrentExercise();
@@ -610,6 +746,73 @@
                 subSel.innerHTML = '';
                 subSel.classList.add('hidden');
                 subSel.disabled = true;
+            }
+        }
+
+        function handleBalanceChange(i, val) {
+            const absIndex = (currentPage * itemsPerPage) + i;
+            const row = currentChapter.exercises[absIndex];
+            const sel = document.getElementById(`sel_bal_${i}`);
+            
+            sel.classList.remove('border-red-500', 'bg-red-50', 'text-red-700');
+
+            if(val === '') return;
+
+            if(val === row.type) {
+                // Správne
+                sel.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+                sel.disabled = true;
+                row.answeredCorrectly = true;
+                updateSuvaha();
+            } else {
+                // Nesprávne
+                sel.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                setTimeout(() => {
+                    sel.value = '';
+                    sel.classList.remove('border-red-500', 'bg-red-50', 'text-red-700');
+                }, 800);
+            }
+        }
+
+        function updateSuvaha() {
+            if(currentChapter.type !== 'balance_sheet') return;
+
+            const start = currentPage * itemsPerPage;
+            const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPage);
+            
+            let aktivaHtml = '';
+            let pasivaHtml = '';
+            let aktivaTotal = 0;
+            let pasivaTotal = 0;
+
+            displayExercises.forEach(row => {
+                if(row.answeredCorrectly) {
+                    if(row.type === 'A' || row.type === '-A') {
+                        let dispAmount = row.type === '-A' ? -row.amount : row.amount;
+                        aktivaTotal += dispAmount;
+                        aktivaHtml += `<div class="flex justify-between px-4 py-2 border-b border-slate-100 hover:bg-blue-50 text-slate-700"><span class="truncate pr-2">${row.text}</span><span class="whitespace-nowrap font-medium">${formatCurrency(dispAmount)}</span></div>`;
+                    } else if(row.type === 'P') {
+                        pasivaTotal += row.amount;
+                        pasivaHtml += `<div class="flex justify-between px-4 py-2 border-b border-slate-100 hover:bg-orange-50 text-slate-700"><span class="truncate pr-2">${row.text}</span><span class="whitespace-nowrap font-medium">${formatCurrency(row.amount)}</span></div>`;
+                    }
+                }
+            });
+
+            document.getElementById('suvaha-aktiva').innerHTML = aktivaHtml;
+            document.getElementById('suvaha-pasiva').innerHTML = pasivaHtml;
+            document.getElementById('suvaha-aktiva-sum').innerText = formatCurrency(aktivaTotal);
+            document.getElementById('suvaha-pasiva-sum').innerText = formatCurrency(pasivaTotal);
+
+            const allAnswered = displayExercises.every(r => r.answeredCorrectly);
+            const footerAktiva = document.getElementById('suvaha-footer-aktiva');
+            const footerPasiva = document.getElementById('suvaha-footer-pasiva');
+            
+            if (allAnswered && aktivaTotal === pasivaTotal) {
+                footerAktiva.className = "bg-emerald-600 text-white px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]";
+                footerPasiva.className = "bg-emerald-600 text-white px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]";
+            } else {
+                footerAktiva.className = "bg-slate-600 text-slate-100 px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500";
+                footerPasiva.className = "bg-slate-600 text-slate-100 px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500";
             }
         }
 
@@ -692,6 +895,34 @@
                         </td>
                     </tr>`
                 }).join('');
+            } else if (currentChapter.type === "balance_sheet") {
+                tableHeader.innerHTML = `
+                    <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+                        <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Názov</th><th class="py-3 px-3 text-right">Suma</th><th class="py-3 px-3 text-center w-36">Zaradenie</th>
+                    </tr>`;
+                tbody.innerHTML = displayExercises.map((row, i) => {
+                    const absIndex = (currentPage * itemsPerPage) + i + 1;
+                    const isDone = row.answeredCorrectly;
+                    const selClass = isDone ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-300 bg-white text-slate-700";
+                    const val = isDone ? row.type : "";
+                    const dis = isDone ? "disabled" : "";
+                    
+                    return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${absIndex}.</td>
+                        <td class="py-3 px-3 text-sm font-medium text-slate-700">${row.text}</td>
+                        <td class="py-3 px-3 text-sm font-bold text-slate-600 text-right whitespace-nowrap">${formatCurrency(row.amount)}</td>
+                        <td class="py-3 px-3 text-center">
+                            <select id="sel_bal_${i}" onchange="handleBalanceChange(${i}, this.value)" ${dis} class="w-full text-center px-2 py-2 text-sm font-bold border rounded-lg focus:outline-none focus:border-blue-500 shadow-sm cursor-pointer transition-colors ${selClass}">
+                                <option value="">-- Vyber --</option>
+                                <option value="A" ${val==='A'?'selected':''}>Aktíva</option>
+                                <option value="P" ${val==='P'?'selected':''}>Pasíva</option>
+                                <option value="-A" ${val==='-A'?'selected':''}>Kontraaktívny účet</option>
+                            </select>
+                        </td>
+                    </tr>`
+                }).join('');
+                updateSuvaha();
             } else {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
@@ -723,9 +954,19 @@
         function resetCurrentExercise() {
             document.querySelectorAll('#transactionRows input, #transactionRows select').forEach(el => {
                 el.value = '';
-                el.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                el.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-700', 'text-red-700');
+                el.disabled = false;
                 if(el.id.startsWith('sub_')) { el.classList.add('hidden'); el.disabled = true; }
             });
+            
+            if(currentChapter.type === 'balance_sheet') {
+                const start = currentPage * itemsPerPage;
+                for(let i=start; i < start + itemsPerPage; i++) {
+                    if(currentChapter.exercises[i]) currentChapter.exercises[i].answeredCorrectly = false;
+                }
+                updateSuvaha();
+            }
+
             document.getElementById('feedbackContainer').classList.add('hidden');
         }
 
@@ -734,6 +975,23 @@
             
             const start = currentPage * itemsPerPage;
             const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPage);
+
+            if (currentChapter.type === "balance_sheet") {
+                const allAnswered = displayExercises.every(r => r.answeredCorrectly);
+                const fb = document.getElementById('feedbackContainer');
+                const fbContent = document.getElementById('feedbackContent');
+                fb.classList.remove('hidden');
+
+                if (allAnswered) {
+                    fb.className = "rounded-xl p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 mt-4";
+                    fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-emerald-950 mb-1">Výborne! Súvaha je zostavená.</h4><p class="text-xs text-emerald-800">Aktíva sa rovnajú Pasívam, účtovná rovnica platí.</p></div>`;
+                } else {
+                    fb.className = "rounded-xl p-4 bg-rose-50 border border-rose-200 text-rose-900 mt-4";
+                    fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="x" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-rose-950 mb-1">Ešte nemáš všetko!</h4><p class="text-xs text-rose-800">Doplň všetky položky na tejto strane do súvahy.</p></div>`;
+                }
+                lucide.createIcons();
+                return;
+            }
 
             displayExercises.forEach((row, i) => {
                 if (currentChapter.type === "document") {
@@ -819,7 +1077,7 @@
         }
 
         function pasteAccount(code) {
-            if (currentChapter && (currentChapter.type === 'document' || currentChapter.type === 'asset_grouping')) return;
+            if (currentChapter && (currentChapter.type === 'document' || currentChapter.type === 'asset_grouping' || currentChapter.type === 'balance_sheet')) return;
             if (activeInput) {
                 activeInput.value = code;
                 activeInput.classList.remove('border-red-500', 'bg-red-50');
