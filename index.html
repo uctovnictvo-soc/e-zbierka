@@ -915,9 +915,9 @@
                         <td class="py-3 px-3 text-center">
                             <select id="sel_bal_${i}" onchange="handleBalanceChange(${i}, this.value)" ${dis} class="w-full text-center px-2 py-2 text-sm font-bold border rounded-lg focus:outline-none focus:border-blue-500 shadow-sm cursor-pointer transition-colors ${selClass}">
                                 <option value="">-- Vyber --</option>
-                                <option value="A" ${val==='A'?'selected':''}>Aktíva</option>
-                                <option value="P" ${val==='P'?'selected':''}>Pasíva</option>
-                                <option value="-A" ${val==='-A'?'selected':''}>Kontraaktívny účet</option>
+                                <option value="A" ${val==='A'?'selected':''}>A</option>
+                                <option value="P" ${val==='P'?'selected':''}>P</option>
+                                <option value="-A" ${val==='-A'?'selected':''}>-A</option>
                             </select>
                         </td>
                     </tr>`
