@@ -19,6 +19,10 @@
         .active-input-ring { ring: 2px; ring-color: #3b82f6; border-color: #2563eb !important; background-color: #eff6ff !important; }
         optgroup { font-weight: 700; color: #1e293b; font-style: normal; background-color: #f8fafc; }
         option { font-weight: 500; color: #334155; }
+        /* Schovanie šípok v number inputoch */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
     </style>
 </head>
 <body class="text-slate-800">
@@ -65,7 +69,7 @@
                 <div id="exerciseView" class="hidden space-y-6">
                     <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <button onclick="showChapterSelection()" class="inline-flex items-center text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Späť na prehľad kapitol</button>
-                        <span id="chapterBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Kapitola 1</span>
+                        <span id="chapterBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Kapitola</span>
                     </div>
                     
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -201,7 +205,7 @@
             <span>Kalkulačka</span>
             <span onclick="toggleCalculator()" class="cursor-pointer text-slate-400 hover:text-white text-lg">✕</span>
         </div>
-        <input type="text" id="calcScreen" readonly value="0" class="w-full h-14 bg-slate-100 text-right px-4 text-2xl font-bold text-slate-800 border-none outline-none focus:outline-none">
+        <input type="text" id="calcScreen" readonly value="0" class="w-full h-14 bg-slate-100 text-right px-4 text-2xl font-bold text-slate-800 border-none outline-none focus:outline-none overflow-hidden">
         <div class="grid grid-cols-4 gap-1 p-2 bg-slate-200">
             <button onclick="calcClear()" class="p-3 bg-white hover:bg-slate-50 font-bold rounded shadow-sm">C</button>
             <button onclick="calcAppend('/')" class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded shadow-sm">÷</button>
@@ -525,7 +529,7 @@
             { text: "Prijatý preddavok od zákazníka na zákazku", amount: "1 500,00 €", main: "CZ", sub: "CZ_INE" }
         ];
 
-        // Údaje pre NOVÚ Kapitolu 3: 3 vybalansované sady po 20 položiek (spolu 60)
+        // Údaje pre Kapitolu 3
         const balanceExercises = [
             // SADA 1 (0-19): Spolu Súvaha = 116 000 €
             { text: "211 - Pokladnica", amount: 2000, type: "A", answeredCorrectly: false },
@@ -594,6 +598,76 @@
             { text: "336 - Záväzky voči zdravotnej poisťovni", amount: 2000, type: "P", answeredCorrectly: false }
         ];
 
+        // Údaje pre Kapitolu 4 (T-účty) - Rozšírené na 16 účtov (8 Aktív a 8 Pasív) per súvaha
+        const tAccountsExercises = [
+            {
+                aktiva: [
+                    { acc: "Pokladnica", amount: 2500 },
+                    { acc: "Bankové účty", amount: 12500 },
+                    { acc: "Materiál na sklade", amount: 4000 },
+                    { acc: "Odberatelia", amount: 6000 },
+                    { acc: "Softvér", amount: 1500 },
+                    { acc: "Stroje a zariadenia", amount: 10500 },
+                    { acc: "Tovar na sklade", amount: 8000 },
+                    { acc: "Ceniny", amount: 500 }
+                ],
+                pasiva: [
+                    { acc: "Základné imanie", amount: 15000 },
+                    { acc: "Dodávatelia", amount: 8000 },
+                    { acc: "Bankové úvery", amount: 1000 },
+                    { acc: "Zamestnanci", amount: 1000 },
+                    { acc: "Nerozdelený zisk", amount: 12000 },
+                    { acc: "Krátkodobé rezervy", amount: 2000 },
+                    { acc: "Daň z príjmov", amount: 5000 },
+                    { acc: "Zúčtovanie so SP a ZP", amount: 1500 }
+                ]
+            },
+            {
+                aktiva: [
+                    { acc: "Stavby", amount: 85000 },
+                    { acc: "Pozemky", amount: 15000 },
+                    { acc: "Bankové účty", amount: 4000 },
+                    { acc: "Pokladnica", amount: 1000 },
+                    { acc: "Samost. hnuteľné veci", amount: 20000 },
+                    { acc: "Pohľadávky z obch. styku", amount: 12000 },
+                    { acc: "Nedokončená výroba", amount: 5000 },
+                    { acc: "Poskytnuté preddavky", amount: 3000 }
+                ],
+                pasiva: [
+                    { acc: "Základné imanie", amount: 80000 },
+                    { acc: "Nerozdelený zisk", amount: 10000 },
+                    { acc: "Bankové úvery", amount: 10000 },
+                    { acc: "Zamestnanci", amount: 5000 },
+                    { acc: "Zákonný rezervný fond", amount: 15000 },
+                    { acc: "Dodávatelia", amount: 18000 },
+                    { acc: "Krátkodobé bankové úvery", amount: 4000 },
+                    { acc: "Zúčtovanie so SP a ZP", amount: 3000 }
+                ]
+            },
+            {
+                aktiva: [
+                    { acc: "Stroje a zariadenia", amount: 45000 },
+                    { acc: "Tovar na sklade", amount: 8000 },
+                    { acc: "Pokladnica", amount: 500 },
+                    { acc: "Bankový účet", amount: 12000 },
+                    { acc: "Výrobky", amount: 14500 },
+                    { acc: "Odberatelia", amount: 22000 },
+                    { acc: "Oceniteľné práva", amount: 5000 },
+                    { acc: "Ceniny", amount: 1000 }
+                ],
+                pasiva: [
+                    { acc: "Základné imanie", amount: 50000 },
+                    { acc: "Zákonný rezervný fond", amount: 5000 },
+                    { acc: "Dlhodobý bankový úver", amount: 8000 },
+                    { acc: "Dodávatelia", amount: 2500 },
+                    { acc: "Emisné ážio", amount: 10000 },
+                    { acc: "Zamestnanci", amount: 12000 },
+                    { acc: "Záv. zo soc. poistenia", amount: 8500 },
+                    { acc: "Krátkodobé rezervy", amount: 12000 }
+                ]
+            }
+        ];
+
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -636,8 +710,15 @@
                 exercises: balanceExercises
             },
             {
-                id: 4, type: "accounting",
-                title: "Pokladňa a Bankové účty", desc: "Základy účtovania na finančných účtoch (MD a D).",
+                id: 4, type: "t_accounts",
+                title: "Otváranie účtov (Začiatočné stavy)", 
+                desc: "Otvor účty a doplň Začiatočný stav zo súvahy na stranu MD alebo D.",
+                exercises: tAccountsExercises
+            },
+            {
+                id: 5, type: "accounting",
+                title: "Účtovanie na MD a D", 
+                desc: "Základy účtovania na finančných účtoch. Pokladňa a Bankové účty.",
                 exercises: [
                     { op: "Tržba v hotovosti za predaný tovar", md: "211", d: "604" },
                     { op: "Výber hotovosti z bankového účtu (výpis z banky)", md: "261", d: "221" },
@@ -651,7 +732,6 @@
         let currentChapter = null;
         let activeInput = null;
         let currentPage = 0;
-        const itemsPerPage = 20;
 
         window.onload = function() {
             renderChaptersGrid();
@@ -750,7 +830,8 @@
         }
 
         function handleBalanceChange(i, val) {
-            const absIndex = (currentPage * itemsPerPage) + i;
+            let itemsPerPageLimit = currentChapter.type === "t_accounts" ? 1 : 20;
+            const absIndex = (currentPage * itemsPerPageLimit) + i;
             const row = currentChapter.exercises[absIndex];
             const sel = document.getElementById(`sel_bal_${i}`);
             
@@ -759,13 +840,11 @@
             if(val === '') return;
 
             if(val === row.type) {
-                // Správne
                 sel.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
                 sel.disabled = true;
                 row.answeredCorrectly = true;
                 updateSuvaha();
             } else {
-                // Nesprávne
                 sel.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
                 setTimeout(() => {
                     sel.value = '';
@@ -777,8 +856,9 @@
         function updateSuvaha() {
             if(currentChapter.type !== 'balance_sheet') return;
 
-            const start = currentPage * itemsPerPage;
-            const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPage);
+            let itemsPerPageLimit = 20;
+            const start = currentPage * itemsPerPageLimit;
+            const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPageLimit);
             
             let aktivaHtml = '';
             let pasivaHtml = '';
@@ -815,6 +895,18 @@
                 footerPasiva.className = "bg-slate-600 text-slate-100 px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500";
             }
         }
+        
+        // Dynamické zmenšovanie textu v T-účtoch pre dlhé čísla
+        function adjustTAccountInput(inp) {
+            let len = inp.value.length;
+            if (len > 7) {
+                inp.style.fontSize = "10px";
+            } else if (len > 5) {
+                inp.style.fontSize = "12px";
+            } else {
+                inp.style.fontSize = "14px";
+            }
+        }
 
         function loadCurrentExercise() {
             const tableHeader = document.getElementById('tableHeader');
@@ -822,17 +914,18 @@
             document.getElementById('feedbackContainer').classList.add('hidden');
             activeInput = null;
             
+            let itemsPerPageLimit = currentChapter.type === "t_accounts" ? 1 : 20;
             let displayExercises = currentChapter.exercises;
             
-            if (currentChapter.exercises.length > itemsPerPage) {
+            if (currentChapter.exercises.length > itemsPerPageLimit) {
                 document.getElementById('paginationControls').classList.remove('hidden');
                 document.getElementById('paginationTop').classList.remove('hidden');
                 
-                const start = currentPage * itemsPerPage;
-                const end = start + itemsPerPage;
+                const start = currentPage * itemsPerPageLimit;
+                const end = start + itemsPerPageLimit;
                 displayExercises = currentChapter.exercises.slice(start, end);
                 
-                const totalPages = Math.ceil(currentChapter.exercises.length / itemsPerPage);
+                const totalPages = Math.ceil(currentChapter.exercises.length / itemsPerPageLimit);
                 document.getElementById('currentPageNum').innerText = currentPage + 1;
                 document.getElementById('totalPagesNum').innerText = totalPages;
                 
@@ -849,7 +942,7 @@
                         <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 text-center w-40">Doklad</th>
                     </tr>`;
                 tbody.innerHTML = displayExercises.map((row, i) => {
-                    const absIndex = (currentPage * itemsPerPage) + i + 1;
+                    const absIndex = (currentPage * itemsPerPageLimit) + i + 1;
                     return `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="py-3 px-2 font-bold text-slate-400 text-sm">${absIndex}.</td>
@@ -874,7 +967,7 @@
                         <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 w-[45%]">Určenie skupiny</th>
                     </tr>`;
                 tbody.innerHTML = displayExercises.map((row, i) => {
-                    const absIndex = (currentPage * itemsPerPage) + i + 1;
+                    const absIndex = (currentPage * itemsPerPageLimit) + i + 1;
                     return `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="py-3 px-2 font-bold text-slate-400 text-sm align-top pt-4">${absIndex}.</td>
@@ -901,7 +994,7 @@
                         <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Názov</th><th class="py-3 px-3 text-right">Suma</th><th class="py-3 px-3 text-center w-36">Zaradenie</th>
                     </tr>`;
                 tbody.innerHTML = displayExercises.map((row, i) => {
-                    const absIndex = (currentPage * itemsPerPage) + i + 1;
+                    const absIndex = (currentPage * itemsPerPageLimit) + i + 1;
                     const isDone = row.answeredCorrectly;
                     const selClass = isDone ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-300 bg-white text-slate-700";
                     const val = isDone ? row.type : "";
@@ -923,6 +1016,78 @@
                     </tr>`
                 }).join('');
                 updateSuvaha();
+            } else if (currentChapter.type === "t_accounts") {
+                const scenario = displayExercises[0];
+                let sumA = scenario.aktiva.reduce((sum, item) => sum + item.amount, 0);
+                let sumP = scenario.pasiva.reduce((sum, item) => sum + item.amount, 0);
+                
+                let aktivaHtml = scenario.aktiva.map(a => `<div class="flex justify-between text-sm py-1.5 border-b border-slate-100 text-slate-700"><span>${a.acc}</span><span class="font-bold whitespace-nowrap ml-2">${formatCurrency(a.amount)}</span></div>`).join('');
+                let pasivaHtml = scenario.pasiva.map(p => `<div class="flex justify-between text-sm py-1.5 border-b border-slate-100 text-slate-700"><span>${p.acc}</span><span class="font-bold whitespace-nowrap ml-2">${formatCurrency(p.amount)}</span></div>`).join('');
+                
+                let combinedAccounts = [...scenario.aktiva.map(a => ({...a, side: 'A'})), ...scenario.pasiva.map(p => ({...p, side: 'P'}))];
+                shuffleArray(combinedAccounts);
+
+                let tAccountsHtml = combinedAccounts.map((acc, idx) => `
+                    <div class="bg-white p-3 sm:p-4 rounded-xl border border-slate-300 shadow-sm flex flex-col items-center transition-all hover:shadow-md">
+                        <div class="text-center font-bold text-sm border-b-4 border-slate-800 pb-2 mb-2 w-full text-slate-800 px-1 leading-tight min-h-[40px] flex items-center justify-center">${acc.acc}</div>
+                        <div class="flex w-full pt-1 relative">
+                            <!-- Stredová čiara T-účtu -->
+                            <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-slate-800 -translate-x-1/2"></div>
+                            
+                            <div class="w-1/2 pr-2 flex flex-col items-center">
+                                <div class="text-xs font-black text-slate-400 mb-2">MD</div>
+                                <!-- Odstránené overflow-hidden a text-ellipsis pre správne zobrazenie dlhých čísel -->
+                                <input type="text" id="t_md_${idx}" data-correct="${acc.side === 'A' ? acc.amount : ''}" oninput="adjustTAccountInput(this)" class="w-full text-center text-sm font-bold border border-slate-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none py-1.5 px-1 text-slate-700 bg-slate-50 transition-colors tracking-tighter" placeholder="0">
+                            </div>
+                            <div class="w-1/2 pl-2 flex flex-col items-center">
+                                <div class="text-xs font-black text-slate-400 mb-2">D</div>
+                                <input type="text" id="t_d_${idx}" data-correct="${acc.side === 'P' ? acc.amount : ''}" oninput="adjustTAccountInput(this)" class="w-full text-center text-sm font-bold border border-slate-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none py-1.5 px-1 text-slate-700 bg-slate-50 transition-colors tracking-tighter" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                tableHeader.innerHTML = ``; 
+                tbody.innerHTML = `
+                    <tr>
+                        <td class="p-0 pb-4">
+                            <!-- Vizuálna Súvaha -->
+                            <div class="mb-8 border border-slate-300 rounded-xl overflow-hidden shadow-sm max-w-4xl mx-auto">
+                                <div class="bg-blue-600 text-white text-center py-2.5 font-bold tracking-widest text-lg">SÚVAHA K 31.12.2025</div>
+                                <div class="grid grid-cols-2">
+                                    <div class="border-r border-slate-300 bg-white p-5 flex flex-col">
+                                        <h4 class="font-black border-b-2 border-slate-800 pb-2 mb-3 text-center text-base text-slate-800">AKTÍVA</h4>
+                                        <div class="flex-1">${aktivaHtml}</div>
+                                        <div class="flex justify-between font-black mt-4 pt-3 border-t-2 border-slate-800 text-slate-900">
+                                            <span>Spolu Aktíva:</span><span>${formatCurrency(sumA)}</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-5 flex flex-col">
+                                        <h4 class="font-black border-b-2 border-slate-800 pb-2 mb-3 text-center text-base text-slate-800">PASÍVA</h4>
+                                        <div class="flex-1">${pasivaHtml}</div>
+                                        <div class="flex justify-between font-black mt-4 pt-3 border-t-2 border-slate-800 text-slate-900">
+                                            <span>Spolu Pasíva:</span><span>${formatCurrency(sumP)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Inštrukcie -->
+                            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-8 text-indigo-900 flex items-start shadow-sm max-w-4xl mx-auto">
+                                <i data-lucide="info" class="w-5 h-5 mr-3 mt-0.5 text-indigo-600 flex-shrink-0"></i>
+                                <div>
+                                    <h4 class="font-bold text-sm mb-1">Úloha: Otvorenie syntetických účtov</h4>
+                                    <p class="text-sm font-medium">Pozri sa do Súvahy vyššie. Pre každý účet nižšie doplň jeho <b>Začiatočný stav</b> na správnu stranu.</p>
+                                </div>
+                            </div>
+
+                            <!-- T-Účty Grid -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-2">
+                                ${tAccountsHtml}
+                            </div>
+                        </td>
+                    </tr>
+                `;
             } else {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
@@ -946,7 +1111,7 @@
         }
 
         function setActiveInput(inp) {
-            document.querySelectorAll('#transactionRows input').forEach(el => el.classList.remove('active-input-ring'));
+            document.querySelectorAll('#transactionRows input[type="text"]').forEach(el => el.classList.remove('active-input-ring'));
             activeInput = inp;
             inp.classList.add('active-input-ring');
         }
@@ -954,14 +1119,16 @@
         function resetCurrentExercise() {
             document.querySelectorAll('#transactionRows input, #transactionRows select').forEach(el => {
                 el.value = '';
+                el.style.fontSize = ''; // Reset the dynamic font size
                 el.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-700', 'text-red-700');
                 el.disabled = false;
                 if(el.id.startsWith('sub_')) { el.classList.add('hidden'); el.disabled = true; }
             });
             
             if(currentChapter.type === 'balance_sheet') {
-                const start = currentPage * itemsPerPage;
-                for(let i=start; i < start + itemsPerPage; i++) {
+                let itemsPerPageLimit = 20;
+                const start = currentPage * itemsPerPageLimit;
+                for(let i=start; i < start + itemsPerPageLimit; i++) {
                     if(currentChapter.exercises[i]) currentChapter.exercises[i].answeredCorrectly = false;
                 }
                 updateSuvaha();
@@ -970,11 +1137,18 @@
             document.getElementById('feedbackContainer').classList.add('hidden');
         }
 
+        // Pomocná funkcia pre parsovanie čísel s desatinnou čiarkou/bodkou a medzerami
+        function parseToNum(str) {
+            if (!str || str.trim() === '') return 0;
+            let num = parseFloat(str.replace(/\s+/g, '').replace(',', '.'));
+            return isNaN(num) ? 0 : num;
+        }
+
         function checkSolution() {
             let isAllCorrect = true;
-            
-            const start = currentPage * itemsPerPage;
-            const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPage);
+            let itemsPerPageLimit = currentChapter.type === "t_accounts" ? 1 : 20;
+            const start = currentPage * itemsPerPageLimit;
+            const displayExercises = currentChapter.exercises.slice(start, start + itemsPerPageLimit);
 
             if (currentChapter.type === "balance_sheet") {
                 const allAnswered = displayExercises.every(r => r.answeredCorrectly);
@@ -993,49 +1167,93 @@
                 return;
             }
 
-            displayExercises.forEach((row, i) => {
-                if (currentChapter.type === "document") {
-                    const el = document.getElementById(`sel_${i}`);
-                    if (el.value === row.correct) {
-                        el.classList.add('border-emerald-500', 'bg-emerald-50'); el.classList.remove('border-red-500', 'bg-red-50');
+            if (currentChapter.type === "t_accounts") {
+                const inputsMD = document.querySelectorAll('[id^="t_md_"]');
+                const inputsD = document.querySelectorAll('[id^="t_d_"]');
+                
+                inputsMD.forEach((mdInput, i) => {
+                    const dInput = inputsD[i];
+                    const correctMDStr = mdInput.getAttribute('data-correct');
+                    const correctDStr = dInput.getAttribute('data-correct');
+                    
+                    let mdNum = parseToNum(mdInput.value);
+                    let dNum = parseToNum(dInput.value);
+                    let correctMDNum = parseToNum(correctMDStr);
+                    let correctDNum = parseToNum(correctDStr);
+                    
+                    let mdIsEmpty = mdInput.value.trim() === '';
+                    let dIsEmpty = dInput.value.trim() === '';
+
+                    // Resetovanie tried pred kontrolou
+                    mdInput.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                    dInput.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                    
+                    if (mdNum === correctMDNum && dNum === correctDNum) {
+                        // Správne. Zelené políčko dostane len to, ktoré má obsahovať hodnotu.
+                        if (correctMDNum > 0 || (!mdIsEmpty && mdNum === 0)) mdInput.classList.add('border-emerald-500', 'bg-emerald-50');
+                        if (correctDNum > 0 || (!dIsEmpty && dNum === 0)) dInput.classList.add('border-emerald-500', 'bg-emerald-50');
                     } else {
-                        el.classList.add('border-red-500', 'bg-red-50'); el.classList.remove('border-emerald-500', 'bg-emerald-50');
                         isAllCorrect = false;
+                        
+                        if (mdIsEmpty && dIsEmpty) {
+                            // Ochrana pred ťahákom: Ak študent nenechal nič, zafarbia sa obe na červeno, aby neuhádol stranu.
+                            mdInput.classList.add('border-red-500', 'bg-red-50');
+                            dInput.classList.add('border-red-500', 'bg-red-50');
+                        } else {
+                            // Ak sa študent pokúsil niečo zadať, skontrolujeme konkrétne políčka.
+                            if (mdNum !== correctMDNum) mdInput.classList.add('border-red-500', 'bg-red-50');
+                            else if (!mdIsEmpty) mdInput.classList.add('border-emerald-500', 'bg-emerald-50');
+
+                            if (dNum !== correctDNum) dInput.classList.add('border-red-500', 'bg-red-50');
+                            else if (!dIsEmpty) dInput.classList.add('border-emerald-500', 'bg-emerald-50');
+                        }
                     }
-                } else if (currentChapter.type === "asset_grouping") {
-                    const main = document.getElementById(`main_${i}`);
-                    const sub = document.getElementById(`sub_${i}`);
-                    if(!main || !sub) return;
+                });
+            } else {
+                displayExercises.forEach((row, i) => {
+                    if (currentChapter.type === "document") {
+                        const el = document.getElementById(`sel_${i}`);
+                        if (el.value === row.correct) {
+                            el.classList.add('border-emerald-500', 'bg-emerald-50'); el.classList.remove('border-red-500', 'bg-red-50');
+                        } else {
+                            el.classList.add('border-red-500', 'bg-red-50'); el.classList.remove('border-emerald-500', 'bg-emerald-50');
+                            isAllCorrect = false;
+                        }
+                    } else if (currentChapter.type === "asset_grouping") {
+                        const main = document.getElementById(`main_${i}`);
+                        const sub = document.getElementById(`sub_${i}`);
+                        if(!main || !sub) return;
 
-                    let mainOk = false;
-                    let subOk = false;
+                        let mainOk = false;
+                        let subOk = false;
 
-                    if(main.value === row.main) {
-                        main.classList.add('border-emerald-500', 'bg-emerald-50'); main.classList.remove('border-red-500', 'bg-red-50');
-                        mainOk = true;
-                    } else {
-                        main.classList.add('border-red-500', 'bg-red-50'); main.classList.remove('border-emerald-500', 'bg-emerald-50');
+                        if(main.value === row.main) {
+                            main.classList.add('border-emerald-500', 'bg-emerald-50'); main.classList.remove('border-red-500', 'bg-red-50');
+                            mainOk = true;
+                        } else {
+                            main.classList.add('border-red-500', 'bg-red-50'); main.classList.remove('border-emerald-500', 'bg-emerald-50');
+                        }
+
+                        if(sub.value === row.sub && mainOk) {
+                            sub.classList.add('border-emerald-500', 'bg-emerald-50'); sub.classList.remove('border-red-500', 'bg-red-50');
+                            subOk = true;
+                        } else if (sub.value !== '' || main.value !== '') {
+                            sub.classList.add('border-red-500', 'bg-red-50'); sub.classList.remove('border-emerald-500', 'bg-emerald-50');
+                        }
+
+                        if(!mainOk || !subOk) isAllCorrect = false;
+                    } else if (currentChapter.type === "accounting") {
+                        const md = document.getElementById(`md_${i}`);
+                        const d = document.getElementById(`d_${i}`);
+                        
+                        if (md.value.trim() === row.md) { md.classList.add('border-emerald-500', 'bg-emerald-50'); md.classList.remove('border-red-500', 'bg-red-50'); } 
+                        else { md.classList.add('border-red-500', 'bg-red-50'); md.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
+                        
+                        if (d.value.trim() === row.d) { d.classList.add('border-emerald-500', 'bg-emerald-50'); d.classList.remove('border-red-500', 'bg-red-50'); } 
+                        else { d.classList.add('border-red-500', 'bg-red-50'); d.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
                     }
-
-                    if(sub.value === row.sub && mainOk) {
-                        sub.classList.add('border-emerald-500', 'bg-emerald-50'); sub.classList.remove('border-red-500', 'bg-red-50');
-                        subOk = true;
-                    } else if (sub.value !== '' || main.value !== '') {
-                        sub.classList.add('border-red-500', 'bg-red-50'); sub.classList.remove('border-emerald-500', 'bg-emerald-50');
-                    }
-
-                    if(!mainOk || !subOk) isAllCorrect = false;
-                } else {
-                    const md = document.getElementById(`md_${i}`);
-                    const d = document.getElementById(`d_${i}`);
-                    
-                    if (md.value.trim() === row.md) { md.classList.add('border-emerald-500', 'bg-emerald-50'); md.classList.remove('border-red-500', 'bg-red-50'); } 
-                    else { md.classList.add('border-red-500', 'bg-red-50'); md.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
-                    
-                    if (d.value.trim() === row.d) { d.classList.add('border-emerald-500', 'bg-emerald-50'); d.classList.remove('border-red-500', 'bg-red-50'); } 
-                    else { d.classList.add('border-red-500', 'bg-red-50'); d.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
-                }
-            });
+                });
+            }
 
             const fb = document.getElementById('feedbackContainer');
             const fbContent = document.getElementById('feedbackContent');
@@ -1077,7 +1295,7 @@
         }
 
         function pasteAccount(code) {
-            if (currentChapter && (currentChapter.type === 'document' || currentChapter.type === 'asset_grouping' || currentChapter.type === 'balance_sheet')) return;
+            if (currentChapter && (currentChapter.type === 'document' || currentChapter.type === 'asset_grouping' || currentChapter.type === 'balance_sheet' || currentChapter.type === 't_accounts')) return;
             if (activeInput) {
                 activeInput.value = code;
                 activeInput.classList.remove('border-red-500', 'bg-red-50');
@@ -1092,18 +1310,31 @@
 
         let calcExpression = "0";
 
+        // Funkcia pre dynamickú zmenu veľkosti textu v kalkulačke
+        function updateCalcDisplay() {
+            const screen = document.getElementById('calcScreen');
+            screen.value = calcExpression;
+            if (calcExpression.length > 20) {
+                screen.className = "w-full h-14 bg-slate-100 text-right px-4 text-sm font-bold text-slate-800 border-none outline-none focus:outline-none overflow-hidden";
+            } else if (calcExpression.length > 12) {
+                screen.className = "w-full h-14 bg-slate-100 text-right px-4 text-lg font-bold text-slate-800 border-none outline-none focus:outline-none overflow-hidden";
+            } else {
+                screen.className = "w-full h-14 bg-slate-100 text-right px-4 text-2xl font-bold text-slate-800 border-none outline-none focus:outline-none overflow-hidden";
+            }
+        }
+
         function calcAppend(val) {
             if (calcExpression === "0" && val !== '.') {
                 calcExpression = val;
             } else {
                 calcExpression += val;
             }
-            document.getElementById('calcScreen').value = calcExpression;
+            updateCalcDisplay();
         }
 
         function calcClear() {
             calcExpression = "0";
-            document.getElementById('calcScreen').value = calcExpression;
+            updateCalcDisplay();
         }
 
         function calcBack() {
@@ -1112,17 +1343,18 @@
             } else {
                 calcExpression = "0";
             }
-            document.getElementById('calcScreen').value = calcExpression;
+            updateCalcDisplay();
         }
 
         function calcCalculate() {
             try {
                 let result = eval(calcExpression.replace(/×/g, '*').replace(/÷/g, '/'));
                 calcExpression = String(result);
-                document.getElementById('calcScreen').value = calcExpression;
+                updateCalcDisplay();
             } catch (e) {
-                document.getElementById('calcScreen').value = "Chyba";
-                calcExpression = "0";
+                calcExpression = "Chyba";
+                updateCalcDisplay();
+                setTimeout(calcClear, 1500);
             }
         }
     </script>
