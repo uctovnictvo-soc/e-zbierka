@@ -19,7 +19,6 @@
         .active-input-ring { ring: 2px; ring-color: #3b82f6; border-color: #2563eb !important; background-color: #eff6ff !important; }
         optgroup { font-weight: 700; color: #1e293b; font-style: normal; background-color: #f8fafc; }
         option { font-weight: 500; color: #334155; }
-        /* Schovanie šípok v number inputoch */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
@@ -77,7 +76,7 @@
                             <h2 id="exerciseTitle" class="text-2xl font-bold text-slate-900 mb-2">Názov cvičenia</h2>
                             <p id="exerciseDescription" class="text-slate-600 text-sm leading-relaxed mb-4">Popis cvičenia</p>
                             
-                            <!-- Legenda pre dokumenty (zobrazí sa len pri Kapitole 1) -->
+                            <!-- Legenda pre dokumenty -->
                             <div id="docLegend" class="hidden bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-900">
                                 <h4 class="font-bold mb-3 flex items-center text-blue-800"><i data-lucide="info" class="w-4 h-4 mr-1.5"></i>Legenda účtovných dokladov</h4>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 font-medium">
@@ -97,7 +96,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Legenda pre Aktíva/Pasíva (Zobrazí sa len pri Kapitole 3) -->
+                            <!-- Legenda pre Aktíva/Pasíva -->
                             <div id="docLegend3" class="hidden bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-xs text-indigo-900 mb-4 mt-4">
                                 <h4 class="font-bold mb-3 flex items-center text-indigo-800"><i data-lucide="info" class="w-4 h-4 mr-1.5"></i>Legenda položiek Súvahy</h4>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-medium">
@@ -120,7 +119,7 @@
                                 </table>
                             </div>
                             
-                            <!-- Interaktívna Súvaha (Zobrazí sa len v Kapitole 3) -->
+                            <!-- Interaktívna Súvaha -->
                             <div id="interactiveSuvaha" class="hidden mt-8 border border-slate-300 rounded-lg overflow-hidden shadow-sm">
                                 <div class="bg-blue-600 text-white text-center py-2 font-bold text-lg tracking-wider">SÚVAHA</div>
                                 <div class="grid grid-cols-2">
@@ -233,13 +232,11 @@
     </div>
 
     <script>
-        // Formátovanie meny
         function formatCurrency(val) {
             return val.toLocaleString('sk-SK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         }
 
         const ACCOUNTS_DB = [
-            // Trieda 0
             { code: "012", name: "Aktivované náklady na vývoj" }, { code: "013", name: "Softvér" }, { code: "014", name: "Oceniteľné práva" },
             { code: "015", name: "Goodwill" }, { code: "019", name: "Ostatný dlhodobý nehmotný majetok" }, { code: "021", name: "Stavby" },
             { code: "022", name: "Samostatné hnuteľné veci a súbory hnuteľných vecí" }, { code: "025", name: "Pestovateľské celky trvalých porastov" },
@@ -260,7 +257,6 @@
             { code: "094", name: "Opravné položky k nedokončenému dlhodobému hmotnému majetku" }, { code: "095", name: "Opravné položky k poskytnutým preddavkom na dlhodobý majetok" },
             { code: "096", name: "Opravné položky k dlhodobému finančnému majetku" }, { code: "097", name: "Opravné položky k nadobudnutému majetku" },
             { code: "098", name: "Oprávky k opravnej položke k nadobudnutému majetku" },
-            // Trieda 1
             { code: "111", name: "Obstaranie materiálu" }, { code: "112", name: "Materiál na sklade" }, { code: "119", name: "Materiál na ceste" },
             { code: "121", name: "Nedokončená výroba" }, { code: "122", name: "Polotovary vlastnej výroby" }, { code: "123", name: "Výrobky" },
             { code: "124", name: "Zvieratá" }, { code: "131", name: "Obstaranie tovaru" }, { code: "132", name: "Tovar na sklade a v predajniach" },
@@ -268,7 +264,6 @@
             { code: "191", name: "Opravné položky k materiálu" }, { code: "192", name: "Opravné položky k nedokončenej výrobe" },
             { code: "193", name: "Opravné položky k polotovarom vlastnej výroby" }, { code: "194", name: "Opravné položky k výrobkom" },
             { code: "195", name: "Opravné položky k zvieratám" }, { code: "196", name: "Opravné položky k tovaru" },
-            // Trieda 2
             { code: "211", name: "Pokladnica" }, { code: "213", name: "Ceniny" }, { code: "221", name: "Bankové účty" },
             { code: "231", name: "Krátkodobé bankové úvery" }, { code: "232", name: "Eskontné úvery" }, { code: "241", name: "Vydané krátkodobé dlhopisy" },
             { code: "249", name: "Ostatné krátkodobé finančné výpomoci" }, { code: "251", name: "Majetkové cenné papiere na obchodovanie" },
@@ -276,7 +271,6 @@
             { code: "255", name: "Vlastné dlhopisy" }, { code: "256", name: "Dlhové cenné papiere so splatnosťou do jedného roka držané do splatnosti" },
             { code: "257", name: "Ostatné realizovateľné cenné papiere" }, { code: "259", name: "Obstaranie krátkodobého finančného majetku" },
             { code: "261", name: "Peniaze na ceste" }, { code: "291", name: "Opravné položky ku krátkodobému finančnému majetku" },
-            // Trieda 3
             { code: "311", name: "Odberatelia" }, { code: "312", name: "Zmenky na inkaso" }, { code: "313", name: "Pohľadávky za eskontované cenné papiere" },
             { code: "314", name: "Poskytnuté preddavky" }, { code: "315", name: "Ostatné pohľadávky" }, { code: "316", name: "Čistá hodnota zákazky" },
             { code: "321", name: "Dodávatelia" }, { code: "322", name: "Zmenky na úhradu" }, { code: "323", name: "Krátkodobé rezervy" },
@@ -297,7 +291,6 @@
             { code: "381", name: "Náklady budúcich období" }, { code: "382", name: "Komplexné náklady budúcich období" },
             { code: "383", name: "Výdavky budúcich období" }, { code: "384", name: "Výnosy budúcich období" }, { code: "385", name: "Príjmy budúcich období" },
             { code: "391", name: "Opravné položky k pohľadávkam" }, { code: "395", name: "Vnútorné zúčtovanie" }, { code: "398", name: "Spojovací účet pri združení" },
-            // Trieda 4
             { code: "411", name: "Základné imanie" }, { code: "412", name: "Emisné ážio" }, { code: "413", name: "Ostatné kapitálové fondy" },
             { code: "414", name: "Oceňovacie rozdiely z precenenia majetku a záväzkov" }, { code: "415", name: "Oceňovacie rozdiely z kapitálových účastín" },
             { code: "416", name: "Oceňovacie rozdiely z precenenia pri zlúčení, splynutí a rozdelení" }, { code: "417", name: "Zákonný rezervný fond z kapitálových vkladov" },
@@ -310,9 +303,8 @@
             { code: "475", name: "Dlhodobé prijaté preddavky" }, { code: "476", name: "Dlhodobé nevyfakturované dodávky" },
             { code: "478", name: "Dlhodobé zmenky na úhradu" }, { code: "479", name: "Ostatné dlhodobé záväzky" },
             { code: "481", name: "Odložený daňový záväzok a odložená daňová pohľadávka" }, { code: "491", name: "Vlastné imanie fyzickej osoby – podnikateľa" },
-            // Trieda 5
             { code: "501", name: "Spotreba materiálu" }, { code: "502", name: "Spotreba energie" }, { code: "503", name: "Spotreba ostatných neskladovateľných dodávok" },
-            { code: "504", name: "Predaný tovar" }, { code: "505", name: "Tvorba a zúčtovanie opravných položiek k zásobám" }, { code: "507", name: "Predaná nehnuteľnosť" },
+            { code: "504", name: "Predaný tovar" }, { code: "505", name: "Tvorba a zúčtowanie opravných položiek k zásobám" }, { code: "507", name: "Predaná nehnuteľnosť" },
             { code: "511", name: "Opravy a udržiavanie" }, { code: "512", name: "Cestovné" }, { code: "513", name: "Náklady na reprezentáciu" },
             { code: "518", name: "Ostatné služby" }, { code: "521", name: "Mzdové náklady" }, { code: "522", name: "Príjmy spoločníkov a členov zo závislej činnosti" },
             { code: "523", name: "Odmeny členom orgánov spoločnosti a družstva" }, { code: "524", name: "Zákonné sociálne poistenie" },
@@ -331,7 +323,6 @@
             { code: "568", name: "Ostatné finančné náklady" }, { code: "569", name: "Manká a škody na finančnom majetku" },
             { code: "591", name: "Splatná daň z príjmov" }, { code: "592", name: "Odložená daň z príjmov" }, { code: "595", name: "Dodatočné odvody dane z príjmov" },
             { code: "596", name: "Prevod podielov na výsledku hospodárenia spoločníkom" },
-            // Trieda 6
             { code: "601", name: "Tržby za vlastné výrobky" }, { code: "602", name: "Tržby z predaja služieb" }, { code: "604", name: "Tržby za tovar" },
             { code: "606", name: "Výnosy zo zákazky" }, { code: "607", name: "Výnosy z nehnuteľnosti na predaj" },
             { code: "611", name: "Zmena stavu nedokončenej výroby" }, { code: "612", name: "Zmena stavu polotovarov" },
@@ -345,11 +336,9 @@
             { code: "661", name: "Tržby z predaja cenných papierov a podielov" }, { code: "662", name: "Úroky" }, { code: "663", name: "Kurzové zisky" },
             { code: "664", name: "Výnosy z precenenia cenných papierov" }, { code: "665", name: "Výnosy z dlhodobého finančného majetku" },
             { code: "666", name: "Výnosy z krátkodobého finančného majetku" }, { code: "667", name: "Výnosy z derivátových operácií" }, { code: "668", name: "Ostatné finančné výnosy" },
-            // Trieda 7
             { code: "701", name: "Začiatočný účet súvahový" }, { code: "702", name: "Konečný účet súvahový" }, { code: "710", name: "Účet ziskov a strát" }, { code: "711", name: "Začiatočný účet nákladov a výnosov" }
         ];
 
-        // Definovanie hlavných a vedľajších kategórií pre Kapitolu 2
         const KATEGORIE_MAJETKU = {
             "DM": {
                 name: "Dlhodobý majetok",
@@ -401,7 +390,6 @@
             }
         };
 
-        // Údaje pre Kapitolu 1
         const allDocExercises = [
             { op: "Prevod peňazí z banky do pokladne", correct: "PPD" },
             { op: "Vyplatenie miezd zamestnancom v hotovosti", correct: "VPD" },
@@ -465,230 +453,267 @@
             { op: "Zúčtovanie prijatého preddavku", correct: "ID" }
         ];
 
-        // Údaje pre Kapitolu 2
         const allAssetExercises = [
-            { text: "Výrobná hala podniku", amount: "350 000,00 €", main: "DM", sub: "DHM" },
-            { text: "Osobný automobil pre obchodného zástupcu", amount: "24 500,00 €", main: "DM", sub: "DHM" },
-            { text: "Výrobný stroj", amount: "45 000,00 €", main: "DM", sub: "DHM" },
-            { text: "Pozemok pod výrobnou halou", amount: "85 000,00 €", main: "DM", sub: "DHM" },
-            { text: "Nakúpený účtovný softvér", amount: "1 200,00 €", main: "DM", sub: "DNM" },
-            { text: "Ochranná známka podniku", amount: "3 500,00 €", main: "DM", sub: "DNM" },
-            { text: "Licencia na výrobný postup", amount: "8 000,00 €", main: "DM", sub: "DNM" },
-            { text: "Zriaďovacie náklady spoločnosti", amount: "1 500,00 €", main: "DM", sub: "DNM" },
-            { text: "Nakúpené akcie inej spoločnosti držané nad 1 rok", amount: "15 000,00 €", main: "DM", sub: "DFM" },
-            { text: "Poskytnutá pôžička inej firme so splatnosťou 5 rokov", amount: "50 000,00 €", main: "DM", sub: "DFM" },
-            { text: "Umelecké dielo v zasadačke podniku", amount: "4 200,00 €", main: "DM", sub: "DHM" },
+            // P1.1
             { text: "Látka na výrobu odevov na sklade", amount: "4 200,00 €", main: "KM", sub: "K_MAT" },
-            { text: "Kancelársky papier a náplne do tlačiarní v sklade", amount: "150,00 €", main: "KM", sub: "K_MAT" },
-            { text: "Náhradné diely na opravu strojov", amount: "850,00 €", main: "KM", sub: "K_MAT" },
-            { text: "Obalový materiál pre výrobky", amount: "320,00 €", main: "KM", sub: "K_MAT" },
-            { text: "Rozpracované výrobky na výrobnej linke", amount: "1 800,00 €", main: "KM", sub: "K_NV" },
-            { text: "Nedokončený drevený nábytok v dielni", amount: "2 100,00 €", main: "KM", sub: "K_NV" },
-            { text: "Hotový nábytok na sklade pripravený na predaj", amount: "8 500,00 €", main: "KM", sub: "K_VYR" },
-            { text: "Upečené pekárenské výrobky na sklade", amount: "400,00 €", main: "KM", sub: "K_VYR" },
-            { text: "Nakúpené notebooky v predajni elektroniky", amount: "12 000,00 €", main: "KM", sub: "K_TOV" },
-            { text: "Tovar v podnikovej predajni potravín", amount: "5 500,00 €", main: "KM", sub: "K_TOV" },
-            { text: "Vystavená faktúra za služby - neuhradená", amount: "1 100,00 €", main: "KM", sub: "P_ODB" },
-            { text: "Neuhradená faktúra od odberateľa za tovar", amount: "4 300,00 €", main: "KM", sub: "P_ODB" },
-            { text: "Zmenka na inkaso od odberateľa", amount: "2 000,00 €", main: "KM", sub: "P_ODB" },
-            { text: "Pohľadávka voči zamestnancovi za manko", amount: "120,00 €", main: "KM", sub: "P_OST" },
-            { text: "Poskytnutý preddavok dodávateľovi na materiál", amount: "500,00 €", main: "KM", sub: "P_OST" },
-            { text: "Nárok na vrátenie nadmerného odpočtu DPH", amount: "3 100,00 €", main: "KM", sub: "P_OST" },
-            { text: "Krátkodobá pohľadávka voči spoločníkovi", amount: "400,00 €", main: "KM", sub: "P_OST" },
-            { text: "Hotovosť v pokladnici v eurách", amount: "350,00 €", main: "KM", sub: "F_POK" },
-            { text: "Poštové známky a stravné lístky v trezore", amount: "450,00 €", main: "KM", sub: "F_POK" },
-            { text: "Valuty v cudzej mene v pokladnici", amount: "150,00 €", main: "KM", sub: "F_POK" },
-            { text: "Peniaze na bežnom účte v banke", amount: "18 500,00 €", main: "KM", sub: "F_BU" },
-            { text: "Zostatok na devízovom účte v USD", amount: "4 200,00 €", main: "KM", sub: "F_BU" },
-            { text: "Nakúpené štátne dlhopisy so splatnosťou 6 mesiacov", amount: "10 000,00 €", main: "KM", sub: "F_CP" },
-            { text: "Majetkové cenné papiere určené na obchodovanie do pol roka", amount: "5 000,00 €", main: "KM", sub: "F_CP" },
-            { text: "Vklady spoločníkov do s.r.o.", amount: "5 000,00 €", main: "VZ", sub: "VZ_ZI" },
-            { text: "Základné imanie akciovej spoločnosti", amount: "25 000,00 €", main: "VZ", sub: "VZ_ZI" },
-            { text: "Emisné ážio", amount: "1 200,00 €", main: "VZ", sub: "VZ_KF" },
-            { text: "Oceňovacie rozdiely z precenenia majetku", amount: "800,00 €", main: "VZ", sub: "VZ_KF" },
-            { text: "Kapitálové fondy z prijatých darov", amount: "3 000,00 €", main: "VZ", sub: "VZ_KF" },
-            { text: "Zákonný rezervný fond", amount: "1 500,00 €", main: "VZ", sub: "VZ_FZ" },
-            { text: "Štatutárne fondy tvorené zo zisku", amount: "2 200,00 €", main: "VZ", sub: "VZ_FZ" },
-            { text: "Nedeliteľný fond", amount: "4 000,00 €", main: "VZ", sub: "VZ_FZ" },
-            { text: "Nerozdelený zisk z minulých rokov", amount: "12 400,00 €", main: "VZ", sub: "VZ_VH" },
-            { text: "Neuhradená strata z minulého roka", amount: "3 200,00 €", main: "VZ", sub: "VZ_VH" },
-            { text: "Zisk bežného účtovného obdobia", amount: "8 900,00 €", main: "VZ", sub: "VZ_VH" },
             { text: "Dlhodobý hypotekárny úver na budovu", amount: "150 000,00 €", main: "CZ", sub: "CZ_UV" },
+            { text: "Kancelársky papier a náplne do tlačiarní v sklade", amount: "150,00 €", main: "KM", sub: "K_MAT" },
+            { text: "Výrobná hala podniku", amount: "350 000,00 €", main: "DM", sub: "DHM" },
+            { text: "Náhradné diely na opravu strojov", amount: "850,00 €", main: "KM", sub: "K_MAT" },
+            { text: "Vklady spoločníkov do s.r.o.", amount: "5 000,00 €", main: "VZ", sub: "VZ_ZI" },
+            
+            // P1.2
+            { text: "Obalový materiál pre výrobky", amount: "320,00 €", main: "KM", sub: "K_MAT" },
             { text: "Krátkodobý prevádzkový úver", amount: "15 000,00 €", main: "CZ", sub: "CZ_UV" },
+            { text: "Rozpracované výrobky na výrobnej linke", amount: "1 800,00 €", main: "KM", sub: "K_NV" },
+            { text: "Osobný automobil pre obchodného zástupcu", amount: "24 500,00 €", main: "DM", sub: "DHM" },
+            { text: "Nedokončený drevený nábytok v dielni", amount: "2 100,00 €", main: "KM", sub: "K_NV" },
+            { text: "Základné imanie akciovej spoločnosti", amount: "25 000,00 €", main: "VZ", sub: "VZ_ZI" },
+            
+            // P1.3
+            { text: "Hotový nábytok na sklade pripravený na predaj", amount: "8 500,00 €", main: "KM", sub: "K_VYR" },
             { text: "Eskontný úver poskytnutý bankou", amount: "4 500,00 €", main: "CZ", sub: "CZ_UV" },
+            { text: "Upečené pekárenské výrobky na sklade", amount: "400,00 €", main: "KM", sub: "K_VYR" },
+            { text: "Výrobný stroj", amount: "45 000,00 €", main: "DM", sub: "DHM" },
+            { text: "Nakúpené notebooky v predajni elektroniky", amount: "12 000,00 €", main: "KM", sub: "K_TOV" },
+            { text: "Emisné ážio", amount: "1 200,00 €", main: "VZ", sub: "VZ_KF" },
+            
+            // P1.4
+            { text: "Tovar v podnikovej predajni potravín", amount: "5 500,00 €", main: "KM", sub: "K_TOV" },
             { text: "Došlá faktúra za nákup materiálu - nezaplatená", amount: "2 600,00 €", main: "CZ", sub: "CZ_DOD" },
+            { text: "Vystavená faktúra za služby - neuhradená", amount: "1 100,00 €", main: "KM", sub: "P_ODB" },
+            { text: "Pozemok pod výrobnou halou", amount: "85 000,00 €", main: "DM", sub: "DHM" },
+            { text: "Neuhradená faktúra od odberateľa za tovar", amount: "4 300,00 €", main: "KM", sub: "P_ODB" },
+            { text: "Oceňovacie rozdiely z precenenia majetku", amount: "800,00 €", main: "VZ", sub: "VZ_KF" },
+            
+            // P1.5
+            { text: "Zmenka na inkaso od odberateľa", amount: "2 000,00 €", main: "KM", sub: "P_ODB" },
             { text: "Nezaplatená faktúra za opravu firemného auta", amount: "380,00 €", main: "CZ", sub: "CZ_DOD" },
+            { text: "Pohľadávka voči zamestnancovi za manko", amount: "120,00 €", main: "KM", sub: "P_OST" },
+            { text: "Nakúpený účtovný softvér", amount: "1 200,00 €", main: "DM", sub: "DNM" },
+            { text: "Poskytnutý preddavok dodávateľovi na materiál", amount: "500,00 €", main: "KM", sub: "P_OST" },
+            { text: "Kapitálové fondy z prijatých darov", amount: "3 000,00 €", main: "VZ", sub: "VZ_KF" },
+            
+            // P1.6
+            { text: "Nárok na vrátenie nadmerného odpočtu DPH", amount: "3 100,00 €", main: "KM", sub: "P_OST" },
             { text: "Neuhradená faktúra od telekomunikačného operátora", amount: "65,00 €", main: "CZ", sub: "CZ_DOD" },
+            { text: "Krátkodobá pohľadávka voči spoločníkovi", amount: "400,00 €", main: "KM", sub: "P_OST" },
+            { text: "Ochranná známka podniku", amount: "3 500,00 €", main: "DM", sub: "DNM" },
+            { text: "Hotovosť v pokladnici v eurách", amount: "350,00 €", main: "KM", sub: "F_POK" },
+            { text: "Zákonný rezervný fond", amount: "1 500,00 €", main: "VZ", sub: "VZ_FZ" },
+            
+            // P1.7
+            { text: "Poštové známky a stravné lístky v trezore", amount: "450,00 €", main: "KM", sub: "F_POK" },
             { text: "Nevyplatené čisté mzdy zamestnancom", amount: "6 400,00 €", main: "CZ", sub: "CZ_ZAM" },
+            { text: "Valuty v cudzej mene v pokladnici", amount: "150,00 €", main: "KM", sub: "F_POK" },
+            { text: "Licencia na výrobný postup", amount: "8 000,00 €", main: "DM", sub: "DNM" },
+            { text: "Peniaze na bežnom účte v banke", amount: "18 500,00 €", main: "KM", sub: "F_BU" },
+            { text: "Štatutárne fondy tvorené zo zisku", amount: "2 200,00 €", main: "VZ", sub: "VZ_FZ" },
+            
+            // P1.8
+            { text: "Zostatok na devízovom účte v USD", amount: "4 200,00 €", main: "KM", sub: "F_BU" },
             { text: "Nevyplatené odmeny manažmentu", amount: "2 500,00 €", main: "CZ", sub: "CZ_ZAM" },
+            { text: "Nakúpené štátne dlhopisy so splatnosťou 6 mesiacov", amount: "10 000,00 €", main: "KM", sub: "F_CP" },
+            { text: "Zriaďovacie náklady spoločnosti", amount: "1 500,00 €", main: "DM", sub: "DNM" },
+            { text: "Majetkové cenné papiere určené na obchodovanie do pol roka", amount: "5 000,00 €", main: "KM", sub: "F_CP" },
+            { text: "Nedeliteľný fond", amount: "4 000,00 €", main: "VZ", sub: "VZ_FZ" },
+            
+            // P2.1
             { text: "Záväzok voči zamestnancovi z vyúčtovania pracovnej cesty", amount: "45,00 €", main: "CZ", sub: "CZ_ZAM" },
+            { text: "Nakúpené akcie inej spoločnosti držané nad 1 rok", amount: "15 000,00 €", main: "DM", sub: "DFM" },
             { text: "Neodvedená daň z príjmov právnických osôb", amount: "4 100,00 €", main: "CZ", sub: "CZ_DAN" },
+            { text: "Nerozdelený zisk z minulých rokov", amount: "12 400,00 €", main: "VZ", sub: "VZ_VH" },
+            
+            // P2.2
             { text: "Záväzok voči daňovému úradu z titulu DPH", amount: "1 800,00 €", main: "CZ", sub: "CZ_DAN" },
+            { text: "Poskytnutá pôžička inej firme so splatnosťou 5 rokov", amount: "50 000,00 €", main: "DM", sub: "DFM" },
             { text: "Záväzok voči Sociálnej poisťovni za zamestnancov", amount: "2 100,00 €", main: "CZ", sub: "CZ_POI" },
+            { text: "Neuhradená strata z minulého roka", amount: "3 200,00 €", main: "VZ", sub: "VZ_VH" },
+            
+            // P2.3
             { text: "Záväzok voči zdravotnej poisťovni", amount: "850,00 €", main: "CZ", sub: "CZ_POI" },
-            { text: "Prijatý preddavok od zákazníka na zákazku", amount: "1 500,00 €", main: "CZ", sub: "CZ_INE" }
+            { text: "Umelecké dielo v zasadačke podniku", amount: "4 200,00 €", main: "DM", sub: "DHM" },
+            { text: "Prijatý preddavok od zákazníka na zákazku", amount: "1 500,00 €", main: "CZ", sub: "CZ_INE" },
+            { text: "Zisk bežného účtovného obdobia", amount: "8 900,00 €", main: "VZ", sub: "VZ_VH" }
         ];
 
-        // Údaje pre Kapitolu 3
         const balanceExercises = [
-            // SADA 1 (0-19): Spolu Súvaha = 116 000 €
+            // Page 1
             { text: "211 - Pokladnica", amount: 2000, type: "A", answeredCorrectly: false },
-            { text: "221 - Bankové účty", amount: 35000, type: "A", answeredCorrectly: false },
+            { text: "321 - Dodávatelia", amount: 15000, type: "P", answeredCorrectly: false },
             { text: "112 - Materiál na sklade", amount: 8000, type: "A", answeredCorrectly: false },
+            { text: "411 - Základné imanie", amount: 50000, type: "P", answeredCorrectly: false },
+            { text: "073 - Oprávky k softvéru", amount: 1000, type: "-A", answeredCorrectly: false },
+            { text: "221 - Bankové účty", amount: 35000, type: "A", answeredCorrectly: false },
+            { text: "331 - Zamestnanci", amount: 12000, type: "P", answeredCorrectly: false },
             { text: "311 - Odberatelia", amount: 15000, type: "A", answeredCorrectly: false },
+            { text: "461 - Bankové úvery", amount: 30000, type: "P", answeredCorrectly: false },
+            { text: "081 - Oprávky k stavbám", amount: 8000, type: "-A", answeredCorrectly: false },
             { text: "013 - Softvér", amount: 5000, type: "A", answeredCorrectly: false },
+            { text: "341 - Daň z príjmov", amount: 4000, type: "P", answeredCorrectly: false },
             { text: "021 - Stavby", amount: 40000, type: "A", answeredCorrectly: false },
+            { text: "421 - Zákonný rezervný fond", amount: 5000, type: "P", answeredCorrectly: false },
+            { text: "082 - Oprávky k samost. hnuteľným veciam", amount: 5000, type: "-A", answeredCorrectly: false },
             { text: "022 - Samostatné hnuteľné veci", amount: 20000, type: "A", answeredCorrectly: false },
+            { text: "314 - Poskytnuté preddavky", amount: 1500, type: "A", answeredCorrectly: false },
+            { text: "391 - Opravné položky k pohľadávkam", amount: 2000, type: "-A", answeredCorrectly: false },
             { text: "132 - Tovar na sklade a v predajniach", amount: 5000, type: "A", answeredCorrectly: false },
             { text: "213 - Ceniny", amount: 500, type: "A", answeredCorrectly: false },
-            { text: "314 - Poskytnuté preddavky", amount: 1500, type: "A", answeredCorrectly: false },
-            { text: "073 - Oprávky k softvéru", amount: 1000, type: "-A", answeredCorrectly: false },
-            { text: "081 - Oprávky k stavbám", amount: 8000, type: "-A", answeredCorrectly: false },
-            { text: "082 - Oprávky k samost. hnuteľným veciam", amount: 5000, type: "-A", answeredCorrectly: false },
-            { text: "391 - Opravné položky k pohľadávkam", amount: 2000, type: "-A", answeredCorrectly: false },
-            { text: "411 - Základné imanie", amount: 50000, type: "P", answeredCorrectly: false },
-            { text: "461 - Bankové úvery", amount: 30000, type: "P", answeredCorrectly: false },
-            { text: "321 - Dodávatelia", amount: 15000, type: "P", answeredCorrectly: false },
-            { text: "331 - Zamestnanci", amount: 12000, type: "P", answeredCorrectly: false },
-            { text: "341 - Daň z príjmov", amount: 4000, type: "P", answeredCorrectly: false },
-            { text: "421 - Zákonný rezervný fond", amount: 5000, type: "P", answeredCorrectly: false },
 
-            // SADA 2 (20-39): Spolu Súvaha = 275 000 €
+            // Page 2
             { text: "031 - Pozemky", amount: 50000, type: "A", answeredCorrectly: false },
-            { text: "021 - Budovy", amount: 120000, type: "A", answeredCorrectly: false },
-            { text: "022 - Stroje a zariadenia", amount: 80000, type: "A", answeredCorrectly: false },
-            { text: "121 - Nedokončená výroba", amount: 15000, type: "A", answeredCorrectly: false },
-            { text: "123 - Výrobky", amount: 25000, type: "A", answeredCorrectly: false },
-            { text: "311 - Pohľadávky z obchodného styku", amount: 30000, type: "A", answeredCorrectly: false },
-            { text: "221 - Bankové účty", amount: 22000, type: "A", answeredCorrectly: false },
-            { text: "211 - Pokladnica", amount: 1500, type: "A", answeredCorrectly: false },
-            { text: "251 - Majetkové cenné papiere na obchodovanie", amount: 8500, type: "A", answeredCorrectly: false },
-            { text: "081 - Oprávky k budovám", amount: 40000, type: "-A", answeredCorrectly: false },
-            { text: "082 - Oprávky k strojom", amount: 35000, type: "-A", answeredCorrectly: false },
-            { text: "196 - Opravné položky k tovaru", amount: 2000, type: "-A", answeredCorrectly: false },
             { text: "411 - Základné imanie", amount: 100000, type: "P", answeredCorrectly: false },
-            { text: "412 - Emisné ážio", amount: 10000, type: "P", answeredCorrectly: false },
-            { text: "428 - Nerozdelený zisk minulých rokov", amount: 45000, type: "P", answeredCorrectly: false },
-            { text: "461 - Dlhodobý bankový úver", amount: 80000, type: "P", answeredCorrectly: false },
-            { text: "323 - Krátkodobé rezervy", amount: 5000, type: "P", answeredCorrectly: false },
+            { text: "121 - Nedokončená výroba", amount: 15000, type: "A", answeredCorrectly: false },
             { text: "321 - Záväzky voči dodávateľom", amount: 25000, type: "P", answeredCorrectly: false },
+            { text: "081 - Oprávky k budovám", amount: 40000, type: "-A", answeredCorrectly: false },
+            { text: "021 - Budovy", amount: 120000, type: "A", answeredCorrectly: false },
+            { text: "323 - Krátkodobé rezervy", amount: 5000, type: "P", answeredCorrectly: false },
+            { text: "311 - Pohľadávky z obchodného styku", amount: 30000, type: "A", answeredCorrectly: false },
+            { text: "461 - Dlhodobý bankový úver", amount: 80000, type: "P", answeredCorrectly: false },
+            { text: "082 - Oprávky k strojom", amount: 35000, type: "-A", answeredCorrectly: false },
+            { text: "221 - Bankové účty", amount: 22000, type: "A", answeredCorrectly: false },
             { text: "336 - Zúčtovanie s orgánmi soc. poistenia", amount: 8000, type: "P", answeredCorrectly: false },
+            { text: "123 - Výrobky", amount: 25000, type: "A", answeredCorrectly: false },
+            { text: "412 - Emisné ážio", amount: 10000, type: "P", answeredCorrectly: false },
+            { text: "196 - Opravné položky k tovaru", amount: 2000, type: "-A", answeredCorrectly: false },
+            { text: "022 - Stroje a zariadenia", amount: 80000, type: "A", answeredCorrectly: false },
+            { text: "428 - Nerozdelený zisk minulých rokov", amount: 45000, type: "P", answeredCorrectly: false },
+            { text: "251 - Majetkové cenné papiere na obchodovanie", amount: 8500, type: "A", answeredCorrectly: false },
             { text: "342 - Ostatné priame dane", amount: 2000, type: "P", answeredCorrectly: false },
+            { text: "211 - Pokladnica", amount: 1500, type: "A", answeredCorrectly: false },
 
-            // SADA 3 (40-59): Spolu Súvaha = 85 000 €
+            // Page 3
             { text: "013 - Softvér", amount: 12000, type: "A", answeredCorrectly: false },
-            { text: "014 - Oceniteľné práva", amount: 8000, type: "A", answeredCorrectly: false },
-            { text: "022 - Stroje", amount: 45000, type: "A", answeredCorrectly: false },
-            { text: "022 - Počítače (SHV)", amount: 18000, type: "A", answeredCorrectly: false },
-            { text: "112 - Materiál", amount: 6500, type: "A", answeredCorrectly: false },
-            { text: "139 - Tovar na ceste", amount: 3500, type: "A", answeredCorrectly: false },
-            { text: "311 - Odberatelia", amount: 14000, type: "A", answeredCorrectly: false },
-            { text: "253 - Dlhové cenné papiere na obchodovanie", amount: 5000, type: "A", answeredCorrectly: false },
-            { text: "221 - Bankový účet", amount: 11000, type: "A", answeredCorrectly: false },
-            { text: "211 - Pokladnica", amount: 2000, type: "A", answeredCorrectly: false },
-            { text: "073 - Oprávky k softvéru", amount: 6000, type: "-A", answeredCorrectly: false },
-            { text: "074 - Oprávky k oceniteľným právam", amount: 3000, type: "-A", answeredCorrectly: false },
-            { text: "082 - Oprávky k strojom", amount: 20000, type: "-A", answeredCorrectly: false },
-            { text: "082 - Oprávky k počítačom", amount: 10000, type: "-A", answeredCorrectly: false },
-            { text: "391 - Opravné položky k pohľadávkam", amount: 1000, type: "-A", answeredCorrectly: false },
-            { text: "491 - Vlastné imanie FO - podnikateľa", amount: 50000, type: "P", answeredCorrectly: false },
-            { text: "231 - Krátkodobé bankové úvery", amount: 15000, type: "P", answeredCorrectly: false },
             { text: "321 - Dodávatelia", amount: 12000, type: "P", answeredCorrectly: false },
+            { text: "112 - Materiál", amount: 6500, type: "A", answeredCorrectly: false },
+            { text: "491 - Vlastné imanie FO - podnikateľa", amount: 50000, type: "P", answeredCorrectly: false },
+            { text: "073 - Oprávky k softvéru", amount: 6000, type: "-A", answeredCorrectly: false },
+            { text: "022 - Stroje", amount: 45000, type: "A", answeredCorrectly: false },
+            { text: "231 - Krátkodobé bankové úvery", amount: 15000, type: "P", answeredCorrectly: false },
+            { text: "139 - Tovar na ceste", amount: 3500, type: "A", answeredCorrectly: false },
             { text: "331 - Zamestnanci", amount: 6000, type: "P", answeredCorrectly: false },
-            { text: "336 - Záväzky voči zdravotnej poisťovni", amount: 2000, type: "P", answeredCorrectly: false }
+            { text: "082 - Oprávky k strojom", amount: 20000, type: "-A", answeredCorrectly: false },
+            { text: "311 - Odberatelia", amount: 14000, type: "A", answeredCorrectly: false },
+            { text: "336 - Záväzky voči zdravotnej poisťovni", amount: 2000, type: "P", answeredCorrectly: false },
+            { text: "022 - Počítače (SHV)", amount: 18000, type: "A", answeredCorrectly: false },
+            { text: "074 - Oprávky k oceniteľným právam", amount: 3000, type: "-A", answeredCorrectly: false },
+            { text: "221 - Bankový účet", amount: 11000, type: "A", answeredCorrectly: false },
+            { text: "082 - Oprávky k počítačom", amount: 10000, type: "-A", answeredCorrectly: false },
+            { text: "014 - Oceniteľné práva", amount: 8000, type: "A", answeredCorrectly: false },
+            { text: "391 - Opravné položky k pohľadávkam", amount: 1000, type: "-A", answeredCorrectly: false },
+            { text: "253 - Dlhové cenné papiere na obchodovanie", amount: 5000, type: "A", answeredCorrectly: false },
+            { text: "211 - Pokladnica", amount: 2000, type: "A", answeredCorrectly: false }
         ];
 
-        // Údaje pre Kapitolu 4 (T-účty) - Rozšírené na 16 účtov (8 Aktív a 8 Pasív) per súvaha
         const tAccountsExercises = [
             {
                 aktiva: [
-                    { acc: "Pokladnica", amount: 2500 },
-                    { acc: "Bankové účty", amount: 12500 },
-                    { acc: "Materiál na sklade", amount: 4000 },
-                    { acc: "Odberatelia", amount: 6000 },
-                    { acc: "Softvér", amount: 1500 },
-                    { acc: "Stroje a zariadenia", amount: 10500 },
-                    { acc: "Tovar na sklade", amount: 8000 },
-                    { acc: "Ceniny", amount: 500 }
+                    { acc: "Pokladnica", amount: 2500 }, { acc: "Bankové účty", amount: 12500 },
+                    { acc: "Materiál na sklade", amount: 4000 }, { acc: "Odberatelia", amount: 6000 },
+                    { acc: "Softvér", amount: 1500 }, { acc: "Stroje a zariadenia", amount: 10500 },
+                    { acc: "Tovar na sklade", amount: 8000 }, { acc: "Ceniny", amount: 500 }
                 ],
                 pasiva: [
-                    { acc: "Základné imanie", amount: 15000 },
-                    { acc: "Dodávatelia", amount: 8000 },
-                    { acc: "Bankové úvery", amount: 1000 },
-                    { acc: "Zamestnanci", amount: 1000 },
-                    { acc: "Nerozdelený zisk", amount: 12000 },
-                    { acc: "Krátkodobé rezervy", amount: 2000 },
-                    { acc: "Daň z príjmov", amount: 5000 },
-                    { acc: "Zúčtovanie so SP a ZP", amount: 1500 }
+                    { acc: "Základné imanie", amount: 15000 }, { acc: "Dodávatelia", amount: 8000 },
+                    { acc: "Bankové úvery", amount: 1000 }, { acc: "Zamestnanci", amount: 1000 },
+                    { acc: "Nerozdelený zisk", amount: 12000 }, { acc: "Krátkodobé rezervy", amount: 2000 },
+                    { acc: "Daň z príjmov", amount: 5000 }, { acc: "Zúčtovanie so SP a ZP", amount: 1500 }
                 ]
             },
             {
                 aktiva: [
-                    { acc: "Stavby", amount: 85000 },
-                    { acc: "Pozemky", amount: 15000 },
-                    { acc: "Bankové účty", amount: 4000 },
-                    { acc: "Pokladnica", amount: 1000 },
-                    { acc: "Samost. hnuteľné veci", amount: 20000 },
-                    { acc: "Pohľadávky z obch. styku", amount: 12000 },
-                    { acc: "Nedokončená výroba", amount: 5000 },
-                    { acc: "Poskytnuté preddavky", amount: 3000 }
+                    { acc: "Stavby", amount: 85000 }, { acc: "Pozemky", amount: 15000 },
+                    { acc: "Bankové účty", amount: 4000 }, { acc: "Pokladnica", amount: 1000 },
+                    { acc: "Samost. hnuteľné veci", amount: 20000 }, { acc: "Pohľadávky z obch. styku", amount: 12000 },
+                    { acc: "Nedokončená výroba", amount: 5000 }, { acc: "Poskytnuté preddavky", amount: 3000 }
                 ],
                 pasiva: [
-                    { acc: "Základné imanie", amount: 80000 },
-                    { acc: "Nerozdelený zisk", amount: 10000 },
-                    { acc: "Bankové úvery", amount: 10000 },
-                    { acc: "Zamestnanci", amount: 5000 },
-                    { acc: "Zákonný rezervný fond", amount: 15000 },
-                    { acc: "Dodávatelia", amount: 18000 },
-                    { acc: "Krátkodobé bankové úvery", amount: 4000 },
-                    { acc: "Zúčtovanie so SP a ZP", amount: 3000 }
+                    { acc: "Základné imanie", amount: 80000 }, { acc: "Nerozdelený zisk", amount: 10000 },
+                    { acc: "Bankové úvery", amount: 10000 }, { acc: "Zamestnanci", amount: 5000 },
+                    { acc: "Zákonný rezervný fond", amount: 15000 }, { acc: "Dodávatelia", amount: 18000 },
+                    { acc: "Krátkodobé bankové úvery", amount: 4000 }, { acc: "Zúčtovanie so SP a ZP", amount: 3000 }
                 ]
             },
             {
                 aktiva: [
-                    { acc: "Stroje a zariadenia", amount: 45000 },
-                    { acc: "Tovar na sklade", amount: 8000 },
-                    { acc: "Pokladnica", amount: 500 },
-                    { acc: "Bankový účet", amount: 12000 },
-                    { acc: "Výrobky", amount: 14500 },
-                    { acc: "Odberatelia", amount: 22000 },
-                    { acc: "Oceniteľné práva", amount: 5000 },
-                    { acc: "Ceniny", amount: 1000 }
+                    { acc: "Stroje a zariadenia", amount: 45000 }, { acc: "Tovar na sklade", amount: 8000 },
+                    { acc: "Pokladnica", amount: 500 }, { acc: "Bankový účet", amount: 12000 },
+                    { acc: "Výrobky", amount: 14500 }, { acc: "Odberatelia", amount: 22000 },
+                    { acc: "Oceniteľné práva", amount: 5000 }, { acc: "Ceniny", amount: 1000 }
                 ],
                 pasiva: [
-                    { acc: "Základné imanie", amount: 50000 },
-                    { acc: "Zákonný rezervný fond", amount: 5000 },
-                    { acc: "Dlhodobý bankový úver", amount: 8000 },
-                    { acc: "Dodávatelia", amount: 2500 },
-                    { acc: "Emisné ážio", amount: 10000 },
-                    { acc: "Zamestnanci", amount: 12000 },
-                    { acc: "Záv. zo soc. poistenia", amount: 8500 },
-                    { acc: "Krátkodobé rezervy", amount: 12000 }
+                    { acc: "Základné imanie", amount: 50000 }, { acc: "Zákonný rezervný fond", amount: 5000 },
+                    { acc: "Dlhodobý bankový úver", amount: 8000 }, { acc: "Dodávatelia", amount: 2500 },
+                    { acc: "Emisné ážio", amount: 10000 }, { acc: "Zamestnanci", amount: 12000 },
+                    { acc: "Záv. zo soc. poistenia", amount: 8500 }, { acc: "Krátkodobé rezervy", amount: 12000 }
                 ]
             }
         ];
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-        
-        function shuffleChapter3(array) {
-            for(let block = 0; block < 3; block++) {
-                let start = block * 20;
-                let end = start + 20;
-                for (let i = end - 1; i > start; i--) {
-                    const j = start + Math.floor(Math.random() * (i - start + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            }
-        }
+        // Kapitola 5: Účtovanie o peniazoch v hotovosti (roztrúsené DPH položky: presne 2 PPD a 2 VPD s DPH na každých 20 položiek, rozložené na rôzne pozície)
+        const cashBookExercises = [
+            // --- STRANA 1 ---
+            { doklad: "PPD", op: "Výber peňazí z bankového účtu (dotácia pokladnice)", isDph: false, baseSum: 2000, md: "211", d: "261" },
+            { doklad: "PPD", op: "Inkaso odoslanej faktúry", isDph: false, baseSum: 600, md: "211", d: "311" },
+            { doklad: "PPD", op: "Tržba za predané výrobky", isDph: true, a: {sum: 1000, md: "", d: "601"}, b: {sum: 230, md: "", d: "343"}, c: {sum: 1230, md: "211", d: ""} }, // 3. príklad (PPD s DPH)
+            { doklad: "PPD", op: "Inkaso pohľadávky voči zamestnancovi", isDph: false, baseSum: 200, md: "211", d: "335" },
+            { doklad: "VPD", op: "Odvod peňazí na bankový účet - vklad do banky", isDph: false, baseSum: 3000, md: "261", d: "211" },
+            { doklad: "VPD", op: "Úhrada prijatej faktúry", isDph: false, baseSum: 2400, md: "321", d: "211" },
+            { doklad: "VPD", op: "Prevod peňazí do inej pokladnice", isDph: false, baseSum: 1000, md: "261", d: "211" },
+            { doklad: "VPD", op: "Nákup pohonných látok (PHM)", isDph: true, a: {sum: 100, md: "501", d: ""}, b: {sum: 23, md: "343", d: ""}, c: {sum: 123, md: "", d: "211"} }, // 8. príklad (VPD s DPH)
+            { doklad: "VPD", op: "Úhrada poštovného", isDph: false, baseSum: 12, md: "518", d: "211" },
+            { doklad: "VPD", op: "Úhrada miezd zamestnancom", isDph: false, baseSum: 5000, md: "331", d: "211" },
+            { doklad: "VPD", op: "Úhrada za službu - právne poradenstvo", isDph: false, baseSum: 150, md: "518", d: "211" },
+            { doklad: "VPD", op: "Nákup pochutín a kávy na pohostenie", isDph: false, baseSum: 40, md: "513", d: "211" },
+            { doklad: "PPD", op: "Tržba za predaný tovar", isDph: true, a: {sum: 2000, md: "", d: "604"}, b: {sum: 460, md: "", d: "343"}, c: {sum: 2460, md: "211", d: ""} }, // 13. príklad (PPD s DPH)
+            { doklad: "VPD", op: "Úhrada cestovných náhrad zamestnancovi", isDph: false, baseSum: 50, md: "512", d: "211" },
+            { doklad: "VPD", op: "Úhrada správneho poplatku na súde", isDph: false, baseSum: 100, md: "538", d: "211" },
+            { doklad: "ID", op: "Inventarizačný rozdiel - pokladničný prebytok", isDph: false, baseSum: 50, md: "211", d: "668" },
+            { doklad: "ID", op: "Inventarizačný rozdiel - manko v pokladnici", isDph: false, baseSum: 30, md: "569", d: "211" },
+            { doklad: "VPD", op: "Nákup kancelárskych potrieb", isDph: true, a: {sum: 50, md: "501", d: ""}, b: {sum: 11.50, md: "343", d: ""}, c: {sum: 61.50, md: "", d: "211"} }, // 18. príklad (VPD s DPH)
+            { doklad: "VPD", op: "Poskytnutý preddavok zamestnancovi v hotovosti", isDph: false, baseSum: 150, md: "335", d: "211" },
+            { doklad: "PPD", op: "Vrátený zvyšok preddavku do pokladnice", isDph: false, baseSum: 20, md: "211", d: "335" },
 
-        shuffleArray(allDocExercises);
-        shuffleArray(allAssetExercises);
-        shuffleChapter3(balanceExercises);
+            // --- STRANA 2 ---
+            { doklad: "PPD", op: "Náhrada manka od hmotne zodpovedného zamestnanca", isDph: false, baseSum: 30, md: "211", d: "335" },
+            { doklad: "VPD", op: "Poskytnutý preddavok dodávateľovi v hotovosti", isDph: false, baseSum: 500, md: "314", d: "211" },
+            { doklad: "PPD", op: "Prijatý preddavok od zákazníka v hotovosti", isDph: false, baseSum: 800, md: "211", d: "324" },
+            { doklad: "PPD", op: "Tržba za poskytnuté služby", isDph: true, a: {sum: 500, md: "", d: "602"}, b: {sum: 115, md: "", d: "343"}, c: {sum: 615, md: "211", d: ""} }, // 4. príklad (PPD s DPH)
+            { doklad: "VPD", op: "Nákup odbornej literatúry", isDph: false, baseSum: 45, md: "501", d: "211" },
+            { doklad: "VPD", op: "Nákup poštových známok do zásoby (ceniny)", isDph: false, baseSum: 30, md: "213", d: "211" },
+            { doklad: "VPD", op: "Výplata odmeny členovi štatutárneho orgánu", isDph: false, baseSum: 300, md: "523", d: "211" },
+            { doklad: "VPD", op: "Úhrada poistného firemného majetku v hotovosti", isDph: false, baseSum: 250, md: "548", d: "211" },
+            { doklad: "VPD", op: "Nákup základného materiálu", isDph: true, a: {sum: 300, md: "501", d: ""}, b: {sum: 69, md: "343", d: ""}, c: {sum: 369, md: "", d: "211"} }, // 9. príklad (VPD s DPH)
+            { doklad: "VPD", op: "Úhrada poplatku za vedenie účtu v hotovosti", isDph: false, baseSum: 15, md: "568", d: "211" },
+            { doklad: "VPD", op: "Zaplatenie zmluvnej pokuty dodávateľovi v hotovosti", isDph: false, baseSum: 80, md: "544", d: "211" },
+            { doklad: "PPD", op: "Prijatá zmluvná pokuta od odberateľa v hotovosti", isDph: false, baseSum: 120, md: "211", d: "644" },
+            { doklad: "PPD", op: "Inkaso preddavku od odberateľa v hotovosti", isDph: false, baseSum: 350, md: "211", d: "324" },
+            { doklad: "PPD", op: "Tržba za predaj prebytočného softvéru", isDph: true, a: {sum: 500, md: "", d: "602"}, b: {sum: 115, md: "", d: "343"}, c: {sum: 615, md: "211", d: ""} }, // 14. príklad (PPD s DPH)
+            { doklad: "VPD", op: "Vrátenie chybného preddavku zákazníkovi v hotovosti", isDph: false, baseSum: 100, md: "324", d: "211" },
+            { doklad: "PPD", op: "Príjem daru v hotovosti od sponzora", isDph: false, baseSum: 1000, md: "211", d: "648" },
+            { doklad: "VPD", op: "Poskytnutý dar v hotovosti na charitu", isDph: false, baseSum: 200, md: "543", d: "211" },
+            { doklad: "ID", op: "Predpis manka na materiáli na zamestnanca", isDph: false, baseSum: 150, md: "335", d: "549" },
+            { doklad: "VPD", op: "Nákup pomocného materiálu do skladu", isDph: true, a: {sum: 200, md: "112", d: ""}, b: {sum: 46, md: "343", d: ""}, c: {sum: 246, md: "", d: "211"} }, // 19. príklad (VPD s DPH)
+            { doklad: "VPD", op: "Úhrada za službu - kopírovanie", isDph: false, baseSum: 20, md: "518", d: "211" },
+
+            // --- STRANA 3 ---
+            { doklad: "VPD", op: "Úhrada vedenia účtovníctva", isDph: false, baseSum: 100, md: "518", d: "211" },
+            { doklad: "VPD", op: "Nákup pracovného ošatenia", isDph: false, baseSum: 400, md: "501", d: "211" },
+            { doklad: "PPD", op: "Tržba za nájomné priestorov", isDph: true, a: {sum: 1200, md: "", d: "602"}, b: {sum: 276, md: "", d: "343"}, c: {sum: 1476, md: "211", d: ""} }, // 3. príklad (PPD s DPH)
+            { doklad: "VPD", op: "Nákup tonera do tlačiarne", isDph: false, baseSum: 50, md: "501", d: "211" },
+            { doklad: "VPD", op: "Úhrada za službu - oprava počítača", isDph: false, baseSum: 80, md: "511", d: "211" },
+            { doklad: "VPD", op: "Nákup drobných prevádzkových potrieb", isDph: false, baseSum: 200, md: "501", d: "211" },
+            { doklad: "VPD", op: "Úhrada za inzerciu v novinách (reklama)", isDph: true, a: {sum: 300, md: "518", d: ""}, b: {sum: 69, md: "343", d: ""}, c: {sum: 369, md: "", d: "211"} }, // 7. príklad (VPD s DPH)
+            { doklad: "VPD", op: "Nákup služby - čistenie firemného vozidla", isDph: false, baseSum: 60, md: "518", d: "211" },
+            { doklad: "VPD", op: "Nákup hygienických potrieb", isDph: false, baseSum: 200, md: "501", d: "211" },
+            { doklad: "VPD", op: "Nákup obalov do skladu", isDph: false, baseSum: 150, md: "112", d: "211" },
+            { doklad: "PPD", op: "Tržba za prepravné služby", isDph: true, a: {sum: 400, md: "", d: "602"}, b: {sum: 92, md: "", d: "343"}, c: {sum: 492, md: "211", d: ""} }, // 11. príklad (PPD s DPH)
+            { doklad: "VPD", op: "Nákup čistiacich prostriedkov do firmy", isDph: false, baseSum: 70, md: "501", d: "211" },
+            { doklad: "VPD", op: "Nákup drobného dlhodobého majetku", isDph: false, baseSum: 900, md: "501", d: "211" },
+            { doklad: "VPD", op: "Nákup tovaru do zásoby (do skladu)", isDph: true, a: {sum: 800, md: "132", d: ""}, b: {sum: 184, md: "343", d: ""}, c: {sum: 984, md: "", d: "211"} }, // 14. príklad (VPD s DPH)
+            { doklad: "VPD", op: "Úhrada za prenájom výstavnej plochy", isDph: false, baseSum: 450, md: "518", d: "211" },
+            { doklad: "VPD", op: "Úhrada za revíziu elektrických zariadení", isDph: false, baseSum: 180, md: "511", d: "211" }
+        ];
 
         const CHAPTERS = [
             {
@@ -716,16 +741,10 @@
                 exercises: tAccountsExercises
             },
             {
-                id: 5, type: "accounting",
-                title: "Účtovanie na MD a D", 
-                desc: "Základy účtovania na finančných účtoch. Pokladňa a Bankové účty.",
-                exercises: [
-                    { op: "Tržba v hotovosti za predaný tovar", md: "211", d: "604" },
-                    { op: "Výber hotovosti z bankového účtu (výpis z banky)", md: "261", d: "221" },
-                    { op: "Príjem hotovosti do pokladnice (podľa PPD)", md: "211", d: "261" },
-                    { op: "Nákup kancelárskeho papiera v hotovosti", md: "501", d: "211" },
-                    { op: "Úhrada došlej faktúry z bankového účtu", md: "321", d: "221" }
-                ]
+                id: 5, type: "cash_book",
+                title: "Účtovanie o peniazoch v hotovosti", 
+                desc: "Precvič si účtovanie v pokladni – hotovostné doklady, výpočet DPH a predkontácia účtov.",
+                exercises: cashBookExercises
             }
         ];
 
@@ -772,11 +791,10 @@
             
             document.getElementById('chapterView').classList.add('hidden');
             document.getElementById('exerciseView').classList.remove('hidden');
-            document.getElementById('chapterBadge').innerText = `Kapitola ${currentChapter.id}`;
+            document.getElementById('chapterBadge').innerText = `Kapitola ${currentChapter.id} - ${currentChapter.title}`;
             document.getElementById('exerciseTitle').innerText = currentChapter.title;
             document.getElementById('exerciseDescription').innerText = currentChapter.desc;
             
-            // Nastavenie legiend
             document.getElementById('docLegend').classList.add('hidden');
             document.getElementById('docLegend3').classList.add('hidden');
             document.getElementById('interactiveSuvaha').classList.add('hidden');
@@ -787,7 +805,6 @@
             if (currentChapter.id === 3) {
                 document.getElementById('docLegend3').classList.remove('hidden');
                 document.getElementById('interactiveSuvaha').classList.remove('hidden');
-                // Reset answers for chapter 3 on open
                 currentChapter.exercises.forEach(e => e.answeredCorrectly = false);
             }
 
@@ -836,7 +853,6 @@
             const sel = document.getElementById(`sel_bal_${i}`);
             
             sel.classList.remove('border-red-500', 'bg-red-50', 'text-red-700');
-
             if(val === '') return;
 
             if(val === row.type) {
@@ -882,30 +898,13 @@
             document.getElementById('suvaha-pasiva').innerHTML = pasivaHtml;
             document.getElementById('suvaha-aktiva-sum').innerText = formatCurrency(aktivaTotal);
             document.getElementById('suvaha-pasiva-sum').innerText = formatCurrency(pasivaTotal);
-
-            const allAnswered = displayExercises.every(r => r.answeredCorrectly);
-            const footerAktiva = document.getElementById('suvaha-footer-aktiva');
-            const footerPasiva = document.getElementById('suvaha-footer-pasiva');
-            
-            if (allAnswered && aktivaTotal === pasivaTotal) {
-                footerAktiva.className = "bg-emerald-600 text-white px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]";
-                footerPasiva.className = "bg-emerald-600 text-white px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]";
-            } else {
-                footerAktiva.className = "bg-slate-600 text-slate-100 px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500";
-                footerPasiva.className = "bg-slate-600 text-slate-100 px-4 py-3 flex justify-between font-bold text-sm mt-auto transition-colors duration-500";
-            }
         }
-        
-        // Dynamické zmenšovanie textu v T-účtoch pre dlhé čísla
-        function adjustTAccountInput(inp) {
+
+        function adjustInputSize(inp) {
             let len = inp.value.length;
-            if (len > 7) {
-                inp.style.fontSize = "10px";
-            } else if (len > 5) {
-                inp.style.fontSize = "12px";
-            } else {
-                inp.style.fontSize = "14px";
-            }
+            if (len > 8) inp.style.fontSize = "10px";
+            else if (len > 5) inp.style.fontSize = "12px";
+            else inp.style.fontSize = "";
         }
 
         function loadCurrentExercise() {
@@ -1025,23 +1024,21 @@
                 let pasivaHtml = scenario.pasiva.map(p => `<div class="flex justify-between text-sm py-1.5 border-b border-slate-100 text-slate-700"><span>${p.acc}</span><span class="font-bold whitespace-nowrap ml-2">${formatCurrency(p.amount)}</span></div>`).join('');
                 
                 let combinedAccounts = [...scenario.aktiva.map(a => ({...a, side: 'A'})), ...scenario.pasiva.map(p => ({...p, side: 'P'}))];
-                shuffleArray(combinedAccounts);
-
+                
                 let tAccountsHtml = combinedAccounts.map((acc, idx) => `
-                    <div class="bg-white p-3 sm:p-4 rounded-xl border border-slate-300 shadow-sm flex flex-col items-center transition-all hover:shadow-md">
-                        <div class="text-center font-bold text-sm border-b-4 border-slate-800 pb-2 mb-2 w-full text-slate-800 px-1 leading-tight min-h-[40px] flex items-center justify-center">${acc.acc}</div>
-                        <div class="flex w-full pt-1 relative">
-                            <!-- Stredová čiara T-účtu -->
+                    <div class="bg-white p-3 sm:p-4 rounded-xl border border-slate-300 shadow-sm flex flex-col items-center">
+                        <div class="border-b-4 border-slate-800 pb-2 w-full flex items-center justify-between px-1 sm:px-2 min-h-[44px]">
+                            <span class="text-[10px] sm:text-xs font-black text-slate-400 w-6">MD</span>
+                            <span class="text-center font-bold text-xs sm:text-sm text-slate-800 flex-1 leading-tight px-1">${acc.acc}</span>
+                            <span class="text-[10px] sm:text-xs font-black text-slate-400 w-6 text-right">D</span>
+                        </div>
+                        <div class="flex w-full pt-3 relative">
                             <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-slate-800 -translate-x-1/2"></div>
-                            
                             <div class="w-1/2 pr-2 flex flex-col items-center">
-                                <div class="text-xs font-black text-slate-400 mb-2">MD</div>
-                                <!-- Odstránené overflow-hidden a text-ellipsis pre správne zobrazenie dlhých čísel -->
-                                <input type="text" id="t_md_${idx}" data-correct="${acc.side === 'A' ? acc.amount : ''}" oninput="adjustTAccountInput(this)" class="w-full text-center text-sm font-bold border border-slate-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none py-1.5 px-1 text-slate-700 bg-slate-50 transition-colors tracking-tighter" placeholder="0">
+                                <input type="text" id="t_md_${idx}" data-correct="${acc.side === 'A' ? acc.amount : ''}" oninput="adjustInputSize(this)" class="w-full text-center text-sm font-bold border border-slate-300 rounded-md focus:border-blue-500 outline-none py-1.5 px-1 text-slate-700 bg-slate-50" placeholder="0">
                             </div>
                             <div class="w-1/2 pl-2 flex flex-col items-center">
-                                <div class="text-xs font-black text-slate-400 mb-2">D</div>
-                                <input type="text" id="t_d_${idx}" data-correct="${acc.side === 'P' ? acc.amount : ''}" oninput="adjustTAccountInput(this)" class="w-full text-center text-sm font-bold border border-slate-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none py-1.5 px-1 text-slate-700 bg-slate-50 transition-colors tracking-tighter" placeholder="0">
+                                <input type="text" id="t_d_${idx}" data-correct="${acc.side === 'P' ? acc.amount : ''}" oninput="adjustInputSize(this)" class="w-full text-center text-sm font-bold border border-slate-300 rounded-md focus:border-blue-500 outline-none py-1.5 px-1 text-slate-700 bg-slate-50" placeholder="0">
                             </div>
                         </div>
                     </div>
@@ -1051,7 +1048,6 @@
                 tbody.innerHTML = `
                     <tr>
                         <td class="p-0 pb-4">
-                            <!-- Vizuálna Súvaha -->
                             <div class="mb-8 border border-slate-300 rounded-xl overflow-hidden shadow-sm max-w-4xl mx-auto">
                                 <div class="bg-blue-600 text-white text-center py-2.5 font-bold tracking-widest text-lg">SÚVAHA K 31.12.2025</div>
                                 <div class="grid grid-cols-2">
@@ -1071,35 +1067,88 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Inštrukcie -->
-                            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-8 text-indigo-900 flex items-start shadow-sm max-w-4xl mx-auto">
-                                <i data-lucide="info" class="w-5 h-5 mr-3 mt-0.5 text-indigo-600 flex-shrink-0"></i>
-                                <div>
-                                    <h4 class="font-bold text-sm mb-1">Úloha: Otvorenie syntetických účtov</h4>
-                                    <p class="text-sm font-medium">Pozri sa do Súvahy vyššie. Pre každý účet nižšie doplň jeho <b>Začiatočný stav</b> na správnu stranu.</p>
-                                </div>
-                            </div>
-
-                            <!-- T-Účty Grid -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-2">
                                 ${tAccountsHtml}
                             </div>
                         </td>
                     </tr>
                 `;
-            } else {
+            } else if (currentChapter.type === "cash_book") {
                 tableHeader.innerHTML = `
                     <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
-                        <th class="py-3 px-2 w-10">#</th><th class="py-3 px-3">Účtovný prípad</th><th class="py-3 px-3 text-center w-28">Má Dať (MD)</th><th class="py-3 px-3 text-center w-28">Dal (D)</th>
+                        <th class="py-3 px-2 w-10">#</th>
+                        <th class="py-3 px-3 w-24">Doklad</th>
+                        <th class="py-3 px-3">Účtovný prípad</th>
+                        <th class="py-3 px-3 text-right w-32">Suma v €</th>
+                        <th class="py-3 px-3 text-center w-20">MD</th>
+                        <th class="py-3 px-3 text-center w-20">D</th>
                     </tr>`;
-                tbody.innerHTML = displayExercises.map((row, i) => `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3 px-2 font-bold text-slate-400 text-sm">${i+1}.</td>
-                        <td class="py-3 px-3 text-sm">${row.op}</td>
-                        <td class="py-3 px-3 text-center"><input type="text" id="md_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none shadow-sm uppercase"></td>
-                        <td class="py-3 px-3 text-center"><input type="text" id="d_${i}" placeholder="" onfocus="setActiveInput(this)" class="w-24 text-center px-2 py-2 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none shadow-sm uppercase"></td>
-                    </tr>`).join('');
+                
+                let rowsHtml = "";
+                displayExercises.forEach((ex, idx) => {
+                    const absIndex = (currentPage * 20) + idx + 1;
+                    if (!ex.isDph) {
+                        rowsHtml += `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-2 font-bold text-slate-400 text-sm align-middle">${absIndex}.</td>
+                            <td class="py-3 px-3 text-sm font-bold text-slate-700 align-middle">${ex.doklad}</td>
+                            <td class="py-3 px-3 text-sm font-medium text-slate-900">${ex.op}</td>
+                            <td class="py-3 px-3 text-right">
+                                <input type="text" id="sum_${idx}_single" value="${ex.baseSum.toFixed(2).replace('.', ',')}" disabled class="w-28 text-right px-2 py-1.5 text-sm font-semibold border border-slate-200 bg-slate-100 text-slate-600 rounded-md">
+                            </td>
+                            <td class="py-3 px-3 text-center">
+                                <input type="text" id="md_${idx}_single" data-correct="${ex.md}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                            <td class="py-3 px-3 text-center">
+                                <input type="text" id="d_${idx}_single" data-correct="${ex.d}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                        </tr>`;
+                    } else {
+                        rowsHtml += `
+                        <tr class="bg-slate-50/60 border-t border-slate-200">
+                            <td class="py-2 px-2 font-bold text-slate-400 text-sm align-top pt-3" rowspan="4">${absIndex}.</td>
+                            <td class="py-2 px-3 text-sm font-bold text-slate-700 align-top pt-3" rowspan="4">${ex.doklad}</td>
+                            <td class="py-2 px-3 text-sm font-bold text-slate-900 pt-2" colspan="4">${ex.op}</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-2 px-3 text-sm font-medium text-slate-700 pl-6">a) cena</td>
+                            <td class="py-2 px-3 text-right">
+                                <input type="text" id="sum_${idx}_a" value="${ex.a.sum.toFixed(2).replace('.', ',')}" disabled class="w-28 text-right px-2 py-1.5 text-sm font-semibold border border-slate-200 bg-slate-100 text-slate-600 rounded-md">
+                            </td>
+                            <td class="py-2 px-3 text-center">
+                                <input type="text" id="md_${idx}_a" data-correct="${ex.a.md}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                            <td class="py-2 px-3 text-center">
+                                <input type="text" id="d_${idx}_a" data-correct="${ex.a.d}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
+                            <td class="py-2 px-3 text-sm font-medium text-slate-700 pl-6">b) DPH 23 %</td>
+                            <td class="py-2 px-3 text-right">
+                                <input type="text" id="sum_${idx}_b" data-correct="${ex.b.sum}" class="w-28 text-right px-2 py-1.5 text-sm font-semibold border border-slate-300 rounded-md focus:outline-none focus:border-blue-500 shadow-sm" placeholder="vypočítaj">
+                            </td>
+                            <td class="py-2 px-3 text-center">
+                                <input type="text" id="md_${idx}_b" data-correct="${ex.b.md}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                            <td class="py-2 px-3 text-center">
+                                <input type="text" id="d_${idx}_b" data-correct="${ex.b.d}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200 bg-slate-50/40">
+                            <td class="py-2 px-3 text-sm font-medium text-slate-700 pl-6">c) spolu</td>
+                            <td class="py-2 px-3 text-right">
+                                <input type="text" id="sum_${idx}_c" data-correct="${ex.c.sum}" class="w-28 text-right px-2 py-1.5 text-sm font-semibold border border-slate-300 rounded-md focus:outline-none focus:border-blue-500 shadow-sm" placeholder="vypočítaj">
+                            </td>
+                            <td class="py-2 px-3 text-center">
+                                <input type="text" id="md_${idx}_c" data-correct="${ex.c.md}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                            <td class="py-2 px-3 text-center">
+                                <input type="text" id="d_${idx}_c" data-correct="${ex.c.d}" onfocus="setActiveInput(this)" oninput="adjustInputSize(this)" class="w-16 text-center px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-md focus:outline-none shadow-sm uppercase" placeholder="">
+                            </td>
+                        </tr>`;
+                    }
+                });
+                tbody.innerHTML = rowsHtml;
             }
             lucide.createIcons();
         }
@@ -1118,26 +1167,16 @@
 
         function resetCurrentExercise() {
             document.querySelectorAll('#transactionRows input, #transactionRows select').forEach(el => {
-                el.value = '';
-                el.style.fontSize = ''; // Reset the dynamic font size
-                el.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-700', 'text-red-700');
-                el.disabled = false;
+                if(!el.disabled) {
+                    el.value = '';
+                    el.style.fontSize = '';
+                    el.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-700', 'text-red-700');
+                }
                 if(el.id.startsWith('sub_')) { el.classList.add('hidden'); el.disabled = true; }
             });
-            
-            if(currentChapter.type === 'balance_sheet') {
-                let itemsPerPageLimit = 20;
-                const start = currentPage * itemsPerPageLimit;
-                for(let i=start; i < start + itemsPerPageLimit; i++) {
-                    if(currentChapter.exercises[i]) currentChapter.exercises[i].answeredCorrectly = false;
-                }
-                updateSuvaha();
-            }
-
             document.getElementById('feedbackContainer').classList.add('hidden');
         }
 
-        // Pomocná funkcia pre parsovanie čísel s desatinnou čiarkou/bodkou a medzerami
         function parseToNum(str) {
             if (!str || str.trim() === '') return 0;
             let num = parseFloat(str.replace(/\s+/g, '').replace(',', '.'));
@@ -1173,40 +1212,87 @@
                 
                 inputsMD.forEach((mdInput, i) => {
                     const dInput = inputsD[i];
-                    const correctMDStr = mdInput.getAttribute('data-correct');
-                    const correctDStr = dInput.getAttribute('data-correct');
-                    
                     let mdNum = parseToNum(mdInput.value);
                     let dNum = parseToNum(dInput.value);
-                    let correctMDNum = parseToNum(correctMDStr);
-                    let correctDNum = parseToNum(correctDStr);
+                    let correctMDNum = parseToNum(mdInput.getAttribute('data-correct'));
+                    let correctDNum = parseToNum(dInput.getAttribute('data-correct'));
                     
-                    let mdIsEmpty = mdInput.value.trim() === '';
-                    let dIsEmpty = dInput.value.trim() === '';
-
-                    // Resetovanie tried pred kontrolou
                     mdInput.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
                     dInput.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
                     
                     if (mdNum === correctMDNum && dNum === correctDNum) {
-                        // Správne. Zelené políčko dostane len to, ktoré má obsahovať hodnotu.
-                        if (correctMDNum > 0 || (!mdIsEmpty && mdNum === 0)) mdInput.classList.add('border-emerald-500', 'bg-emerald-50');
-                        if (correctDNum > 0 || (!dIsEmpty && dNum === 0)) dInput.classList.add('border-emerald-500', 'bg-emerald-50');
+                        if (correctMDNum > 0) mdInput.classList.add('border-emerald-500', 'bg-emerald-50');
+                        if (correctDNum > 0) dInput.classList.add('border-emerald-500', 'bg-emerald-50');
                     } else {
                         isAllCorrect = false;
-                        
-                        if (mdIsEmpty && dIsEmpty) {
-                            // Ochrana pred ťahákom: Ak študent nenechal nič, zafarbia sa obe na červeno, aby neuhádol stranu.
-                            mdInput.classList.add('border-red-500', 'bg-red-50');
-                            dInput.classList.add('border-red-500', 'bg-red-50');
-                        } else {
-                            // Ak sa študent pokúsil niečo zadať, skontrolujeme konkrétne políčka.
-                            if (mdNum !== correctMDNum) mdInput.classList.add('border-red-500', 'bg-red-50');
-                            else if (!mdIsEmpty) mdInput.classList.add('border-emerald-500', 'bg-emerald-50');
+                        if (mdNum !== correctMDNum) mdInput.classList.add('border-red-500', 'bg-red-50');
+                        if (dNum !== correctDNum) dInput.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+            } else if (currentChapter.type === "cash_book") {
+                displayExercises.forEach((ex, idx) => {
+                    if (!ex.isDph) {
+                        const sumInp = document.getElementById(`sum_${idx}_single`);
+                        const mdInp = document.getElementById(`md_${idx}_single`);
+                        const dInp = document.getElementById(`d_${idx}_single`);
 
-                            if (dNum !== correctDNum) dInput.classList.add('border-red-500', 'bg-red-50');
-                            else if (!dIsEmpty) dInput.classList.add('border-emerald-500', 'bg-emerald-50');
+                        if (mdInp) {
+                            mdInp.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                            let userMd = mdInp.value.trim().toUpperCase();
+                            let correctMd = (ex.md || "").toUpperCase();
+                            if (userMd === correctMd) mdInp.classList.add('border-emerald-500', 'bg-emerald-50');
+                            else { mdInp.classList.add('border-red-500', 'bg-red-50'); isAllCorrect = false; }
                         }
+                        if (dInp) {
+                            dInp.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                            let userD = dInp.value.trim().toUpperCase();
+                            let correctD = (ex.d || "").toUpperCase();
+                            if (userD === correctD) dInp.classList.add('border-emerald-500', 'bg-emerald-50');
+                            else { dInp.classList.add('border-red-500', 'bg-red-50'); isAllCorrect = false; }
+                        }
+                    } else {
+                        ['a', 'b', 'c'].forEach(sub => {
+                            const sumInp = document.getElementById(`sum_${idx}_${sub}`);
+                            const mdInp = document.getElementById(`md_${idx}_${sub}`);
+                            const dInp = document.getElementById(`d_${idx}_${sub}`);
+                            const subData = ex[sub];
+
+                            if (sumInp && !sumInp.disabled) {
+                                const correctSum = subData.sum;
+                                const userSum = parseToNum(sumInp.value);
+                                sumInp.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                                if (Math.abs(userSum - correctSum) < 0.05 && userSum > 0) {
+                                    sumInp.classList.add('border-emerald-500', 'bg-emerald-50');
+                                } else {
+                                    sumInp.classList.add('border-red-500', 'bg-red-50');
+                                    isAllCorrect = false;
+                                }
+                            }
+
+                            if (mdInp) {
+                                mdInp.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                                let userMd = mdInp.value.trim().toUpperCase();
+                                let correctMd = (subData.md || "").toUpperCase();
+                                if (userMd === correctMd || (correctMd === "" && (userMd === "" || userMd === "-" || userMd === "0"))) {
+                                    mdInp.classList.add('border-emerald-500', 'bg-emerald-50');
+                                } else {
+                                    mdInp.classList.add('border-red-500', 'bg-red-50');
+                                    isAllCorrect = false;
+                                }
+                            }
+
+                            if (dInp) {
+                                dInp.classList.remove('border-red-500', 'bg-red-50', 'border-emerald-500', 'bg-emerald-50');
+                                let userD = dInp.value.trim().toUpperCase();
+                                let correctD = (subData.d || "").toUpperCase();
+                                if (userD === correctD || (correctD === "" && (userD === "" || userD === "-" || userD === "0"))) {
+                                    dInp.classList.add('border-emerald-500', 'bg-emerald-50');
+                                } else {
+                                    dInp.classList.add('border-red-500', 'bg-red-50');
+                                    isAllCorrect = false;
+                                }
+                            }
+                        });
                     }
                 });
             } else {
@@ -1224,33 +1310,13 @@
                         const sub = document.getElementById(`sub_${i}`);
                         if(!main || !sub) return;
 
-                        let mainOk = false;
-                        let subOk = false;
+                        let mainOk = (main.value === row.main);
+                        let subOk = (sub.value === row.sub && mainOk);
 
-                        if(main.value === row.main) {
-                            main.classList.add('border-emerald-500', 'bg-emerald-50'); main.classList.remove('border-red-500', 'bg-red-50');
-                            mainOk = true;
-                        } else {
-                            main.classList.add('border-red-500', 'bg-red-50'); main.classList.remove('border-emerald-500', 'bg-emerald-50');
-                        }
-
-                        if(sub.value === row.sub && mainOk) {
-                            sub.classList.add('border-emerald-500', 'bg-emerald-50'); sub.classList.remove('border-red-500', 'bg-red-50');
-                            subOk = true;
-                        } else if (sub.value !== '' || main.value !== '') {
-                            sub.classList.add('border-red-500', 'bg-red-50'); sub.classList.remove('border-emerald-500', 'bg-emerald-50');
-                        }
+                        if(mainOk) main.classList.add('border-emerald-500', 'bg-emerald-50'); else main.classList.add('border-red-500', 'bg-red-50');
+                        if(subOk) sub.classList.add('border-emerald-500', 'bg-emerald-50'); else sub.classList.add('border-red-500', 'bg-red-50');
 
                         if(!mainOk || !subOk) isAllCorrect = false;
-                    } else if (currentChapter.type === "accounting") {
-                        const md = document.getElementById(`md_${i}`);
-                        const d = document.getElementById(`d_${i}`);
-                        
-                        if (md.value.trim() === row.md) { md.classList.add('border-emerald-500', 'bg-emerald-50'); md.classList.remove('border-red-500', 'bg-red-50'); } 
-                        else { md.classList.add('border-red-500', 'bg-red-50'); md.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
-                        
-                        if (d.value.trim() === row.d) { d.classList.add('border-emerald-500', 'bg-emerald-50'); d.classList.remove('border-red-500', 'bg-red-50'); } 
-                        else { d.classList.add('border-red-500', 'bg-red-50'); d.classList.remove('border-emerald-500', 'bg-emerald-50'); isAllCorrect = false; }
                     }
                 });
             }
@@ -1261,7 +1327,7 @@
 
             if (isAllCorrect) {
                 fb.className = "rounded-xl p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 mt-4";
-                fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-emerald-950 mb-1">Výborne! Všetko je správne.</h4><p class="text-xs text-emerald-800">Skvelo zvládnuté účtovné prípady na tejto strane.</p></div>`;
+                fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-emerald-950 mb-1">Výborne! Všetko je správne.</h4><p class="text-xs text-emerald-800">Skvelo zvládnuté účtovné prípady.</p></div>`;
             } else {
                 fb.className = "rounded-xl p-4 bg-rose-50 border border-rose-200 text-rose-900 mt-4";
                 fbContent.innerHTML = `<div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="x" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-rose-950 mb-1">Našli sa chyby!</h4><p class="text-xs text-rose-800">Skontroluj červeno podfarbené políčka a oprav ich.</p></div>`;
@@ -1285,12 +1351,8 @@
             if (!query) return renderAccountsList(ACCOUNTS_DB);
             const isNum = /^\d+$/.test(query);
             renderAccountsList(ACCOUNTS_DB.filter(a => {
-                if (isNum) {
-                    return a.code.startsWith(query);
-                } else {
-                    const normalizedName = removeDiacritics(a.name.toLowerCase());
-                    return normalizedName.includes(query);
-                }
+                if (isNum) return a.code.startsWith(query);
+                return removeDiacritics(a.name.toLowerCase()).includes(query);
             }));
         }
 
@@ -1304,31 +1366,23 @@
         }
 
         function toggleCalculator() {
-            const modal = document.getElementById('calcModal');
-            modal.classList.toggle('hidden');
+            document.getElementById('calcModal').classList.toggle('hidden');
         }
 
         let calcExpression = "0";
 
-        // Funkcia pre dynamickú zmenu veľkosti textu v kalkulačke
         function updateCalcDisplay() {
             const screen = document.getElementById('calcScreen');
             screen.value = calcExpression;
-            if (calcExpression.length > 20) {
-                screen.className = "w-full h-14 bg-slate-100 text-right px-4 text-sm font-bold text-slate-800 border-none outline-none focus:outline-none overflow-hidden";
-            } else if (calcExpression.length > 12) {
-                screen.className = "w-full h-14 bg-slate-100 text-right px-4 text-lg font-bold text-slate-800 border-none outline-none focus:outline-none overflow-hidden";
-            } else {
-                screen.className = "w-full h-14 bg-slate-100 text-right px-4 text-2xl font-bold text-slate-800 border-none outline-none focus:outline-none overflow-hidden";
-            }
+            let len = calcExpression.length;
+            if (len > 14) screen.style.fontSize = "14px";
+            else if (len > 10) screen.style.fontSize = "18px";
+            else screen.style.fontSize = "24px"; 
         }
 
         function calcAppend(val) {
-            if (calcExpression === "0" && val !== '.') {
-                calcExpression = val;
-            } else {
-                calcExpression += val;
-            }
+            if (calcExpression === "0" && val !== '.') calcExpression = val;
+            else calcExpression += val;
             updateCalcDisplay();
         }
 
@@ -1338,11 +1392,8 @@
         }
 
         function calcBack() {
-            if (calcExpression.length > 1) {
-                calcExpression = calcExpression.slice(0, -1);
-            } else {
-                calcExpression = "0";
-            }
+            if (calcExpression.length > 1) calcExpression = calcExpression.slice(0, -1);
+            else calcExpression = "0";
             updateCalcDisplay();
         }
 
