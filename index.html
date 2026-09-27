@@ -454,83 +454,62 @@
         ];
 
         const allAssetExercises = [
-            // P1.1
             { text: "Látka na výrobu odevov na sklade", amount: "4 200,00 €", main: "KM", sub: "K_MAT" },
             { text: "Dlhodobý hypotekárny úver na budovu", amount: "150 000,00 €", main: "CZ", sub: "CZ_UV" },
             { text: "Kancelársky papier a náplne do tlačiarní v sklade", amount: "150,00 €", main: "KM", sub: "K_MAT" },
             { text: "Výrobná hala podniku", amount: "350 000,00 €", main: "DM", sub: "DHM" },
             { text: "Náhradné diely na opravu strojov", amount: "850,00 €", main: "KM", sub: "K_MAT" },
             { text: "Vklady spoločníkov do s.r.o.", amount: "5 000,00 €", main: "VZ", sub: "VZ_ZI" },
-            
-            // P1.2
             { text: "Obalový materiál pre výrobky", amount: "320,00 €", main: "KM", sub: "K_MAT" },
             { text: "Krátkodobý prevádzkový úver", amount: "15 000,00 €", main: "CZ", sub: "CZ_UV" },
             { text: "Rozpracované výrobky na výrobnej linke", amount: "1 800,00 €", main: "KM", sub: "K_NV" },
             { text: "Osobný automobil pre obchodného zástupcu", amount: "24 500,00 €", main: "DM", sub: "DHM" },
             { text: "Nedokončený drevený nábytok v dielni", amount: "2 100,00 €", main: "KM", sub: "K_NV" },
             { text: "Základné imanie akciovej spoločnosti", amount: "25 000,00 €", main: "VZ", sub: "VZ_ZI" },
-            
-            // P1.3
             { text: "Hotový nábytok na sklade pripravený na predaj", amount: "8 500,00 €", main: "KM", sub: "K_VYR" },
             { text: "Eskontný úver poskytnutý bankou", amount: "4 500,00 €", main: "CZ", sub: "CZ_UV" },
             { text: "Upečené pekárenské výrobky na sklade", amount: "400,00 €", main: "KM", sub: "K_VYR" },
             { text: "Výrobný stroj", amount: "45 000,00 €", main: "DM", sub: "DHM" },
             { text: "Nakúpené notebooky v predajni elektroniky", amount: "12 000,00 €", main: "KM", sub: "K_TOV" },
             { text: "Emisné ážio", amount: "1 200,00 €", main: "VZ", sub: "VZ_KF" },
-            
-            // P1.4
             { text: "Tovar v podnikovej predajni potravín", amount: "5 500,00 €", main: "KM", sub: "K_TOV" },
             { text: "Došlá faktúra za nákup materiálu - nezaplatená", amount: "2 600,00 €", main: "CZ", sub: "CZ_DOD" },
             { text: "Vystavená faktúra za služby - neuhradená", amount: "1 100,00 €", main: "KM", sub: "P_ODB" },
             { text: "Pozemok pod výrobnou halou", amount: "85 000,00 €", main: "DM", sub: "DHM" },
             { text: "Neuhradená faktúra od odberateľa za tovar", amount: "4 300,00 €", main: "KM", sub: "P_ODB" },
             { text: "Oceňovacie rozdiely z precenenia majetku", amount: "800,00 €", main: "VZ", sub: "VZ_KF" },
-            
-            // P1.5
             { text: "Zmenka na inkaso od odberateľa", amount: "2 000,00 €", main: "KM", sub: "P_ODB" },
             { text: "Nezaplatená faktúra za opravu firemného auta", amount: "380,00 €", main: "CZ", sub: "CZ_DOD" },
             { text: "Pohľadávka voči zamestnancovi za manko", amount: "120,00 €", main: "KM", sub: "P_OST" },
             { text: "Nakúpený účtovný softvér", amount: "1 200,00 €", main: "DM", sub: "DNM" },
             { text: "Poskytnutý preddavok dodávateľovi na materiál", amount: "500,00 €", main: "KM", sub: "P_OST" },
             { text: "Kapitálové fondy z prijatých darov", amount: "3 000,00 €", main: "VZ", sub: "VZ_KF" },
-            
-            // P1.6
             { text: "Nárok na vrátenie nadmerného odpočtu DPH", amount: "3 100,00 €", main: "KM", sub: "P_OST" },
             { text: "Neuhradená faktúra od telekomunikačného operátora", amount: "65,00 €", main: "CZ", sub: "CZ_DOD" },
             { text: "Krátkodobá pohľadávka voči spoločníkovi", amount: "400,00 €", main: "KM", sub: "P_OST" },
             { text: "Ochranná známka podniku", amount: "3 500,00 €", main: "DM", sub: "DNM" },
             { text: "Hotovosť v pokladnici v eurách", amount: "350,00 €", main: "KM", sub: "F_POK" },
             { text: "Zákonný rezervný fond", amount: "1 500,00 €", main: "VZ", sub: "VZ_FZ" },
-            
-            // P1.7
             { text: "Poštové známky a stravné lístky v trezore", amount: "450,00 €", main: "KM", sub: "F_POK" },
             { text: "Nevyplatené čisté mzdy zamestnancom", amount: "6 400,00 €", main: "CZ", sub: "CZ_ZAM" },
             { text: "Valuty v cudzej mene v pokladnici", amount: "150,00 €", main: "KM", sub: "F_POK" },
             { text: "Licencia na výrobný postup", amount: "8 000,00 €", main: "DM", sub: "DNM" },
             { text: "Peniaze na bežnom účte v banke", amount: "18 500,00 €", main: "KM", sub: "F_BU" },
             { text: "Štatutárne fondy tvorené zo zisku", amount: "2 200,00 €", main: "VZ", sub: "VZ_FZ" },
-            
-            // P1.8
             { text: "Zostatok na devízovom účte v USD", amount: "4 200,00 €", main: "KM", sub: "F_BU" },
             { text: "Nevyplatené odmeny manažmentu", amount: "2 500,00 €", main: "CZ", sub: "CZ_ZAM" },
             { text: "Nakúpené štátne dlhopisy so splatnosťou 6 mesiacov", amount: "10 000,00 €", main: "KM", sub: "F_CP" },
             { text: "Zriaďovacie náklady spoločnosti", amount: "1 500,00 €", main: "DM", sub: "DNM" },
             { text: "Majetkové cenné papiere určené na obchodovanie do pol roka", amount: "5 000,00 €", main: "KM", sub: "F_CP" },
             { text: "Nedeliteľný fond", amount: "4 000,00 €", main: "VZ", sub: "VZ_FZ" },
-            
-            // P2.1
             { text: "Záväzok voči zamestnancovi z vyúčtovania pracovnej cesty", amount: "45,00 €", main: "CZ", sub: "CZ_ZAM" },
             { text: "Nakúpené akcie inej spoločnosti držané nad 1 rok", amount: "15 000,00 €", main: "DM", sub: "DFM" },
             { text: "Neodvedená daň z príjmov právnických osôb", amount: "4 100,00 €", main: "CZ", sub: "CZ_DAN" },
             { text: "Nerozdelený zisk z minulých rokov", amount: "12 400,00 €", main: "VZ", sub: "VZ_VH" },
-            
-            // P2.2
             { text: "Záväzok voči daňovému úradu z titulu DPH", amount: "1 800,00 €", main: "CZ", sub: "CZ_DAN" },
             { text: "Poskytnutá pôžička inej firme so splatnosťou 5 rokov", amount: "50 000,00 €", main: "DM", sub: "DFM" },
             { text: "Záväzok voči Sociálnej poisťovni za zamestnancov", amount: "2 100,00 €", main: "CZ", sub: "CZ_POI" },
             { text: "Neuhradená strata z minulého roka", amount: "3 200,00 €", main: "VZ", sub: "VZ_VH" },
-            
-            // P2.3
             { text: "Záväzok voči zdravotnej poisťovni", amount: "850,00 €", main: "CZ", sub: "CZ_POI" },
             { text: "Umelecké dielo v zasadačke podniku", amount: "4 200,00 €", main: "DM", sub: "DHM" },
             { text: "Prijatý preddavok od zákazníka na zákazku", amount: "1 500,00 €", main: "CZ", sub: "CZ_INE" },
@@ -538,9 +517,8 @@
         ];
 
         const balanceExercises = [
-            // Page 1
             { text: "211 - Pokladnica", amount: 2000, type: "A", answeredCorrectly: false },
-	    { text: "461 - Bankové úvery", amount: 30000, type: "P", answeredCorrectly: false },
+            { text: "461 - Bankové úvery", amount: 30000, type: "P", answeredCorrectly: false },
             { text: "321 - Dodávatelia", amount: 15000, type: "P", answeredCorrectly: false },
             { text: "112 - Materiál na sklade", amount: 8000, type: "A", answeredCorrectly: false },
             { text: "073 - Oprávky k softvéru", amount: 1000, type: "-A", answeredCorrectly: false },
@@ -559,8 +537,6 @@
             { text: "391 - Opravné položky k pohľadávkam", amount: 2000, type: "-A", answeredCorrectly: false },
             { text: "132 - Tovar na sklade a v predajniach", amount: 5000, type: "A", answeredCorrectly: false },
             { text: "213 - Ceniny", amount: 500, type: "A", answeredCorrectly: false },
-
-            // Page 2
             { text: "031 - Pozemky", amount: 50000, type: "A", answeredCorrectly: false },
             { text: "411 - Základné imanie", amount: 100000, type: "P", answeredCorrectly: false },
             { text: "121 - Nedokončená výroba", amount: 15000, type: "A", answeredCorrectly: false },
@@ -581,8 +557,6 @@
             { text: "336 - Zúčtovanie s orgánmi soc. poistenia", amount: 8000, type: "P", answeredCorrectly: false },
             { text: "251 - Majetkové cenné papiere na obchodovanie", amount: 8500, type: "A", answeredCorrectly: false },
             { text: "211 - Pokladnica", amount: 1500, type: "A", answeredCorrectly: false },
-
-            // Page 3
             { text: "013 - Softvér", amount: 12000, type: "A", answeredCorrectly: false },
             { text: "321 - Dodávatelia", amount: 12000, type: "P", answeredCorrectly: false },
             { text: "112 - Materiál", amount: 6500, type: "A", answeredCorrectly: false },
@@ -650,9 +624,7 @@
             }
         ];
 
-        // Kapitola 5: Účtovanie o peniazoch v hotovosti (211, PPD, VPD) - Doplnené na 60 príkladov
         const cashBookExercises = [
-            // --- STRANA 1 ---
             { doklad: "PPD", op: "Výber peňazí z bankového účtu (dotácia pokladnice)", isDph: false, baseSum: 2000, md: "211", d: "261" },
             { doklad: "PPD", op: "Inkaso odoslanej faktúry", isDph: false, baseSum: 600, md: "211", d: "311" },
             { doklad: "PPD", op: "Tržba za predané výrobky", isDph: true, a: {sum: 1000, md: "", d: "601"}, b: {sum: 230, md: "", d: "343"}, c: {sum: 1230, md: "211", d: ""} }, 
@@ -673,8 +645,6 @@
             { doklad: "VPD", op: "Nákup kancelárskych potrieb", isDph: true, a: {sum: 50, md: "501", d: ""}, b: {sum: 11.50, md: "343", d: ""}, c: {sum: 61.50, md: "", d: "211"} },
             { doklad: "VPD", op: "Poskytnutý preddavok zamestnancovi v hotovosti", isDph: false, baseSum: 150, md: "335", d: "211" },
             { doklad: "PPD", op: "Vrátený zvyšok preddavku do pokladnice", isDph: false, baseSum: 20, md: "211", d: "335" },
-
-            // --- STRANA 2 ---
             { doklad: "PPD", op: "Náhrada manka od hmotne zodpovedného zamestnanca", isDph: false, baseSum: 30, md: "211", d: "335" },
             { doklad: "VPD", op: "Poskytnutý preddavok dodávateľovi v hotovosti", isDph: false, baseSum: 500, md: "314", d: "211" },
             { doklad: "PPD", op: "Prijatý preddavok od zákazníka v hotovosti", isDph: false, baseSum: 800, md: "211", d: "324" },
@@ -695,8 +665,6 @@
             { doklad: "ID", op: "Predpis manka na materiáli na zamestnanca", isDph: false, baseSum: 150, md: "335", d: "549" },
             { doklad: "VPD", op: "Nákup pomocného materiálu do skladu", isDph: true, a: {sum: 200, md: "112", d: ""}, b: {sum: 46, md: "343", d: ""}, c: {sum: 246, md: "", d: "211"} },
             { doklad: "VPD", op: "Úhrada za službu - kopírovanie", isDph: false, baseSum: 20, md: "518", d: "211" },
-
-            // --- STRANA 3 (Doplnené na 20 príkladov, celkovo 60) ---
             { doklad: "VPD", op: "Úhrada vedenia účtovníctva", isDph: false, baseSum: 100, md: "518", d: "211" },
             { doklad: "VPD", op: "Nákup pracovného ošatenia", isDph: false, baseSum: 400, md: "501", d: "211" },
             { doklad: "PPD", op: "Tržba za nájomné priestorov", isDph: true, a: {sum: 1200, md: "", d: "602"}, b: {sum: 276, md: "", d: "343"}, c: {sum: 1476, md: "211", d: ""} },
@@ -719,9 +687,7 @@
             { doklad: "PPD", op: "Vrátenie nevyužitej zálohy zamestnancom do pokladnice", isDph: false, baseSum: 50, md: "211", d: "335" }
         ];
 
-        // Kapitola 6: Účtovanie o banke, ceninách a KBÚ (213, 221, 231, 261)
         const bankBookExercises = [
-            // --- STRANA 1 ---
             { doklad: "VBÚ", op: "Výber hotovosti do pokladnice (výpis z banky)", isDph: false, baseSum: 1500, md: "261", d: "221" },
             { doklad: "VPD", op: "Nákup poštových známok do zásoby", isDph: false, baseSum: 20, md: "213", d: "211" },
             { doklad: "PFA", op: "Faktúra za nákup rekreačných poukazov", isDph: true, a: {sum: 500, md: "213", d: ""}, b: {sum: 115, md: "343", d: ""}, c: {sum: 615, md: "", d: "321"} },
@@ -742,8 +708,6 @@
             { doklad: "VBÚ", op: "Platba firemnou kartou za nákup materiálu", isDph: true, a: {sum: 200, md: "112", d: ""}, b: {sum: 46, md: "343", d: ""}, c: {sum: 246, md: "", d: "221"} },
             { doklad: "VBÚ", op: "Poplatok banke za vedenie bežného účtu", isDph: false, baseSum: 20, md: "568", d: "221" },
             { doklad: "VBÚ", op: "Pripísaný kreditný úrok na bežnom účte", isDph: false, baseSum: 10, md: "221", d: "662" },
-
-            // --- STRANA 2 ---
             { doklad: "VBÚ", op: "Zrážková daň z kreditného úroku (daň z príjmov)", isDph: false, baseSum: 1.90, md: "591", d: "221" },
             { doklad: "VPD", op: "Nákup kolkov v hotovosti do zásoby", isDph: false, baseSum: 50, md: "213", d: "211" },
             { doklad: "PFA", op: "Faktúra za nákup telefónnych kariet", isDph: true, a: {sum: 150, md: "213", d: ""}, b: {sum: 34.50, md: "343", d: ""}, c: {sum: 184.50, md: "", d: "321"} },
@@ -764,8 +728,6 @@
             { doklad: "ID", op: "Spotreba telefónnych kariet", isDph: false, baseSum: 30, md: "518", d: "213" },
             { doklad: "VBÚ", op: "Zaplatená zmluvná pokuta dodávateľovi z účtu", isDph: false, baseSum: 100, md: "544", d: "221" },
             { doklad: "VBÚ", op: "Prijatá zmluvná pokuta od odberateľa na účet", isDph: false, baseSum: 150, md: "221", d: "644" },
-            
-            // --- STRANA 3 ---
             { doklad: "VBÚ", op: "Výber hotovosti z bankomatu do pokladnice (výpis z účtu)", isDph: false, baseSum: 200, md: "261", d: "221" },
             { doklad: "PFA", op: "Faktúra za nákup stravných lístkov (ceniny)", isDph: true, a: {sum: 400, md: "213", d: ""}, b: {sum: 92, md: "343", d: ""}, c: {sum: 492, md: "", d: "321"} },
             { doklad: "ID", op: "Výdaj stravných lístkov zamestnancom (príspevok zamestnávateľa)", isDph: false, baseSum: 220, md: "527", d: "213" },
@@ -786,6 +748,50 @@
             { doklad: "PFA", op: "Faktúra za nákup darčekových poukážok (ceniny)", isDph: true, a: {sum: 200, md: "213", d: ""}, b: {sum: 46, md: "343", d: ""}, c: {sum: 246, md: "", d: "321"} },
             { doklad: "ID", op: "Rozdanie darčekových poukážok zamestnancom (zo SF)", isDph: false, baseSum: 200, md: "472", d: "213" },
             { doklad: "VBÚ", op: "Pripísaný úrok na bežnom účte", isDph: false, baseSum: 15, md: "221", d: "662" }
+        ];
+
+        // Kapitola 7: Účtovanie o pohľadávkach a záväzkoch (40 premiešaných príkladov)
+        const receivablesLiabilitiesExercises = [
+            { doklad: "VFA", op: "Vystavená faktúra za prenájom priestorov", isDph: true, a: {sum: 1200, md: "", d: "602"}, b: {sum: 276, md: "", d: "343"}, c: {sum: 1476, md: "311", d: ""} },
+            { doklad: "PFA", op: "Faktúra za prijaté služby (oprava stroja) od dodávateľa", isDph: true, a: {sum: 800, md: "511", d: ""}, b: {sum: 184, md: "343", d: ""}, c: {sum: 984, md: "", d: "321"} },
+            { doklad: "VBÚ", op: "Inkaso pohľadávky za dopravné služby na účet", isDph: false, baseSum: 1107, md: "221", d: "311" },
+            { doklad: "ID", op: "Zúčtovanie poskytnutého preddavku dodávateľovi", isDph: false, baseSum: 500, md: "321", d: "314" },
+            { doklad: "VFA", op: "Vystavená faktúra odberateľovi za predané výrobky", isDph: true, a: {sum: 5000, md: "", d: "601"}, b: {sum: 1150, md: "", d: "343"}, c: {sum: 6150, md: "311", d: ""} },
+            { doklad: "VPD", op: "Úhrada faktúry za kancelársky materiál v hotovosti", isDph: false, baseSum: 184.50, md: "321", d: "211" },
+            { doklad: "PFA", op: "Faktúra za nákup dlhodobého hmotného majetku (stroj)", isDph: true, a: {sum: 10000, md: "042", d: ""}, b: {sum: 2300, md: "343", d: ""}, c: {sum: 12300, md: "", d: "321"} },
+            { doklad: "VFA", op: "Vystavená faktúra za poskytnuté služby odberateľovi", isDph: true, a: {sum: 1500, md: "", d: "602"}, b: {sum: 345, md: "", d: "343"}, c: {sum: 1845, md: "311", d: ""} },
+            { doklad: "PFA", op: "Faktúra za poistné firemného majetku", isDph: false, baseSum: 500, md: "548", d: "321" },
+            { doklad: "VBÚ", op: "Úhrada dodávateľskej faktúry z bankového účtu", isDph: false, baseSum: 1230, md: "321", d: "221" },
+            { doklad: "VFA", op: "Vystavená faktúra za inzerciu a reklamu", isDph: true, a: {sum: 800, md: "", d: "602"}, b: {sum: 184, md: "", d: "343"}, c: {sum: 984, md: "311", d: ""} },
+            { doklad: "PPD", op: "Inkaso pohľadávky od odberateľa v hotovosti", isDph: false, baseSum: 3690, md: "211", d: "311" },
+            { doklad: "PFA", op: "Faktúra za audit a účtovné poradenstvo", isDph: true, a: {sum: 1500, md: "518", d: ""}, b: {sum: 345, md: "343", d: ""}, c: {sum: 1845, md: "", d: "321"} },
+            { doklad: "VBÚ", op: "Inkaso pohľadávky za predaný materiál na účet", isDph: false, baseSum: 738, md: "221", d: "311" },
+            { doklad: "VFA", op: "Vystavená faktúra za predaný tovar odberateľovi", isDph: true, a: {sum: 3000, md: "", d: "604"}, b: {sum: 690, md: "", d: "343"}, c: {sum: 3690, md: "311", d: ""} },
+            { doklad: "VBÚ", op: "Úhrada faktúry za prepravu z účtu", isDph: false, baseSum: 307.50, md: "321", d: "221" },
+            { doklad: "VFA", op: "Vystavená faktúra za predaj dlhodobého hmotného majetku", isDph: true, a: {sum: 5000, md: "", d: "641"}, b: {sum: 1150, md: "", d: "343"}, c: {sum: 6150, md: "311", d: ""} },
+            { doklad: "VBÚ", op: "Úhrada zvyšku dodávateľskej faktúry z bankového účtu", isDph: false, baseSum: 1960, md: "321", d: "221" },
+            { doklad: "PFA", op: "Faktúra za spotrebu elektrickej energie", isDph: true, a: {sum: 400, md: "502", d: ""}, b: {sum: 92, md: "343", d: ""}, c: {sum: 492, md: "", d: "321"} },
+            { doklad: "VBÚ", op: "Inkaso pohľadávky od odberateľa na bankový účet", isDph: false, baseSum: 6150, md: "221", d: "311" },
+            { doklad: "VFA", op: "Vystavená faktúra za poradenské služby", isDph: true, a: {sum: 2000, md: "", d: "602"}, b: {sum: 460, md: "", d: "343"}, c: {sum: 2460, md: "311", d: ""} },
+            { doklad: "VBÚ", op: "Úhrada faktúry za stroj z bankového účtu", isDph: false, baseSum: 12300, md: "321", d: "221" },
+            { doklad: "PFA", op: "Nákup materiálu od dodávateľa", isDph: true, a: {sum: 1000, md: "112", d: ""}, b: {sum: 230, md: "343", d: ""}, c: {sum: 1230, md: "", d: "321"} },
+            { doklad: "VBÚ", op: "Úhrada faktúry za telekomunikačné služby z účtu", isDph: false, baseSum: 147.60, md: "321", d: "221" },
+            { doklad: "VBÚ", op: "Prijatá úhrada nájomného od odberateľa na účet", isDph: false, baseSum: 1476, md: "221", d: "311" },
+            { doklad: "PFA", op: "Faktúra za nákup tovaru od dodávateľa", isDph: true, a: {sum: 2000, md: "132", d: ""}, b: {sum: 460, md: "343", d: ""}, c: {sum: 2460, md: "", d: "321"} },
+            { doklad: "VFA", op: "Vystavená faktúra za predaj prebytočného materiálu", isDph: true, a: {sum: 600, md: "", d: "642"}, b: {sum: 138, md: "", d: "343"}, c: {sum: 738, md: "311", d: ""} },
+            { doklad: "VBÚ", op: "Úhrada faktúry za audit z bankového účtu", isDph: false, baseSum: 1845, md: "321", d: "221" },
+            { doklad: "ID", op: "Zúčtovanie prijatého preddavku od odberateľa", isDph: false, baseSum: 400, md: "324", d: "311" },
+            { doklad: "VPD", op: "Úhrada dodávateľskej faktúry v hotovosti", isDph: false, baseSum: 984, md: "321", d: "211" },
+            { doklad: "VFA", op: "Vystavená faktúra za dopravné služby", isDph: true, a: {sum: 900, md: "", d: "602"}, b: {sum: 207, md: "", d: "343"}, c: {sum: 1107, md: "311", d: ""} },
+            { doklad: "VBÚ", op: "Úhrada faktúry za energie z bankového účtu", isDph: false, baseSum: 492, md: "321", d: "221" },
+            { doklad: "PFA", op: "Faktúra za nákup kancelárskeho materiálu", isDph: true, a: {sum: 150, md: "501", d: ""}, b: {sum: 34.50, md: "343", d: ""}, c: {sum: 184.50, md: "", d: "321"} },
+            { doklad: "PPD", op: "Inkaso faktúry za poradenské služby v hotovosti", isDph: false, baseSum: 2460, md: "211", d: "311" },
+            { doklad: "VBÚ", op: "Inkaso zvyšku pohľadávky od odberateľa na účet", isDph: false, baseSum: 1445, md: "221", d: "311" },
+            { doklad: "PFA", op: "Faktúra za telekomunikačné služby", isDph: true, a: {sum: 120, md: "518", d: ""}, b: {sum: 27.60, md: "343", d: ""}, c: {sum: 147.60, md: "", d: "321"} },
+            { doklad: "VBÚ", op: "Inkaso pohľadávky za reklamu na účet", isDph: false, baseSum: 984, md: "221", d: "311" },
+            { doklad: "PFA", op: "Faktúra za prepravné služby od dodávateľa", isDph: true, a: {sum: 250, md: "518", d: ""}, b: {sum: 57.50, md: "343", d: ""}, c: {sum: 307.50, md: "", d: "321"} },
+            { doklad: "VBÚ", op: "Úhrada poistného z bankového účtu", isDph: false, baseSum: 500, md: "321", d: "221" },
+            { doklad: "VBÚ", op: "Inkaso pohľadávky za predaný majetok na účet", isDph: false, baseSum: 6150, md: "221", d: "311" }
         ];
 
         const CHAPTERS = [
@@ -824,6 +830,12 @@
                 title: "Ceniny, banka a krátkodobé úvery", 
                 desc: "Účtovanie krátkodobého finančného majetku a presuny prostredníctvom účtu 261 – Peniaze na ceste.",
                 exercises: bankBookExercises
+            },
+            {
+                id: 7, type: "cash_book",
+                title: "Účtovanie o pohľadávkach a záväzkoch", 
+                desc: "Precvičte si účtovanie dodávateľských a odberateľských faktúr (PFA, VFA), výpočet DPH (23%) a úhrady/inkasá záväzkov a pohľadávok (prípady sú kompletne premiešané).",
+                exercises: receivablesLiabilitiesExercises
             }
         ];
 
@@ -846,7 +858,7 @@
             grid.innerHTML = CHAPTERS.map(ch => `
                 <div onclick="selectChapter(${ch.id})" class="group bg-white rounded-xl border border-slate-200 p-5 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between">
                     <div>
-                        <h4 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">Kapitola ${ch.id}:${ch.title}</h4>
+                        <h4 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">Kapitola ${ch.id}: ${ch.title}</h4>
                         <p class="text-sm text-slate-500 leading-relaxed mb-4">${ch.desc}</p>
                     </div>
                     <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-blue-600 group-hover:text-blue-700">
@@ -870,7 +882,7 @@
             
             document.getElementById('chapterView').classList.add('hidden');
             document.getElementById('exerciseView').classList.remove('hidden');
-            document.getElementById('chapterBadge').innerText = `Kapitola ${currentChapter.id} -${currentChapter.title}`;
+            document.getElementById('chapterBadge').innerText = `Kapitola ${currentChapter.id} - ${currentChapter.title}`;
             document.getElementById('exerciseTitle').innerText = currentChapter.title;
             document.getElementById('exerciseDescription').innerText = currentChapter.desc;
             
