@@ -786,76 +786,144 @@
             { isStory: true, text: "Súvislý príklad 2: Účtovná jednotka obstaráva licenciu na softvér. Dodávateľovi bol z bankového účtu uhradený preddavok vo výške 3 000 €. Následne prišla faktúra od dodávateľa za licenciu v cene 4 800 € + DPH. Za sprostredkovanie výhodnej kúpy licencie bola vyplatená provízia v hotovosti 500 €. Licencia bola zaradená do užívania a zvyšok faktúry bol uhradený." },
             { doklad: "VBÚ", op: "Poskytnutie preddavku dodávateľovi na nákup licencie", isDph: false, baseSum: 3000, md: "051", d: "221" },
             { doklad: "PFA", op: "Faktúra od dodávateľa za licenciu", isDph: true, a: {sum: 4800, md: "041", d: ""}, b: {sum: 1104, md: "343", d: ""}, c: {sum: 5904, md: "", d: "321"} },
-            { doklad: "VPD", op: "Vyplatenie provízie za sprostredkovanie nákupu licencie", isDph: false, baseSum: 500, md: "041", d: "211" },
+            { doklad: "VPD", op: "Vyplatenie provízie za sprostredkovanie nákupu licencie v hotovosti", isDph: false, baseSum: 500, md: "041", d: "211" },
             { doklad: "ZAZ", op: "Zaradenie licencie do užívania v obstarávacej cene", isDph: false, baseSum: 5300, md: "014", d: "041", requireSum: true },
             { doklad: "ID", op: "Zúčtovanie poskytnutého preddavku na licenciu", isDph: false, baseSum: 3000, md: "321", d: "051" },
             { doklad: "VBÚ", op: "Úhrada zvyšku faktúry za licenciu", isDph: false, baseSum: 2904, md: "321", d: "221", requireSum: true },
 
-            { doklad: "PFA", op: "Nákup nového softvéru od dodávateľa", isDph: true, a: {sum: 3000, md: "041", d: ""}, b: {sum: 690, md: "343", d: ""}, c: {sum: 3690, md: "", d: "321"} },
-            { doklad: "VPD", op: "Inštalácia softvéru platená v hotovosti", isDph: true, a: {sum: 150, md: "041", d: ""}, b: {sum: 34.5, md: "343", d: ""}, c: {sum: 184.5, md: "", d: "211"} },
+            { doklad: "PFA", op: "Nákup nového softvéru od dodávateľa na faktúru", isDph: true, a: {sum: 3000, md: "041", d: ""}, b: {sum: 690, md: "343", d: ""}, c: {sum: 3690, md: "", d: "321"} },
+            { doklad: "VPD", op: "Inštalácia softvéru platená v hotovosti externej firme", isDph: true, a: {sum: 150, md: "041", d: ""}, b: {sum: 34.5, md: "343", d: ""}, c: {sum: 184.5, md: "", d: "211"} },
             { doklad: "ZAZ", op: "Zaradenie softvéru do užívania v obstarávacej cene", isDph: false, baseSum: 3150, md: "013", d: "041", requireSum: true },
 
             { doklad: "PFA", op: "Faktúra za nákup výrobného stroja", isDph: true, a: {sum: 25000, md: "042", d: ""}, b: {sum: 5750, md: "343", d: ""}, c: {sum: 30750, md: "", d: "321"} },
-            { doklad: "VPFA", op: "Preprava stroja vo vlastnej réžii", isDph: false, baseSum: 300, md: "042", d: "622" },
+            { doklad: "VPFA", op: "Preprava stroja vo vlastnej réžii (vnútropodniková faktúra)", isDph: false, baseSum: 300, md: "042", d: "622" },
             { doklad: "PFA", op: "Faktúra od inej firmy za montáž a inštaláciu stroja", isDph: true, a: {sum: 1000, md: "042", d: ""}, b: {sum: 230, md: "343", d: ""}, c: {sum: 1230, md: "", d: "321"} },
             { doklad: "ZAZ", op: "Zaradenie stroja do majetku podniku v obstarávacej cene", isDph: false, baseSum: 26300, md: "022", d: "042", requireSum: true },
-            { doklad: "VBÚ", op: "Úhrada faktúry za stroj a faktúry za montáž", isDph: false, baseSum: 31980, md: "321", d: "221" },
+            { doklad: "VBÚ", op: "Úhrada faktúry za stroj a faktúry za montáž z bankového účtu", isDph: false, baseSum: 31980, md: "321", d: "221", requireSum: true },
 
-            { doklad: "PFA", op: "Kúpa nákladného vozidla", isDph: true, a: {sum: 16000, md: "042", d: ""}, b: {sum: 3680, md: "343", d: ""}, c: {sum: 19680, md: "", d: "321"} },
-            { doklad: "PFA", op: "Dokúpenie gumenej rohože do nákladného priestoru", isDph: true, a: {sum: 700, md: "042", d: ""}, b: {sum: 161, md: "343", d: ""}, c: {sum: 861, md: "", d: "321"} },
-            { doklad: "PFA", op: "Kúpa sady zimných pneumatík k novému vozidlu", isDph: true, a: {sum: 1600, md: "042", d: ""}, b: {sum: 368, md: "343", d: ""}, c: {sum: 1968, md: "", d: "321"} },
+            { doklad: "PFA", op: "Kúpa nového nákladného vozidla (šasi)", isDph: true, a: {sum: 16000, md: "042", d: ""}, b: {sum: 3680, md: "343", d: ""}, c: {sum: 19680, md: "", d: "321"} },
+            { doklad: "PFA", op: "Dokúpenie gumenej rohože do nákladného priestoru (súčasť OC)", isDph: true, a: {sum: 700, md: "042", d: ""}, b: {sum: 161, md: "343", d: ""}, c: {sum: 861, md: "", d: "321"} },
+            { doklad: "PFA", op: "Kúpa sady zimných pneumatík k novému vozidlu (súčasť OC)", isDph: true, a: {sum: 1600, md: "042", d: ""}, b: {sum: 368, md: "343", d: ""}, c: {sum: 1968, md: "", d: "321"} },
             { doklad: "ZAZ", op: "Zaradenie nákladného vozidla do majetku v obstarávacej cene", isDph: false, baseSum: 18300, md: "022", d: "042", requireSum: true },
 
-            { isStory: true, text: "Odpisovanie a vyradenie dlhodobého majetku: Podnik na konci účtovného obdobia účtuje odpisy majetku. Ďalej predáva staršie firemné auto a likviduje jeden starý, fyzicky opotrebený výrobný stroj." },
+            { isStory: true, text: "Súvislý príklad 3: Podnik na konci účtovného obdobia účtuje odpisy majetku. Ďalej vyraďuje likvidáciou starý fyzicky opotrebený výrobný stroj, ktorého vstupná cena bola 7 890 €, oprávky: 4 500 € a predáva odberateľovi staršie firemné auto, ktorého vstupná cena bola 25 000 € a oprávky: 23 500 €." },
             { doklad: "ID", op: "Ročný odpis softvéru podľa odpisového plánu", isDph: false, baseSum: 1200, md: "551", d: "073" },
             { doklad: "ID", op: "Ročný odpis budovy", isDph: false, baseSum: 8000, md: "551", d: "081" },
             { doklad: "ID", op: "Ročný odpis výrobného stroja", isDph: false, baseSum: 3600, md: "551", d: "082" },
-
-            { doklad: "ID", op: "Vyradenie plne odpísaného starého stroja z dôvodu fyzického opotrebenia", isDph: false, baseSum: 15000, md: "082", d: "022" },
-            
-            { doklad: "ID", op: "Doúčtovanie zostatkovej ceny pri vyradení iného stroja likvidáciou", isDph: false, baseSum: 1200, md: "551", d: "082" },
-            { doklad: "ID", op: "Vyradenie tohto zlikvidovaného stroja z evidencie", isDph: false, baseSum: 12000, md: "082", d: "022" },
-
+            { doklad: "ID", op: "Zúčtovanie zostatkovej ceny stroja pri jeho likvidácii", isDph: false, baseSum: 3390, md: "551", d: "082", requireSum: true },
+            { doklad: "ID", op: "Vyradenie zlikvidovaného stroja z evidencie vo vstupnej cene", isDph: false, baseSum: 7890, md: "082", d: "022", requireSum: true },
             { doklad: "VFA", op: "Faktúra za odpredaj staršieho firemného osobného auta odberateľovi", isDph: true, a: {sum: 4000, md: "", d: "641"}, b: {sum: 920, md: "", d: "343"}, c: {sum: 4920, md: "311", d: ""} },
-            { doklad: "ID", op: "Doúčtovanie zostatkovej ceny pri predaji tohto auta", isDph: false, baseSum: 1500, md: "541", d: "082" },
-            { doklad: "ID", op: "Vyradenie predaného auta z evidencie v pôvodnej obstarávacej cene", isDph: false, baseSum: 25000, md: "082", d: "022" },
+            { doklad: "ID", op: "Doúčtovanie zostatkovej ceny pri predaji auta", isDph: false, baseSum: 1500, md: "541", d: "082", requireSum: true },
+            { doklad: "ID", op: "Vyradenie predaného auta z evidencie vo vstupnej cene", isDph: false, baseSum: 25000, md: "082", d: "022", requireSum: true },
 
-            { doklad: "PFA", op: "Nákup pozemku od inej spoločnosti", isDph: false, baseSum: 50000, md: "042", d: "321" },
-            { doklad: "VPD", op: "Poplatok za kataster v hotovosti", isDph: false, baseSum: 66, md: "042", d: "211" },
+            { doklad: "PFA", op: "Nákup pozemku od inej spoločnosti (nepodlieha DPH)", isDph: false, baseSum: 50000, md: "042", d: "321" },
+            { doklad: "VPD", op: "Poplatok za návrh na vklad do katastra platený v hotovosti", isDph: false, baseSum: 66, md: "042", d: "211" },
             { doklad: "ZAZ", op: "Zaradenie pozemku do majetku podniku", isDph: false, baseSum: 50066, md: "031", d: "042", requireSum: true },
-            { doklad: "VBÚ", op: "Úhrada faktúry za pozemok", isDph: false, baseSum: 50000, md: "321", d: "221" },
+            { doklad: "VBÚ", op: "Úhrada faktúry za pozemok z bankového účtu", isDph: false, baseSum: 50000, md: "321", d: "221" },
             
             { doklad: "PFA", op: "Nákup budovy od inej spoločnosti", isDph: true, a: {sum: 100000, md: "042", d: ""}, b: {sum: 23000, md: "343", d: ""}, c: {sum: 123000, md: "", d: "321"} },
             { doklad: "ZAZ", op: "Zaradenie budovy do užívania", isDph: false, baseSum: 100000, md: "021", d: "042", requireSum: true },
             { doklad: "VBÚ", op: "Úhrada faktúry za budovu", isDph: false, baseSum: 123000, md: "321", d: "221" },
 
-            { doklad: "PFA", op: "Nákup patentu", isDph: true, a: {sum: 5000, md: "041", d: ""}, b: {sum: 1150, md: "343", d: ""}, c: {sum: 6150, md: "", d: "321"} },
-            { doklad: "ZAZ", op: "Zaradenie patentu (oceniteľné práva) do majetku", isDph: false, baseSum: 5000, md: "014", d: "041", requireSum: true },
+            { doklad: "PFA", op: "Nákup patentu (oceniteľné práva)", isDph: true, a: {sum: 5000, md: "041", d: ""}, b: {sum: 1150, md: "343", d: ""}, c: {sum: 6150, md: "", d: "321"} },
+            { doklad: "ZAZ", op: "Zaradenie patentu do majetku v obstarávacej cene", isDph: false, baseSum: 5000, md: "014", d: "041", requireSum: true },
 
             { doklad: "PFA", op: "Faktúra za rekonštrukciu budovy (technické zhodnotenie)", isDph: true, a: {sum: 15000, md: "042", d: ""}, b: {sum: 3450, md: "343", d: ""}, c: {sum: 18450, md: "", d: "321"} },
-            { doklad: "ID", op: "Zvýšenie obstarávacej ceny budovy o technické zhodnotenie", isDph: false, baseSum: 15000, md: "021", d: "042" },
+            { doklad: "ID", op: "Zvýšenie obstarávacej ceny budovy o technické zhodnotenie (zaradenie)", isDph: false, baseSum: 15000, md: "021", d: "042" },
 
             { doklad: "ID", op: "Tvorba opravnej položky k dlhodobému majetku (zníženie hodnoty stroja)", isDph: false, baseSum: 2000, md: "553", d: "092" },
-            { doklad: "ID", op: "Zrušenie opravnej položky (pominuli dôvody)", isDph: false, baseSum: 2000, md: "092", d: "553" },
+            { doklad: "ID", op: "Zrušenie opravnej položky k majetku (pominuli dôvody zníženia)", isDph: false, baseSum: 2000, md: "092", d: "553" },
 
-            { doklad: "VFA", op: "Predaj staršieho nábytku z kancelárie", isDph: true, a: {sum: 500, md: "", d: "641"}, b: {sum: 115, md: "", d: "343"}, c: {sum: 615, md: "311", d: ""} },
-            { doklad: "ID", op: "Doúčtovanie zostatkovej ceny nábytku", isDph: false, baseSum: 100, md: "541", d: "082" },
-            { doklad: "ID", op: "Vyradenie nábytku v obstarávacej cene z evidencie", isDph: false, baseSum: 1500, md: "082", d: "022" },
+            { doklad: "VFA", op: "Predaj staršieho nábytku z kancelárie odberateľovi", isDph: true, a: {sum: 500, md: "", d: "641"}, b: {sum: 115, md: "", d: "343"}, c: {sum: 615, md: "311", d: ""} },
+            { doklad: "ID", op: "Doúčtovanie zostatkovej ceny nábytku (VC: 1 500 €, oprávky: 1 400 €)", isDph: false, baseSum: 100, md: "541", d: "082", requireSum: true },
+            { doklad: "ID", op: "Vyradenie nábytku vo vstupnej cene z evidencie", isDph: false, baseSum: 1500, md: "082", d: "022", requireSum: true },
 
-            { doklad: "ID", op: "Zistené manko na firemnom notebooku (krádež)", isDph: false, baseSum: 800, md: "549", d: "082" },
-            { doklad: "ID", op: "Vyradenie ukradnutého notebooku v obstarávacej cene", isDph: false, baseSum: 1200, md: "082", d: "022" },
-            { doklad: "VBÚ", op: "Náhrada škody od poisťovne za ukradnutý notebook", isDph: false, baseSum: 600, md: "221", d: "648" },
+            { doklad: "ID", op: "Zistené manko na notebooku - krádež (VC: 1 200 €, oprávky: 400 €)", isDph: false, baseSum: 800, md: "549", d: "082", requireSum: true },
+            { doklad: "ID", op: "Vyradenie ukradnutého notebooku vo vstupnej cene", isDph: false, baseSum: 1200, md: "082", d: "022", requireSum: true },
+            { doklad: "VBÚ", op: "Náhrada škody od poisťovne za ukradnutý notebook pripísaná na účet", isDph: false, baseSum: 600, md: "221", d: "648" },
 
-            { doklad: "ID", op: "Darovanie staršieho zariadenia - zostatková cena", isDph: false, baseSum: 300, md: "543", d: "082" },
-            { doklad: "ID", op: "Vyradenie darovaného zariadenia z evidencie", isDph: false, baseSum: 2000, md: "082", d: "022" },
+            { doklad: "ID", op: "Darovanie staršieho zariadenia - zostatková cena (VC: 2 000 €, oprávky: 1 700 €)", isDph: false, baseSum: 300, md: "543", d: "082", requireSum: true },
+            { doklad: "ID", op: "Vyradenie darovaného zariadenia z evidencie vo vstupnej cene", isDph: false, baseSum: 2000, md: "082", d: "022", requireSum: true },
 
             { doklad: "PFA", op: "Nákup umeleckého diela", isDph: false, baseSum: 3500, md: "042", d: "321" },
-            { doklad: "ZAZ", op: "Zaradenie umeleckého diela do majetku", isDph: false, baseSum: 3500, md: "032", d: "042", requireSum: true },
+            { doklad: "ZAZ", op: "Zaradenie umeleckého diela do majetku podniku", isDph: false, baseSum: 3500, md: "032", d: "042", requireSum: true },
             { doklad: "VBÚ", op: "Úhrada faktúry za umelecké dielo", isDph: false, baseSum: 3500, md: "321", d: "221" },
 
             { doklad: "VBÚ", op: "Poskytnutý preddavok na nákup dlhodobých cenných papierov", isDph: false, baseSum: 4000, md: "053", d: "221" },
             { doklad: "PFA", op: "Faktúra za nákup základného stáda (dojnice)", isDph: true, a: {sum: 10000, md: "042", d: ""}, b: {sum: 2300, md: "343", d: ""}, c: {sum: 12300, md: "", d: "321"} },
-            { doklad: "ZAZ", op: "Zaradenie dojníc do základného stáda v obstarávacej cene", isDph: false, baseSum: 10000, md: "026", d: "042", requireSum: true }
+            { doklad: "ZAZ", op: "Zaradenie dojníc do základného stáda v obstarávacej cene", isDph: false, baseSum: 10000, md: "026", d: "042", requireSum: true },
+            { doklad: "VBÚ", op: "Úhrada faktúry za nákup základného stáda z bankového účtu", isDph: false, baseSum: 12300, md: "321", d: "221" }
+        ];
+        
+        const expensesExercises = [
+            // 1-15: Spotrebované nákupy (Materiál a energie)
+            { doklad: "VPD", op: "Nákup kancelárskych potrieb priamo do spotreby", isDph: true, a: {sum: 100, md: "501", d: ""}, b: {sum: 23, md: "343", d: ""}, c: {sum: 123, md: "", d: "211"} },
+            { doklad: "VPD", op: "Nákup čistiacich prostriedkov priamo do spotreby", isDph: true, a: {sum: 50, md: "501", d: ""}, b: {sum: 11.5, md: "343", d: ""}, c: {sum: 61.5, md: "", d: "211"} },
+            { doklad: "PFA", op: "Faktúra za spotrebovanú elektrickú energiu", isDph: true, a: {sum: 400, md: "502", d: ""}, b: {sum: 92, md: "343", d: ""}, c: {sum: 492, md: "", d: "321"} },
+            { doklad: "PFA", op: "Faktúra za dodávku úžitkovej a pitnej vody (vodné a stočné)", isDph: true, a: {sum: 150, md: "502", d: ""}, b: {sum: 34.5, md: "343", d: ""}, c: {sum: 184.5, md: "", d: "321"} },
+            { doklad: "VPD", op: "Nákup pohonných látok do firemného auta", isDph: true, a: {sum: 80, md: "501", d: ""}, b: {sum: 18.4, md: "343", d: ""}, c: {sum: 98.4, md: "", d: "211"} },
+            { doklad: "VYD", op: "Spotreba materiálu zo skladu do výroby", isDph: false, baseSum: 1200, md: "501", d: "112" },
+            { doklad: "VYD", op: "Úbytok predaného tovaru", isDph: false, baseSum: 850, md: "504", d: "132" },
+            { doklad: "ID", op: "Úbytok materiálu v rámci noriem prirodzených úbytkov", isDph: false, baseSum: 35, md: "501", d: "112" },
+            { doklad: "PFA", op: "Faktúra od plynární za odber plynu", isDph: true, a: {sum: 300, md: "502", d: ""}, b: {sum: 69, md: "343", d: ""}, c: {sum: 369, md: "", d: "321"} },
+            { doklad: "VPD", op: "Nákup odbornej literatúry pre zamestnancov", isDph: false, baseSum: 45, md: "501", d: "211" },
+            { doklad: "VPD", op: "Nákup drobného hmotného majetku do spotreby (kalkulačky)", isDph: true, a: {sum: 20, md: "501", d: ""}, b: {sum: 4.6, md: "343", d: ""}, c: {sum: 24.6, md: "", d: "211"} },
+            { doklad: "VYD", op: "Spotreba náhradných dielov na opravu firemného auta", isDph: false, baseSum: 210, md: "501", d: "112" },
+            { doklad: "VYD", op: "Výdaj čistiacich prostriedkov zo skladu", isDph: false, baseSum: 60, md: "501", d: "112" },
+            { doklad: "VPD", op: "Nákup kvetov do kancelárie riaditeľa", isDph: false, baseSum: 25, md: "501", d: "211" },
+            { doklad: "VYD", op: "Spotreba kancelárskeho papiera zo skladu", isDph: false, baseSum: 40, md: "501", d: "112" },
+
+            // 16-30: Služby
+            { doklad: "PFA", op: "Faktúra od dodávateľa za opravu výrobného stroja", isDph: true, a: {sum: 600, md: "511", d: ""}, b: {sum: 138, md: "343", d: ""}, c: {sum: 738, md: "", d: "321"} },
+            { doklad: "VPD", op: "Úhrada za opravu defektu na aute v hotovosti (neplatca DPH)", isDph: false, baseSum: 25, md: "511", d: "211" },
+            { doklad: "VPD", op: "Cestovné náhrady vyplatené zamestnancovi (vyúčtovanie pracovnej cesty)", isDph: false, baseSum: 49.50, md: "512", d: "211" },
+            { doklad: "VPD", op: "Nákup občerstvenia a kávy pre obchodných partnerov", isDph: false, baseSum: 30, md: "513", d: "211" },
+            { doklad: "PFA", op: "Faktúra za externé účtovné služby", isDph: true, a: {sum: 300, md: "518", d: ""}, b: {sum: 69, md: "343", d: ""}, c: {sum: 369, md: "", d: "321"} },
+            { doklad: "PFA", op: "Faktúra za tvorbu webových stránok", isDph: true, a: {sum: 800, md: "518", d: ""}, b: {sum: 184, md: "343", d: ""}, c: {sum: 984, md: "", d: "321"} },
+            { doklad: "PFA", op: "Faktúra za telefónne hovory a internet", isDph: true, a: {sum: 95, md: "518", d: ""}, b: {sum: 21.85, md: "343", d: ""}, c: {sum: 116.85, md: "", d: "321"} },
+            { doklad: "PFA", op: "Faktúra za prenájom kancelárskych priestorov", isDph: true, a: {sum: 500, md: "518", d: ""}, b: {sum: 115, md: "343", d: ""}, c: {sum: 615, md: "", d: "321"} },
+            { doklad: "PFA", op: "Faktúra za poradenskú právnu službu", isDph: true, a: {sum: 910, md: "518", d: ""}, b: {sum: 209.30, md: "343", d: ""}, c: {sum: 1119.30, md: "", d: "321"} },
+            { doklad: "VPD", op: "Zaplatené poštovné na pošte", isDph: false, baseSum: 4.50, md: "518", d: "211" },
+            { doklad: "PFA", op: "Faktúra za prepravu hotových výrobkov odberateľovi", isDph: true, a: {sum: 120, md: "518", d: ""}, b: {sum: 27.6, md: "343", d: ""}, c: {sum: 147.6, md: "", d: "321"} },
+            { doklad: "VPD", op: "Úhrada za parkovné pri služobnej ceste v hotovosti", isDph: false, baseSum: 15, md: "512", d: "211" },
+            { doklad: "PFA", op: "Faktúra za inzerciu v časopise", isDph: true, a: {sum: 200, md: "518", d: ""}, b: {sum: 46, md: "343", d: ""}, c: {sum: 246, md: "", d: "321"} },
+            { doklad: "ID", op: "Spotreba poštových známok zo zásoby (z cenín)", isDph: false, baseSum: 10, md: "518", d: "213" },
+            { doklad: "VPD", op: "Úhrada za čistenie kobercov v hotovosti", isDph: false, baseSum: 40, md: "518", d: "211" },
+
+            // 31-45: Iné prevádzkové náklady, odpisy a finančné náklady
+            { doklad: "VPD", op: "Úhrada správneho poplatku na súde", isDph: false, baseSum: 30, md: "538", d: "211" },
+            { doklad: "VPD", op: "Nákup diaľničnej známky (neplatca DPH)", isDph: false, baseSum: 60, md: "518", d: "211" },
+            { doklad: "VPD", op: "Zaplatená pokuta za znečistenie ovzdušia", isDph: false, baseSum: 50, md: "545", d: "211" },
+            { doklad: "VBÚ", op: "Zmluvná pokuta zaplatená dodávateľovi za oneskorenú úhradu", isDph: false, baseSum: 100, md: "544", d: "221" },
+            { doklad: "PFA", op: "Faktúra z poisťovne za poistenie budovy", isDph: false, baseSum: 350, md: "548", d: "321" },
+            { doklad: "ID", op: "Manko na materiáli zistené pri inventúre", isDph: false, baseSum: 125, md: "549", d: "112" },
+            { doklad: "ID", op: "Škoda na tovare spôsobená živelnou pohromou (potopa)", isDph: false, baseSum: 682, md: "549", d: "132" },
+            { doklad: "ID", op: "Zistený chýbajúci tovar nad normu prirodzených úbytkov", isDph: false, baseSum: 90, md: "549", d: "132" },
+            { doklad: "ID", op: "Darovanie tovaru na charitatívne účely", isDph: false, baseSum: 150, md: "543", d: "132" },
+            { doklad: "ID", op: "Účtovný odpis dlhodobého hmotného majetku - budova", isDph: false, baseSum: 1120, md: "551", d: "081" },
+            { doklad: "ID", op: "Účtovný odpis dlhodobého nehmotného majetku - softvér", isDph: false, baseSum: 140, md: "551", d: "073" },
+            { doklad: "VBÚ", op: "Poplatok za vedenie bankového účtu", isDph: false, baseSum: 5, md: "568", d: "221" },
+            { doklad: "VBÚ", op: "Debetné úroky z bankového účtu (platené banke)", isDph: false, baseSum: 30, md: "562", d: "221" },
+            { doklad: "ID", op: "Tvorba opravnej položky k pochybnej pohľadávke voči odberateľovi", isDph: false, baseSum: 500, md: "547", d: "391" },
+            { doklad: "ID", op: "Odpis definitívne nedobytnej pohľadávky", isDph: false, baseSum: 200, md: "546", d: "311" },
+
+            // 46-60: Zúčtovacia výplatná listina a mzdy (Súvislý príklad s presnými percentami)
+            { isStory: true, text: "Súvislý príklad: Zúčtovanie miezd. Hrubá mzda zamestnancov podniku je 12 000 €. Zamestnávateľ zráža zamestnancom z hrubej mzdy odvody: do Zdravotnej poisťovne 5 % a do Sociálnej poisťovne 9,4 %. Zamestnávateľ platí odvody z vlastných nákladov v celkovej výške 36,2 %. Preddavok na daň z príjmov FO je 1 450 € a náhrada príjmu pri dočasnej PN je 210 €. Zrážka na sporenie je 150 €." },
+            { doklad: "ZVL", op: "Priznaná hrubá mzda zamestnancom", isDph: false, baseSum: 12000, md: "521", d: "331", requireSum: true },
+            { doklad: "ZVL", op: "Odvody zamestnanca do Zdravotnej poisťovne 5 %", isDph: false, baseSum: 600, md: "331", d: "336", requireSum: true },
+            { doklad: "ZVL", op: "Odvody zamestnanca do Sociálnej poisťovne 9,4 %", isDph: false, baseSum: 1128, md: "331", d: "336", requireSum: true },
+            { doklad: "ZVL", op: "Preddavok na daň z príjmov FO", isDph: false, baseSum: 1450, md: "331", d: "342" },
+            { doklad: "ZVL", op: "Náhrada príjmu počas dočasnej pracovnej neschopnosti", isDph: false, baseSum: 210, md: "527", d: "331" },
+            { doklad: "ID", op: "Odvody zamestnávateľa do Zdravotnej poisťovne 10 %", isDph: false, baseSum: 1200, md: "524", d: "336", requireSum: true },
+            { doklad: "ID", op: "Odvody zamestnávateľa do Sociálnej poisťovne 26,2 %", isDph: false, baseSum: 3144, md: "524", d: "336", requireSum: true },
+            { doklad: "ID", op: "Tvorba sociálneho fondu vo výške 1 % z hrubých miezd", isDph: false, baseSum: 120, md: "527", d: "472", requireSum: true },
+            { doklad: "ZVL", op: "Zrážka zo mzdy zamestnanca na sporenie", isDph: false, baseSum: 150, md: "331", d: "379" },
+            { doklad: "VBÚ", op: "Úhrada čistých miezd zamestnancom na účty", isDph: false, baseSum: 8882, md: "331", d: "221", requireSum: true },
+            { doklad: "VBÚ", op: "Úhrada odvodov do Zdravotnej poisťovne", isDph: false, baseSum: 1800, md: "336", d: "221", requireSum: true },
+            { doklad: "VBÚ", op: "Úhrada odvodov do Sociálnej poisťovne", isDph: false, baseSum: 4272, md: "336", d: "221", requireSum: true },
+            { doklad: "VBÚ", op: "Úhrada preddavkov na daň Daňovému úradu", isDph: false, baseSum: 1450, md: "342", d: "221" },
+            { doklad: "VBÚ", op: "Úhrada zrážok na účet sporiacej spoločnosti", isDph: false, baseSum: 150, md: "379", d: "221" },
+            { doklad: "ID", op: "Zúčtovanie príspevku zamestnávateľa na stravovanie", isDph: false, baseSum: 350, md: "527", d: "213" }
         ];
 
         const CHAPTERS = [
@@ -867,7 +935,8 @@
             { id: 6, type: "cash_book", title: "Ceniny, banka a krátkodobé úvery", desc: "Účtovanie krátkodobého finančného majetku a presuny prostredníctvom účtu Peniaze na ceste.", exercises: bankBookExercises },
             { id: 7, type: "cash_book", title: "Účtovanie o pohľadávkach a záväzkoch", desc: "Precvičte si účtovanie prijatých a vystavených faktúr, výpočet DPH a úhrady/inkasá záväzkov a pohľadávok.", exercises: receivablesLiabilitiesExercises },
             { id: 8, type: "cash_book", title: "Účtovanie o materiáli a oceňovanie, nákup a spotreba", desc: "Komplexné príklady na obstaranie materiálu a tovaru. Prečítaj si najskôr celé zadanie a postupne účtuj jednotlivé prípady.", exercises: materialExercises },
-            { id: 9, type: "cash_book", title: "Účtovanie o dlhodobom majetku", desc: "Precvič si postupy pri obstarávaní dlhodobého majetku, účtovanie preddavkov, zaradenie do užívania, odpisovanie a jeho vyradenie.", exercises: longTermAssetsExercises }
+            { id: 9, type: "cash_book", title: "Účtovanie o dlhodobom majetku", desc: "Precvič si postupy pri obstarávaní dlhodobého majetku, účtovanie preddavkov, zaradenie do užívania, odpisovanie a jeho vyradenie.", exercises: longTermAssetsExercises },
+            { id: 10, type: "cash_book", title: "Účtovanie nákladov", desc: "Komplexné príklady na zúčtovanie nákladov, služieb, finančných nákladov a súvislý príklad na mzdy.", exercises: expensesExercises }
         ];
 
         let currentChapter = null;
